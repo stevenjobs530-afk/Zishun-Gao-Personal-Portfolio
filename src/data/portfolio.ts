@@ -43,7 +43,7 @@ export const projects: Project[] = [
     summary:
       "Cleaned and validated 524,878 analysis-ready transactions from approximately 1.6M raw UK retail records, then analysed £10.6M+ in sales value.",
     tags: ["SQL", "MySQL", "Python", "pandas", "BI"],
-    href: "https://github.com/stevenjobs530-afk/uk-retail-data-cleaning-analysis",
+    href: "https://github.com/stevenjobs530-afk/UK-Retail-Sales-ETL-SQL-Analysis",
     visual: "bars",
   },
   {
@@ -51,7 +51,7 @@ export const projects: Project[] = [
     summary:
       "Cleaned and analysed 1,229,886 App Store records using SQLite, SQL, Python, pandas, matplotlib and seaborn for data quality checks and market-style analysis.",
     tags: ["SQLite", "Python", "seaborn", "Data validation"],
-    href: "https://github.com/stevenjobs530-afk/apple-appstore-sql-python-analysis",
+    href: "https://github.com/stevenjobs530-afk/Apple-App-Store-Data-Cleaning-Analysis",
     visual: "apps",
   },
   {
