@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.DS_Store
+
+# Local previews and handoff notes from design iterations
+preview*.png
+Second round/
+Third Round/
+第一轮内容/
+
+# Legacy static prototype files; the current site is the Vite app in src/
+/script.js
+/styles.css
