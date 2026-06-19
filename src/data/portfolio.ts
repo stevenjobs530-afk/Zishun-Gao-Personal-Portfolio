@@ -484,7 +484,7 @@ export const caseStudies: CaseStudy[] = [
       "The public portfolio can show careful problem framing, routing logic and ethics awareness without exposing internal research documents.",
       "The next step is to keep refining the dissertation materials privately while the website shows a polished, safe summary of the work.",
     ],
-    href: "https://stevenjobs530-afk.github.io/aep-questionnaire-v6-preview/",
+    href: "https://stevenjobs530-afk.github.io/Zishun-Gao-Personal-Portfolio/aep-questionnaire-v6-preview/",
     linkLabel: "Open prototype preview",
   },
 ];
@@ -569,17 +569,17 @@ const chineseProfile: typeof profile = {
 };
 
 const chineseMetrics: typeof metrics = [
-  { value: "1.6M", label: "英国零售原始记录" },
-  { value: "524,878", label: "清洗后的可分析交易" },
-  { value: "£10.6M+", label: "已分析销售额" },
-  { value: "1.23M", label: "App Store 记录" },
+  { value: "160万", label: "英国零售原始记录" },
+  { value: "52.5万", label: "清洗后的可分析交易" },
+  { value: "1,060万英镑+", label: "已分析销售额" },
+  { value: "123万", label: "App Store 记录" },
 ];
 
 const chineseProjects: Project[] = [
   {
     title: "英国零售交易 ETL、SQL 分析与 BI 报告",
     summary:
-      "从约 160 万条英国零售原始记录中清洗并验证出 524,878 条可分析交易，并进一步分析超过 £10.6M 的销售数据。",
+      "从约 160 万条英国零售原始记录中清洗并验证出约 52.5 万条可分析交易，并进一步分析超过 1,060 万英镑的销售数据。",
     tags: ["SQL", "MySQL", "Python", "pandas", "BI"],
     href: "https://github.com/stevenjobs530-afk/UK-Retail-Sales-ETL-SQL-Analysis",
     caseStudyId: "uk-retail",
@@ -588,7 +588,7 @@ const chineseProjects: Project[] = [
   {
     title: "Apple App Store SQL 与 Python 分析",
     summary:
-      "使用 SQLite、SQL、Python、pandas、matplotlib 和 seaborn 清洗并分析 1,229,886 条 App Store 记录，完成数据质量检查和市场分析。",
+      "使用 SQLite、SQL、Python、pandas、matplotlib 和 seaborn 清洗并分析约 123 万条 App Store 记录，完成数据质量检查和市场分析。",
     tags: ["SQLite", "Python", "seaborn", "数据验证"],
     href: "https://github.com/stevenjobs530-afk/Apple-App-Store-Data-Cleaning-Analysis",
     caseStudyId: "apple-app-store",
@@ -622,9 +622,9 @@ const chineseCaseStudies: CaseStudy[] = [
     problem:
       "原始交易数据在分析前需要先建立数据纪律：Excel 序列日期、缺失描述和客户 ID、无效数量或单价、重复交易行都需要先检查，不能直接进入图表分析。",
     metrics: [
-      { value: "1.6M", label: "已检查原始零售记录" },
-      { value: "524,878", label: "清洗后的可分析交易" },
-      { value: "£10.6M+", label: "已分析销售额" },
+      { value: "160万", label: "已检查原始零售记录" },
+      { value: "52.5万", label: "清洗后的可分析交易" },
+      { value: "1,060万英镑+", label: "已分析销售额" },
       { value: "2", label: "Python 报告输出视图" },
     ],
     method: [
@@ -719,10 +719,10 @@ const chineseCaseStudies: CaseStudy[] = [
     problem:
       "数据规模较大，不能依赖手工检查。主要风险包括开发者链接缺失、App 名称空白、无效时间戳、价格逻辑不一致、App 大小缺失，以及需要统一派生逻辑的字段。",
     metrics: [
-      { value: "1,229,886", label: "可分析 App Store 记录" },
-      { value: "1,127,384", label: "识别出的免费应用" },
-      { value: "102,502", label: "识别出的付费应用" },
-      { value: "193,328", label: "Games 类别应用" },
+      { value: "123万", label: "可分析 App Store 记录" },
+      { value: "112.7万", label: "识别出的免费应用" },
+      { value: "10.3万", label: "识别出的付费应用" },
+      { value: "19.3万", label: "Games 类别应用" },
     ],
     method: [
       "将源 JSON 转换为 CSV 和 SQLite，便于 SQL 检查和后续处理。",
@@ -887,7 +887,7 @@ const chineseCaseStudies: CaseStudy[] = [
       "公开作品集可以展示问题框架、问卷分支逻辑和伦理意识，同时不暴露内部研究材料。",
       "下一步应继续在私有 dissertation 材料中完善细节，网站只展示 polished 且安全的项目摘要。",
     ],
-    href: "https://stevenjobs530-afk.github.io/aep-questionnaire-v6-preview/",
+    href: "https://stevenjobs530-afk.github.io/Zishun-Gao-Personal-Portfolio/aep-questionnaire-v6-preview/",
     linkLabel: "打开原型预览",
   },
 ];

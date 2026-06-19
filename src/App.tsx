@@ -273,12 +273,12 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
 
       <div className="grid gap-6">
         {content.caseStudies.map((study, index) => (
-          <div key={study.id} id={`case-${study.id}`} className="scroll-mt-32">
+          <div key={study.id} id={`case-${study.id}`} className="scroll-mt-40">
             <RevealArticle delay={index * 0.08}>
               <LiquidGlass className="grid grid-cols-[minmax(0,1.08fr)_minmax(320px,.92fr)] gap-8 p-7 md:p-9 max-lg:grid-cols-1">
                 <div className="relative z-[1]">
                   <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{study.eyebrow}</p>
-                  <h3 className="apple-display-text mt-4 text-[clamp(1.85rem,3vw,3.2rem)] leading-[1.02] text-neutral-950">
+                  <h3 className="apple-display-text mt-4 break-words text-[clamp(1.7rem,2.6vw,2.75rem)] leading-[1.12] text-neutral-950">
                     {study.title}
                   </h3>
                   <p className="mt-5 max-w-3xl text-base leading-8 text-neutral-600">{study.summary}</p>
@@ -315,7 +315,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                     </div>
                   </div>
 
-                  <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-32 border-t border-white/55 pt-6">
+                  <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-96 border-t border-white/55 pt-6">
                     <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.conclusion}</h4>
                     <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
                       {study.conclusion.map((item) => (
@@ -354,7 +354,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                     ))}
                   </div>
 
-                  <div id={`case-${study.id}-screenshots`} className="scroll-mt-32 border-t border-white/55 pt-5">
+                  <div id={`case-${study.id}-screenshots`} className="scroll-mt-96 border-t border-white/55 pt-5">
                     <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.screenshots}</h4>
                     <div className="mt-4 grid gap-5">
                       {study.screenshots.map((screenshot) => (
@@ -388,7 +388,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                     </div>
                   </div>
 
-                  <div id={`case-${study.id}-code`} className="scroll-mt-32 border-t border-white/55 pt-5">
+                  <div id={`case-${study.id}-code`} className="scroll-mt-96 border-t border-white/55 pt-5">
                     <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.code}</h4>
                     <div className="mt-4 grid gap-4">
                       {study.codeSamples.map((sample) => (
