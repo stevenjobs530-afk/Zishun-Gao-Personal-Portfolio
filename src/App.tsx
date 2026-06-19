@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Code2, ImageIcon, ListChecks } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Animated3DCard } from "@/components/ui/animated-3d-card";
 import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
@@ -19,6 +19,15 @@ const LANGUAGE_STORAGE_KEY = "zishun-portfolio-language";
 const defaultLanguage: LanguageCode = "en";
 
 const navSectionIds = ["about", "projects", "experience", "skills", "education", "contact"] as const;
+const caseStudyDetailTargets = [
+  { id: "screenshots", Icon: ImageIcon },
+  { id: "code", Icon: Code2 },
+  { id: "conclusion", Icon: ListChecks },
+] as const;
+
+function publicAssetPath(path: string) {
+  return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+}
 
 function isLanguageCode(value: string | null): value is LanguageCode {
   return value === "en" || value === "zh-CN";
@@ -166,6 +175,29 @@ function SectionHeading({ label, title }: { label: string; title: string }) {
   );
 }
 
+function ProjectDetailMenu({
+  studyId,
+  labels,
+  className = "",
+}: {
+  studyId: string;
+  labels: PortfolioContent["caseStudyLabels"];
+  className?: string;
+}) {
+  return (
+    <div className={`flex flex-wrap gap-2 ${className}`}>
+      {caseStudyDetailTargets.map(({ id, Icon }) => (
+        <Button key={id} asChild variant="glass" size="sm" className="gap-2 px-3">
+          <a href={`#case-${studyId}-${id}`}>
+            <Icon className="size-4" aria-hidden="true" />
+            {labels[id]}
+          </a>
+        </Button>
+      ))}
+    </div>
+  );
+}
+
 function About({ content }: { content: PortfolioContent }) {
   return (
     <section id="about" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pt-24">
@@ -195,19 +227,21 @@ function Projects({ content }: { content: PortfolioContent }) {
       <div className="grid grid-cols-2 gap-5 max-lg:grid-cols-1">
         {content.projects.map((project, index) => (
           <Animated3DCard key={project.title} delay={index * 0.08}>
-            <Card className="min-h-[560px] overflow-hidden">
+            <Card className="flex min-h-[600px] flex-col overflow-hidden">
               <ProjectVisual visual={project.visual} />
-              <CardHeader>
+              <CardHeader className="grow">
                 <CardTitle className="transition-transform duration-500 group-hover/animated-card:-translate-y-1">{project.title}</CardTitle>
                 <CardDescription className="transition-opacity duration-500 group-hover/animated-card:text-neutral-700">{project.summary}</CardDescription>
               </CardHeader>
-              <CardContent className="flex flex-col gap-6">
+              <CardContent className="mt-auto flex flex-col gap-6">
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag) => (
                     <Badge key={tag}>{tag}</Badge>
                   ))}
                 </div>
-                {project.href ? (
+                {project.caseStudyId ? (
+                  <ProjectDetailMenu studyId={project.caseStudyId} labels={content.caseStudyLabels} />
+                ) : project.href ? (
                   <Button asChild variant="glass" size="sm" className="w-fit gap-2">
                     <a href={project.href} target="_blank" rel="noreferrer">
                       {content.actions.viewProject} <ArrowUpRight className="size-4" aria-hidden="true" />
@@ -221,6 +255,159 @@ function Projects({ content }: { content: PortfolioContent }) {
               </CardContent>
             </Card>
           </Animated3DCard>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CaseStudies({ content }: { content: PortfolioContent }) {
+  return (
+    <section id="case-studies" className="mx-auto w-[min(1180px,calc(100%-40px))] pt-24 max-sm:w-[calc(100%-28px)]">
+      <div className="grid grid-cols-[.86fr_1.14fr] gap-20 pb-9 max-lg:grid-cols-1">
+        <SectionHeading label={content.sections.caseStudies.label} title={content.sections.caseStudies.title} />
+        <RevealBlock>
+          <p className="text-base leading-8 text-neutral-600">{content.sections.caseStudies.body}</p>
+        </RevealBlock>
+      </div>
+
+      <div className="grid gap-6">
+        {content.caseStudies.map((study, index) => (
+          <div key={study.id} id={`case-${study.id}`} className="scroll-mt-32">
+            <RevealArticle delay={index * 0.08}>
+              <LiquidGlass className="grid grid-cols-[minmax(0,1.08fr)_minmax(320px,.92fr)] gap-8 p-7 md:p-9 max-lg:grid-cols-1">
+                <div className="relative z-[1]">
+                  <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{study.eyebrow}</p>
+                  <h3 className="apple-display-text mt-4 text-[clamp(1.85rem,3vw,3.2rem)] leading-[1.02] text-neutral-950">
+                    {study.title}
+                  </h3>
+                  <p className="mt-5 max-w-3xl text-base leading-8 text-neutral-600">{study.summary}</p>
+                  <ProjectDetailMenu studyId={study.id} labels={content.caseStudyLabels} className="mt-6" />
+
+                  <div className="mt-8 border-t border-white/55 pt-6">
+                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.problem}</h4>
+                    <p className="mt-3 text-sm leading-7 text-neutral-600">{study.problem}</p>
+                  </div>
+
+                  <div className="mt-8 grid grid-cols-2 gap-8 max-md:grid-cols-1">
+                    <div>
+                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.method}</h4>
+                      <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
+                        {study.method.map((item) => (
+                          <li key={item} className="flex gap-3">
+                            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500/70" aria-hidden="true" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.result}</h4>
+                      <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
+                        {study.results.map((item) => (
+                          <li key={item} className="flex gap-3">
+                            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500/70" aria-hidden="true" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-32 border-t border-white/55 pt-6">
+                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.conclusion}</h4>
+                    <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
+                      {study.conclusion.map((item) => (
+                        <li key={item} className="flex gap-3">
+                          <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/70" aria-hidden="true" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
+                      <a href="#projects">
+                        <ArrowLeft className="size-4" aria-hidden="true" />
+                        {content.caseStudyLabels.backToProjects}
+                      </a>
+                    </Button>
+                  </div>
+
+                  {study.href && study.linkLabel ? (
+                    <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
+                      <a href={study.href} target="_blank" rel="noreferrer">
+                        {study.linkLabel} <ArrowUpRight className="size-4" aria-hidden="true" />
+                      </a>
+                    </Button>
+                  ) : null}
+                </div>
+
+                <div className="relative z-[1] flex flex-col gap-6">
+                  <div className="grid grid-cols-2 gap-3">
+                    {study.metrics.map((metric) => (
+                      <div key={`${study.id}-${metric.label}`} className="border-t border-white/60 pt-4">
+                        <span className="apple-display-text block text-[clamp(1.45rem,2.5vw,2.35rem)] leading-none text-neutral-950">
+                          {metric.value}
+                        </span>
+                        <span className="mt-2 block text-xs leading-5 text-neutral-500">{metric.label}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div id={`case-${study.id}-screenshots`} className="scroll-mt-32 border-t border-white/55 pt-5">
+                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.screenshots}</h4>
+                    <div className="mt-4 grid gap-5">
+                      {study.screenshots.map((screenshot) => (
+                        <figure key={screenshot.src}>
+                          <div className="overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl">
+                            <img
+                              className="max-h-[360px] w-full object-contain"
+                              src={publicAssetPath(screenshot.src)}
+                              alt={screenshot.alt}
+                              loading="lazy"
+                            />
+                          </div>
+                          <figcaption className="mt-3">
+                            <span className="text-sm font-semibold text-neutral-900">{screenshot.title}</span>
+                            <p className="mt-1 text-sm leading-7 text-neutral-600">{screenshot.caption}</p>
+                          </figcaption>
+                        </figure>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="border-t border-white/55 pt-5">
+                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.evidence}</h4>
+                    <div className="mt-4 grid gap-4">
+                      {study.evidence.map((item) => (
+                        <article key={item.title}>
+                          <h5 className="text-sm font-semibold text-neutral-900">{item.title}</h5>
+                          <p className="mt-1 text-sm leading-7 text-neutral-600">{item.body}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div id={`case-${study.id}-code`} className="scroll-mt-32 border-t border-white/55 pt-5">
+                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.code}</h4>
+                    <div className="mt-4 grid gap-4">
+                      {study.codeSamples.map((sample) => (
+                        <div key={`${study.id}-${sample.label}`} className="overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl">
+                          <div className="flex items-center justify-between gap-4 border-b border-white/55 px-4 py-3">
+                            <span className="text-xs font-semibold text-neutral-600">{sample.label}</span>
+                            <span className="text-xs text-blue-600">{sample.language}</span>
+                          </div>
+                          <pre className="overflow-x-auto p-4 text-[0.78rem] leading-6 text-neutral-700">
+                            <code>{sample.lines.join("\n")}</code>
+                          </pre>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </LiquidGlass>
+            </RevealArticle>
+          </div>
         ))}
       </div>
     </section>
@@ -406,6 +593,7 @@ export default function App() {
         <Metrics content={content} />
         <About content={content} />
         <Projects content={content} />
+        <CaseStudies content={content} />
         <ExperienceSkills content={content} />
         <EducationAwards content={content} />
         <Contact content={content} />

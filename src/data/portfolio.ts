@@ -3,6 +3,7 @@ export type Project = {
   summary: string;
   tags: string[];
   href?: string;
+  caseStudyId?: string;
   visual: "bars" | "apps" | "wave" | "code";
 };
 
@@ -11,6 +12,47 @@ export type Experience = {
   role: string;
   company: string;
   bullets: string[];
+};
+
+export type CaseStudyMetric = {
+  value: string;
+  label: string;
+};
+
+export type CaseStudyEvidence = {
+  title: string;
+  body: string;
+};
+
+export type CaseStudyCode = {
+  label: string;
+  language: string;
+  lines: string[];
+};
+
+export type CaseStudyScreenshot = {
+  title: string;
+  caption: string;
+  src: string;
+  alt: string;
+};
+
+export type CaseStudy = {
+  id: string;
+  eyebrow: string;
+  title: string;
+  summary: string;
+  problem: string;
+  metrics: CaseStudyMetric[];
+  method: string[];
+  results: string[];
+  evidence: CaseStudyEvidence[];
+  code: CaseStudyCode;
+  screenshots: CaseStudyScreenshot[];
+  codeSamples: CaseStudyCode[];
+  conclusion: string[];
+  href?: string;
+  linkLabel?: string;
 };
 
 export const languageOptions = [
@@ -45,6 +87,7 @@ export type PortfolioContent = {
     emailMe: string;
     viewGithub: string;
     viewProject: string;
+    viewCaseStudy: string;
     discussProject: string;
     backToTop: string;
   };
@@ -56,6 +99,11 @@ export type PortfolioContent = {
     projects: {
       label: string;
       title: string;
+    };
+    caseStudies: {
+      label: string;
+      title: string;
+      body: string;
     };
     experience: {
       label: string;
@@ -77,12 +125,23 @@ export type PortfolioContent = {
       body: string;
     };
   };
+  caseStudyLabels: {
+    problem: string;
+    method: string;
+    result: string;
+    evidence: string;
+    screenshots: string;
+    code: string;
+    conclusion: string;
+    backToProjects: string;
+  };
   footer: {
     rights: string;
   };
   profile: typeof profile;
   metrics: typeof metrics;
   projects: Project[];
+  caseStudies: CaseStudy[];
   experiences: Experience[];
   skills: typeof skills;
   education: typeof education;
@@ -120,6 +179,7 @@ export const projects: Project[] = [
       "Cleaned and validated 524,878 analysis-ready transactions from approximately 1.6M raw UK retail records, then analysed £10.6M+ in sales value.",
     tags: ["SQL", "MySQL", "Python", "pandas", "BI"],
     href: "https://github.com/stevenjobs530-afk/UK-Retail-Sales-ETL-SQL-Analysis",
+    caseStudyId: "uk-retail",
     visual: "bars",
   },
   {
@@ -128,6 +188,7 @@ export const projects: Project[] = [
       "Cleaned and analysed 1,229,886 App Store records using SQLite, SQL, Python, pandas, matplotlib and seaborn for data quality checks and market-style analysis.",
     tags: ["SQLite", "Python", "seaborn", "Data validation"],
     href: "https://github.com/stevenjobs530-afk/Apple-App-Store-Data-Cleaning-Analysis",
+    caseStudyId: "apple-app-store",
     visual: "apps",
   },
   {
@@ -135,6 +196,7 @@ export const projects: Project[] = [
     summary:
       "In-progress University of Bristol dissertation collaboration researching early-career professionals' workplace wellbeing needs and employer-facing support.",
     tags: ["In Progress", "Research", "Business insight"],
+    caseStudyId: "aep",
     visual: "wave",
   },
   {
@@ -144,6 +206,286 @@ export const projects: Project[] = [
     tags: ["Automation", "Apps", "GitHub"],
     href: "https://github.com/stevenjobs530-afk",
     visual: "code",
+  },
+];
+
+export const caseStudies: CaseStudy[] = [
+  {
+    id: "uk-retail",
+    eyebrow: "ETL + SQL + BI reporting",
+    title: "UK Retail Transactions: from raw export to analysis-ready reporting",
+    summary:
+      "A practical cleaning and reporting workflow for online retail transactions, connecting SQL validation in MySQL/DataGrip with Python chart outputs.",
+    problem:
+      "The raw transaction export needed basic data discipline before analysis: Excel-style serial dates, missing descriptions and customer IDs, invalid quantity or unit-price values, and duplicate transaction rows all had to be checked before any business interpretation.",
+    metrics: [
+      { value: "1.6M", label: "raw retail records reviewed" },
+      { value: "524,878", label: "cleaned transactions used for analysis" },
+      { value: "£10.6M+", label: "sales value analysed" },
+      { value: "2", label: "reporting views generated in Python" },
+    ],
+    method: [
+      "Converted Excel serial dates into SQL datetime values before analysis.",
+      "Used SQL checks for missing values, invalid transactions and duplicate records.",
+      "Created a final distinct table with positive quantity, positive unit price and non-missing descriptions.",
+      "Queried monthly revenue and top product revenue, then visualised results with pandas and matplotlib.",
+    ],
+    results: [
+      "Built a reproducible cleaning path from raw retail rows to a valid reporting table.",
+      "Produced monthly revenue trend and top-product revenue outputs for business-style discussion.",
+      "Showed the ability to connect SQL database work with Python-based reporting assets.",
+    ],
+    evidence: [
+      {
+        title: "SQL validation",
+        body: "Missing values, invalid price/quantity records and duplicates were checked before building the final table.",
+      },
+      {
+        title: "Python reporting",
+        body: "The cleaned MySQL table fed pandas scripts that saved monthly trend and top-product chart outputs.",
+      },
+    ],
+    code: {
+      label: "Cleaning logic sample",
+      language: "SQL",
+      lines: [
+        "CREATE TABLE Online_Retail_Final AS",
+        "SELECT DISTINCT *",
+        "FROM Online_Retail",
+        "WHERE Quantity > 0",
+        "  AND UnitPrice > 0",
+        "  AND Description IS NOT NULL;",
+      ],
+    },
+    screenshots: [
+      {
+        title: "Monthly revenue trend",
+        caption: "Python reporting output created from the cleaned MySQL table.",
+        src: "project-assets/uk-retail/monthly-revenue-trend.png",
+        alt: "Line chart showing UK retail monthly revenue trend.",
+      },
+      {
+        title: "Top products by revenue",
+        caption: "Top-product view used to connect cleaned transactions with business discussion.",
+        src: "project-assets/uk-retail/top-products-revenue.png",
+        alt: "Horizontal bar chart showing top UK retail products by revenue.",
+      },
+    ],
+    codeSamples: [
+      {
+        label: "SQL cleaning table",
+        language: "SQL",
+        lines: [
+          "CREATE TABLE Online_Retail_Final AS",
+          "SELECT DISTINCT *",
+          "FROM Online_Retail",
+          "WHERE Quantity > 0",
+          "  AND UnitPrice > 0",
+          "  AND Description IS NOT NULL;",
+        ],
+      },
+      {
+        label: "Python reporting query",
+        language: "Python",
+        lines: [
+          "query = \"\"\"",
+          "SELECT DATE_FORMAT(InvoiceDate, '%Y-%m') AS Month,",
+          "       ROUND(SUM(Quantity * UnitPrice), 2) AS Monthly_Revenue",
+          "FROM Online_Retail_Final",
+          "GROUP BY Month",
+          "ORDER BY Month;",
+          "\"\"\"",
+          "df = pd.read_sql(query, conn)",
+        ],
+      },
+    ],
+    conclusion: [
+      "The strongest professional signal is the full path from dirty operational data to a cleaned analysis table and reporting visuals.",
+      "For HR or interview review, this project demonstrates SQL validation, reproducible cleaning logic, and business-friendly chart outputs.",
+      "A next improvement could be a Power BI-style dashboard layer, but the current project already proves the ETL and reporting foundation.",
+    ],
+    href: "https://github.com/stevenjobs530-afk/UK-Retail-Sales-ETL-SQL-Analysis",
+    linkLabel: "Open GitHub project",
+  },
+  {
+    id: "apple-app-store",
+    eyebrow: "SQLite + Python + quality flags",
+    title: "Apple App Store: large-scale data cleaning and market-style analysis",
+    summary:
+      "A full SQL and Python workflow for a 1.2M+ row App Store dataset, focused on conservative data quality checks and analysis-ready structures.",
+    problem:
+      "The source dataset was large enough to require a repeatable workflow rather than manual inspection. Key risks included blank developer links, invalid timestamps, missing prices, price/free mismatches, missing app sizes and fields that needed consistent derived logic.",
+    metrics: [
+      { value: "1,229,886", label: "analysis-ready App Store records" },
+      { value: "1,127,384", label: "free apps identified" },
+      { value: "102,502", label: "paid apps identified" },
+      { value: "193,328", label: "Games category apps" },
+    ],
+    method: [
+      "Converted source JSON into CSV and SQLite for SQL inspection and downstream processing.",
+      "Normalised text, numeric, boolean and date fields using Python cleaning logic.",
+      "Added derived fields such as Size_MB, Free_By_Price and Quality_Issue_Count.",
+      "Validated the cleaned table with SQL, then used pandas, matplotlib and seaborn for exploratory analysis.",
+    ],
+    results: [
+      "Flagged uncertain records instead of silently overwriting unclear business cases.",
+      "Compared category mix, pricing models, developer performance, rating patterns and update activity.",
+      "Documented a clear interview-ready workflow from raw data to cleaned structures to business insight.",
+    ],
+    evidence: [
+      {
+        title: "Quality flags",
+        body: "The cleaning script created issue flags for blank app names, missing prices, invalid release dates and non-positive sizes.",
+      },
+      {
+        title: "Market analysis",
+        body: "The analysis compared free and paid apps, top genres, developer review volume and app update trends.",
+      },
+    ],
+    code: {
+      label: "Feature derivation sample",
+      language: "Python",
+      lines: [
+        "df['Size_MB'] = (df['Size_Bytes'] / (1024 * 1024)).round(2)",
+        "df['Free_By_Price'] = df['Price'].fillna(0).eq(0)",
+        "df['Issue_Missing_Price'] = df['Price'].isna()",
+        "df['Quality_Issue_Count'] = df[issue_columns].sum(axis=1)",
+      ],
+    },
+    screenshots: [
+      {
+        title: "Top app genres",
+        caption: "Category mix view showing Games as the largest app group in the analysis-ready dataset.",
+        src: "project-assets/apple-app-store/top-genres.png",
+        alt: "Bar chart showing top 10 App Store genres by app count.",
+      },
+      {
+        title: "Free vs paid apps",
+        caption: "Pricing model comparison used to explain the dataset's free-app dominance.",
+        src: "project-assets/apple-app-store/free-vs-paid.png",
+        alt: "Bar chart comparing paid and free App Store app counts.",
+      },
+      {
+        title: "Update activity trend",
+        caption: "Yearly update activity chart supporting the market-style analysis narrative.",
+        src: "project-assets/apple-app-store/update-trend.png",
+        alt: "Line chart showing App Store app update trend by year.",
+      },
+    ],
+    codeSamples: [
+      {
+        label: "Quality issue flags",
+        language: "Python",
+        lines: [
+          "df['Size_MB'] = (df['Size_Bytes'] / (1024 * 1024)).round(2)",
+          "df['Free_By_Price'] = df['Price'].fillna(0).eq(0)",
+          "df['Issue_Missing_Price'] = df['Price'].isna()",
+          "df['Quality_Issue_Count'] = df[issue_columns].sum(axis=1)",
+        ],
+      },
+      {
+        label: "Genre aggregation",
+        language: "Python",
+        lines: [
+          "genre_summary = (",
+          "    df.groupby('Primary_Genre')",
+          "      .agg(app_count=('App_Id', 'count'),",
+          "           avg_rating=('Average_User_Rating', 'mean'),",
+          "           avg_reviews=('Reviews', 'mean'))",
+          "      .sort_values('app_count', ascending=False)",
+          ")",
+        ],
+      },
+    ],
+    conclusion: [
+      "The strongest signal is scale: the workflow handles 1.2M+ records with SQL/Python checks rather than manual spreadsheet inspection.",
+      "The project is useful for data analyst roles because it combines cleaning, validation, feature derivation, grouped analysis, and visual communication.",
+      "The analysis remains conservative: uncertain records are flagged and documented instead of silently overwritten.",
+    ],
+    href: "https://github.com/stevenjobs530-afk/Apple-App-Store-Data-Cleaning-Analysis",
+    linkLabel: "Open GitHub project",
+  },
+  {
+    id: "aep",
+    eyebrow: "Research design + prototype logic",
+    title: "Applied Extended Project: early-career wellbeing and employer support",
+    summary:
+      "An in-progress University of Bristol applied research project exploring education-to-employment transition challenges and employer-facing support needs.",
+    problem:
+      "The project needed a careful public-facing research prototype that could explore wellbeing, job-search pressure, workplace connectedness, AI-related pressure, cross-cultural adjustment and employer support without overclaiming final findings or collecting live responses.",
+    metrics: [
+      { value: "V6", label: "draft prototype iteration reviewed" },
+      { value: "7-8 min", label: "target questionnaire length" },
+      { value: "2", label: "main routed participant paths" },
+      { value: "0", label: "live response storage in prototype" },
+    ],
+    method: [
+      "Mapped a consent and screening flow before the main questionnaire path.",
+      "Separated expected challenges for students/recent graduates from actual experience for early-career professionals.",
+      "Combined Likert items, top-challenge selection, support-option ranking and open-text explanation.",
+      "Kept the ethics boundary explicit: discussion prototype only, no submit, no storage and no formal release without approval.",
+    ],
+    results: [
+      "Created a clearer prototype structure for group discussion and supervisor review.",
+      "Strengthened the research scope around job-search pressure, belonging, AI, cross-cultural adjustment and accessible support.",
+      "Produced a public-safe narrative that shows research judgement while keeping the project marked as in progress.",
+    ],
+    evidence: [
+      {
+        title: "Branching logic",
+        body: "The prototype routes participants into expected-challenge or actual-experience paths based on their current situation.",
+      },
+      {
+        title: "Research boundary",
+        body: "The prototype states that it does not submit, transmit, store or save responses.",
+      },
+    ],
+    code: {
+      label: "Questionnaire flow sample",
+      language: "Flow",
+      lines: [
+        "Introduction -> Consent and screening",
+        "A2 student/recent graduate -> expected challenges",
+        "A2 early-career experience -> actual experience",
+        "Challenges -> support needs -> optional comment -> complete",
+      ],
+    },
+    screenshots: [
+      {
+        title: "Questionnaire prototype preview",
+        caption: "Public-safe view of the V6 discussion prototype, showing the purpose, methods note and ethics boundary.",
+        src: "project-assets/aep/prototype-preview.png",
+        alt: "AEP questionnaire prototype introduction screen.",
+      },
+    ],
+    codeSamples: [
+      {
+        label: "Branching flow",
+        language: "Flow",
+        lines: [
+          "Introduction -> Consent and screening",
+          "A2 student/recent graduate -> expected challenges",
+          "A2 early-career experience -> actual experience",
+          "Challenges -> support needs -> optional comment -> complete",
+        ],
+      },
+      {
+        label: "Prototype boundary",
+        language: "Text",
+        lines: [
+          "Prototype only: no submit, no storage.",
+          "Use for discussion and supervisor review before formal release.",
+          "Keep participant information, consent and ethics approval outside this public preview.",
+        ],
+      },
+    ],
+    conclusion: [
+      "The project is strongest when presented as applied research design, not as final findings.",
+      "The public portfolio can show careful problem framing, routing logic and ethics awareness without exposing internal research documents.",
+      "The next step is to keep refining the dissertation materials privately while the website shows a polished, safe summary of the work.",
+    ],
+    href: "https://stevenjobs530-afk.github.io/aep-questionnaire-v6-preview/",
+    linkLabel: "Open prototype preview",
   },
 ];
 
@@ -240,6 +582,7 @@ const chineseProjects: Project[] = [
       "从约 160 万条英国零售原始记录中清洗并验证出 524,878 条可分析交易，并进一步分析超过 £10.6M 的销售数据。",
     tags: ["SQL", "MySQL", "Python", "pandas", "BI"],
     href: "https://github.com/stevenjobs530-afk/UK-Retail-Sales-ETL-SQL-Analysis",
+    caseStudyId: "uk-retail",
     visual: "bars",
   },
   {
@@ -248,6 +591,7 @@ const chineseProjects: Project[] = [
       "使用 SQLite、SQL、Python、pandas、matplotlib 和 seaborn 清洗并分析 1,229,886 条 App Store 记录，完成数据质量检查和市场分析。",
     tags: ["SQLite", "Python", "seaborn", "数据验证"],
     href: "https://github.com/stevenjobs530-afk/Apple-App-Store-Data-Cleaning-Analysis",
+    caseStudyId: "apple-app-store",
     visual: "apps",
   },
   {
@@ -255,6 +599,7 @@ const chineseProjects: Project[] = [
     summary:
       "布里斯托大学进行中的 dissertation collaboration，研究初入职场人群的 workplace wellbeing 需求和雇主侧支持方案。",
     tags: ["进行中", "研究", "商业洞察"],
+    caseStudyId: "aep",
     visual: "wave",
   },
   {
@@ -264,6 +609,286 @@ const chineseProjects: Project[] = [
     tags: ["自动化", "应用", "GitHub"],
     href: "https://github.com/stevenjobs530-afk",
     visual: "code",
+  },
+];
+
+const chineseCaseStudies: CaseStudy[] = [
+  {
+    id: "uk-retail",
+    eyebrow: "ETL + SQL + BI 报告",
+    title: "英国零售交易：从原始导出到可分析报表",
+    summary:
+      "一个完整的零售交易清洗与报告流程，把 MySQL/DataGrip 中的 SQL 验证和 Python 图表输出连接起来。",
+    problem:
+      "原始交易数据在分析前需要先建立数据纪律：Excel 序列日期、缺失描述和客户 ID、无效数量或单价、重复交易行都需要先检查，不能直接进入图表分析。",
+    metrics: [
+      { value: "1.6M", label: "已检查原始零售记录" },
+      { value: "524,878", label: "清洗后的可分析交易" },
+      { value: "£10.6M+", label: "已分析销售额" },
+      { value: "2", label: "Python 报告输出视图" },
+    ],
+    method: [
+      "先把 Excel 序列日期转换为 SQL datetime。",
+      "用 SQL 检查缺失值、无效交易和重复记录。",
+      "创建最终去重表，只保留正数量、正单价和非空商品描述。",
+      "查询月度收入和 Top 产品收入，再用 pandas 与 matplotlib 输出图表。",
+    ],
+    results: [
+      "从原始零售行到有效报表表，形成了可复现的清洗路径。",
+      "产出月度销售趋势和 Top 产品收入视图，适合业务讨论。",
+      "展示了把 SQL 数据库工作连接到 Python 报告资产的能力。",
+    ],
+    evidence: [
+      {
+        title: "SQL 验证",
+        body: "在创建最终表之前，先检查缺失值、无效价格/数量记录和重复项。",
+      },
+      {
+        title: "Python 报告",
+        body: "清洗后的 MySQL 表进入 pandas 脚本，并保存月度趋势与产品收入图表。",
+      },
+    ],
+    code: {
+      label: "清洗逻辑示例",
+      language: "SQL",
+      lines: [
+        "CREATE TABLE Online_Retail_Final AS",
+        "SELECT DISTINCT *",
+        "FROM Online_Retail",
+        "WHERE Quantity > 0",
+        "  AND UnitPrice > 0",
+        "  AND Description IS NOT NULL;",
+      ],
+    },
+    screenshots: [
+      {
+        title: "月度收入趋势",
+        caption: "基于清洗后的 MySQL 表生成的 Python 报告输出。",
+        src: "project-assets/uk-retail/monthly-revenue-trend.png",
+        alt: "英国零售月度收入趋势折线图。",
+      },
+      {
+        title: "Top 产品收入",
+        caption: "用于把清洗后的交易数据转化为业务讨论的产品收入视图。",
+        src: "project-assets/uk-retail/top-products-revenue.png",
+        alt: "英国零售产品收入 Top 10 横向柱状图。",
+      },
+    ],
+    codeSamples: [
+      {
+        label: "SQL 清洗表",
+        language: "SQL",
+        lines: [
+          "CREATE TABLE Online_Retail_Final AS",
+          "SELECT DISTINCT *",
+          "FROM Online_Retail",
+          "WHERE Quantity > 0",
+          "  AND UnitPrice > 0",
+          "  AND Description IS NOT NULL;",
+        ],
+      },
+      {
+        label: "Python 报告查询",
+        language: "Python",
+        lines: [
+          "query = \"\"\"",
+          "SELECT DATE_FORMAT(InvoiceDate, '%Y-%m') AS Month,",
+          "       ROUND(SUM(Quantity * UnitPrice), 2) AS Monthly_Revenue",
+          "FROM Online_Retail_Final",
+          "GROUP BY Month",
+          "ORDER BY Month;",
+          "\"\"\"",
+          "df = pd.read_sql(query, conn)",
+        ],
+      },
+    ],
+    conclusion: [
+      "这个项目最强的信号是完整链路：从混乱运营数据，到清洗后的分析表，再到可展示的报告图表。",
+      "对 HR 或面试官来说，它能证明 SQL 验证、可复现清洗逻辑和业务友好的图表输出能力。",
+      "后续可以继续补一个 Power BI 风格的 dashboard，但当前版本已经能证明 ETL 和报告基础。",
+    ],
+    href: "https://github.com/stevenjobs530-afk/UK-Retail-Sales-ETL-SQL-Analysis",
+    linkLabel: "打开 GitHub 项目",
+  },
+  {
+    id: "apple-app-store",
+    eyebrow: "SQLite + Python + 质量标记",
+    title: "Apple App Store：大规模数据清洗与市场分析",
+    summary:
+      "围绕 120 万级 App Store 数据集构建 SQL + Python 工作流，重点是保守的数据质量检查和可分析数据结构。",
+    problem:
+      "数据规模较大，不能依赖手工检查。主要风险包括开发者链接缺失、App 名称空白、无效时间戳、价格逻辑不一致、App 大小缺失，以及需要统一派生逻辑的字段。",
+    metrics: [
+      { value: "1,229,886", label: "可分析 App Store 记录" },
+      { value: "1,127,384", label: "识别出的免费应用" },
+      { value: "102,502", label: "识别出的付费应用" },
+      { value: "193,328", label: "Games 类别应用" },
+    ],
+    method: [
+      "将源 JSON 转换为 CSV 和 SQLite，便于 SQL 检查和后续处理。",
+      "使用 Python 清洗逻辑规范文本、数值、布尔值和日期字段。",
+      "增加 Size_MB、Free_By_Price 和 Quality_Issue_Count 等派生字段。",
+      "用 SQL 验证清洗结果，再用 pandas、matplotlib、seaborn 做探索性分析。",
+    ],
+    results: [
+      "对不确定记录采用标记而不是静默覆盖，保留分析透明度。",
+      "比较了类别结构、定价模式、开发者表现、评分模式和更新活跃度。",
+      "形成了从原始数据到清洗结构再到商业洞察的面试可解释流程。",
+    ],
+    evidence: [
+      {
+        title: "质量标记",
+        body: "清洗脚本为 App 名称空白、价格缺失、发布日期无效和大小异常等问题创建 issue flags。",
+      },
+      {
+        title: "市场分析",
+        body: "分析覆盖免费/付费应用、Top 类别、开发者评论量和应用更新趋势。",
+      },
+    ],
+    code: {
+      label: "派生字段示例",
+      language: "Python",
+      lines: [
+        "df['Size_MB'] = (df['Size_Bytes'] / (1024 * 1024)).round(2)",
+        "df['Free_By_Price'] = df['Price'].fillna(0).eq(0)",
+        "df['Issue_Missing_Price'] = df['Price'].isna()",
+        "df['Quality_Issue_Count'] = df[issue_columns].sum(axis=1)",
+      ],
+    },
+    screenshots: [
+      {
+        title: "Top App 类别",
+        caption: "类别结构视图，显示 Games 是分析数据集中最大的应用类别。",
+        src: "project-assets/apple-app-store/top-genres.png",
+        alt: "App Store 应用数量 Top 10 类别柱状图。",
+      },
+      {
+        title: "免费与付费应用",
+        caption: "定价模式对比，用来说明数据集中免费应用占主导。",
+        src: "project-assets/apple-app-store/free-vs-paid.png",
+        alt: "App Store 免费应用与付费应用数量对比柱状图。",
+      },
+      {
+        title: "应用更新趋势",
+        caption: "按年份展示更新活跃度，支撑市场分析叙事。",
+        src: "project-assets/apple-app-store/update-trend.png",
+        alt: "App Store 应用按年份更新趋势折线图。",
+      },
+    ],
+    codeSamples: [
+      {
+        label: "质量问题标记",
+        language: "Python",
+        lines: [
+          "df['Size_MB'] = (df['Size_Bytes'] / (1024 * 1024)).round(2)",
+          "df['Free_By_Price'] = df['Price'].fillna(0).eq(0)",
+          "df['Issue_Missing_Price'] = df['Price'].isna()",
+          "df['Quality_Issue_Count'] = df[issue_columns].sum(axis=1)",
+        ],
+      },
+      {
+        label: "类别聚合分析",
+        language: "Python",
+        lines: [
+          "genre_summary = (",
+          "    df.groupby('Primary_Genre')",
+          "      .agg(app_count=('App_Id', 'count'),",
+          "           avg_rating=('Average_User_Rating', 'mean'),",
+          "           avg_reviews=('Reviews', 'mean'))",
+          "      .sort_values('app_count', ascending=False)",
+          ")",
+        ],
+      },
+    ],
+    conclusion: [
+      "这个项目最强的信号是规模：用 SQL/Python 处理 120 万级记录，而不是靠手工表格检查。",
+      "它适合数据分析岗位展示，因为同时覆盖清洗、验证、派生字段、分组分析和可视化表达。",
+      "分析口径保持保守：不确定记录会被标记和记录，而不是被静默覆盖。",
+    ],
+    href: "https://github.com/stevenjobs530-afk/Apple-App-Store-Data-Cleaning-Analysis",
+    linkLabel: "打开 GitHub 项目",
+  },
+  {
+    id: "aep",
+    eyebrow: "研究设计 + 原型逻辑",
+    title: "应用型拓展项目：初入职场 wellbeing 与雇主支持",
+    summary:
+      "布里斯托大学进行中的应用型研究项目，关注 education-to-employment transition 中的挑战和雇主侧支持需求。",
+    problem:
+      "项目需要一个谨慎的公开研究原型，能够探索 wellbeing、求职压力、职场连接感、AI 相关压力、跨文化适应和雇主支持，同时不能提前声称最终结论或收集真实回答。",
+    metrics: [
+      { value: "V6", label: "已复查的问卷原型版本" },
+      { value: "7-8 min", label: "目标填写时长" },
+      { value: "2", label: "主要参与者分支路径" },
+      { value: "0", label: "原型中的实时回答存储" },
+    ],
+    method: [
+      "先设计 consent 与 screening，再进入主要问卷路径。",
+      "区分学生/近期毕业生的 expected challenges 和 early-career professionals 的 actual experience。",
+      "组合 Likert 题、Top challenges 选择、support option 排序和开放题。",
+      "明确伦理边界：仅讨论原型，无提交、无存储，正式发布前需要审批。",
+    ],
+    results: [
+      "为小组讨论和 supervisor review 形成更清晰的原型结构。",
+      "强化求职压力、belonging、AI、跨文化适应和可获得支持等研究主题。",
+      "在公开网站中可以展示研究判断，但仍保持 in progress 表述。",
+    ],
+    evidence: [
+      {
+        title: "分支逻辑",
+        body: "原型根据参与者当前状态，进入 expected challenges 或 actual experience 路径。",
+      },
+      {
+        title: "研究边界",
+        body: "原型明确说明不提交、不传输、不存储、不保存任何回答。",
+      },
+    ],
+    code: {
+      label: "问卷流程示例",
+      language: "Flow",
+      lines: [
+        "Introduction -> Consent and screening",
+        "A2 student/recent graduate -> expected challenges",
+        "A2 early-career experience -> actual experience",
+        "Challenges -> support needs -> optional comment -> complete",
+      ],
+    },
+    screenshots: [
+      {
+        title: "问卷原型预览",
+        caption: "V6 讨论原型的公开安全视图，展示研究目的、方法说明和伦理边界。",
+        src: "project-assets/aep/prototype-preview.png",
+        alt: "AEP 问卷原型介绍页面。",
+      },
+    ],
+    codeSamples: [
+      {
+        label: "分支流程",
+        language: "Flow",
+        lines: [
+          "Introduction -> Consent and screening",
+          "A2 student/recent graduate -> expected challenges",
+          "A2 early-career experience -> actual experience",
+          "Challenges -> support needs -> optional comment -> complete",
+        ],
+      },
+      {
+        label: "原型边界",
+        language: "Text",
+        lines: [
+          "Prototype only: no submit, no storage.",
+          "Use for discussion and supervisor review before formal release.",
+          "Keep participant information, consent and ethics approval outside this public preview.",
+        ],
+      },
+    ],
+    conclusion: [
+      "这个项目最适合被展示为应用型研究设计，而不是最终研究结论。",
+      "公开作品集可以展示问题框架、问卷分支逻辑和伦理意识，同时不暴露内部研究材料。",
+      "下一步应继续在私有 dissertation 材料中完善细节，网站只展示 polished 且安全的项目摘要。",
+    ],
+    href: "https://stevenjobs530-afk.github.io/aep-questionnaire-v6-preview/",
+    linkLabel: "打开原型预览",
   },
 ];
 
@@ -356,6 +981,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       emailMe: "Email Me",
       viewGithub: "View GitHub",
       viewProject: "View Project",
+      viewCaseStudy: "View Case Study",
       discussProject: "Discuss Project",
       backToTop: "Back to top",
     },
@@ -367,6 +993,12 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       projects: {
         label: "Featured Projects",
         title: "Evidence-led portfolio work.",
+      },
+      caseStudies: {
+        label: "Case Studies",
+        title: "What changed, how I worked, and what the evidence shows.",
+        body:
+          "These deeper notes are built from the real SQL, Python, reporting and research files behind the portfolio, so each project is easier to assess in an interview context.",
       },
       experience: {
         label: "Experience",
@@ -391,9 +1023,20 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     footer: {
       rights: "© 2026 Zishun Gao. All rights reserved.",
     },
+    caseStudyLabels: {
+      problem: "Problem",
+      method: "Method",
+      result: "Result",
+      evidence: "Evidence",
+      screenshots: "Screenshots",
+      code: "Code",
+      conclusion: "Conclusion",
+      backToProjects: "Back to project cards",
+    },
     profile,
     metrics,
     projects,
+    caseStudies,
     experiences,
     skills,
     education,
@@ -424,6 +1067,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       emailMe: "发送邮件",
       viewGithub: "查看 GitHub",
       viewProject: "查看项目",
+      viewCaseStudy: "查看案例",
       discussProject: "交流项目",
       backToTop: "返回顶部",
     },
@@ -435,6 +1079,12 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       projects: {
         label: "重点项目",
         title: "用可验证成果呈现分析能力。",
+      },
+      caseStudies: {
+        label: "项目案例",
+        title: "问题、方法、证据和结果。",
+        body:
+          "这些案例来自真实的 SQL、Python、报告和研究原型文件，用更适合面试和 HR 快速判断的方式说明项目价值。",
       },
       experience: {
         label: "经历",
@@ -459,9 +1109,20 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     footer: {
       rights: "© 2026 高子舜。保留所有权利。",
     },
+    caseStudyLabels: {
+      problem: "问题",
+      method: "方法",
+      result: "结果",
+      evidence: "证据",
+      screenshots: "截图",
+      code: "代码",
+      conclusion: "结论",
+      backToProjects: "返回项目卡片",
+    },
     profile: chineseProfile,
     metrics: chineseMetrics,
     projects: chineseProjects,
+    caseStudies: chineseCaseStudies,
     experiences: chineseExperiences,
     skills: chineseSkills,
     education: chineseEducation,
