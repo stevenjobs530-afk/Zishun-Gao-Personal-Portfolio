@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +34,42 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
   ({ className, children, size, asChild = false, contentClassName, glassColor, ...props }, ref) => {
     // Generate a unique ID so multiple buttons don't conflict with each other's SVG filters
     const filterId = React.useId().replace(/:/g, "");
-    const Comp = asChild ? Slot : "button";
+    const rootClassName = cn(glassButtonVariants({ size }), "btn-liquid liquid-glow-button", className);
+    const buttonContent = (innerChildren: React.ReactNode) => (
+      <>
+        {/* ISOLATED BACKGROUND LENS */}
+        <span className="btn-liquid-lens absolute inset-0 -z-10 rounded-[inherit] pointer-events-none" />
+
+        {/* TEXT CONTENT (Composited safely ABOVE the backdrop filter) */}
+        <span className={cn("btn-liquid-text relative z-10 w-full flex items-center justify-center gap-[inherit] select-none", contentClassName)}>
+          {innerChildren}
+        </span>
+      </>
+    );
+
+    const rootElement = asChild ? (
+      (() => {
+        const child = React.Children.only(children);
+
+        if (!React.isValidElement<{ className?: string; children?: React.ReactNode }>(child)) {
+          return null;
+        }
+
+        return React.cloneElement(child, {
+          className: cn(rootClassName, child.props.className),
+          ref,
+          ...props,
+          children: buttonContent(child.props.children),
+        } as React.HTMLAttributes<HTMLElement> & {
+          children: React.ReactNode;
+          ref: React.ForwardedRef<HTMLButtonElement>;
+        });
+      })()
+    ) : (
+      <button className={rootClassName} ref={ref} {...props}>
+        {buttonContent(children)}
+      </button>
+    );
 
     return (
       <>
@@ -127,19 +161,7 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
           }
         `}</style>
         
-        <Comp
-          className={cn(glassButtonVariants({ size }), "btn-liquid liquid-glow-button", className)}
-          ref={ref}
-          {...props}
-        >
-          {/* ISOLATED BACKGROUND LENS */}
-          <span className="btn-liquid-lens absolute inset-0 -z-10 rounded-[inherit] pointer-events-none" />
-
-          {/* TEXT CONTENT (Composited safely ABOVE the backdrop filter) */}
-          <span className={cn("btn-liquid-text relative z-10 w-full flex items-center justify-center gap-[inherit] select-none", contentClassName)}>
-            {children}
-          </span>
-        </Comp>
+        {rootElement}
       </>
     );
   }
