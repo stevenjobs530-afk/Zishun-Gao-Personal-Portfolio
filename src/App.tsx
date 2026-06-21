@@ -29,6 +29,9 @@ function publicAssetPath(path: string) {
   return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
 }
 
+const cvPdfPath = publicAssetPath("cv/Zishun_Gao_CV_2_0_Data_BI_Analyst_2026.pdf");
+const cvDocxPath = publicAssetPath("cv/Zishun_Gao_CV_2_0_Data_BI_Analyst_2026.docx");
+
 function isLanguageCode(value: string | null): value is LanguageCode {
   return value === "en" || value === "zh-CN";
 }
@@ -121,11 +124,13 @@ function Hero({ content }: { content: PortfolioContent }) {
             {content.actions.viewProjects}
           </GlassButton>
           <GlassButton
+            asChild
             className="h-12 min-w-36 text-neutral-950"
             glassColor="oklch(from var(--foreground) l c h / 5%)"
-            title={content.actions.cvPendingTitle}
           >
-            {content.actions.downloadCV}
+            <a href={cvPdfPath} download>
+              {content.actions.downloadCV}
+            </a>
           </GlassButton>
         </StaggerItem>
         <StaggerItem className="mt-7 flex flex-wrap gap-5 text-sm font-medium text-neutral-600 max-sm:flex-col">
@@ -624,6 +629,11 @@ function Contact({ content }: { content: PortfolioContent }) {
             onClick={() => window.open(content.profile.github, "_blank", "noopener,noreferrer")}
           >
             GitHub
+          </GlassButton>
+          <GlassButton asChild className="h-12 text-neutral-950" glassColor="oklch(from var(--foreground) l c h / 5%)">
+            <a href={cvDocxPath} download>
+              {content.actions.downloadWordCV}
+            </a>
           </GlassButton>
         </div>
         </LiquidGlass>

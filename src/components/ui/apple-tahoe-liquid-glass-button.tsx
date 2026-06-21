@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -25,14 +26,16 @@ const glassButtonVariants = cva(
 export interface GlassButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof glassButtonVariants> {
+  asChild?: boolean;
   contentClassName?: string;
   glassColor?: string; // e.g. "oklch(from var(--foreground) l c h / 10%)"
 }
 
 const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
-  ({ className, children, size, contentClassName, glassColor, ...props }, ref) => {
+  ({ className, children, size, asChild = false, contentClassName, glassColor, ...props }, ref) => {
     // Generate a unique ID so multiple buttons don't conflict with each other's SVG filters
     const filterId = React.useId().replace(/:/g, "");
+    const Comp = asChild ? Slot : "button";
 
     return (
       <>
@@ -124,7 +127,7 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
           }
         `}</style>
         
-        <button
+        <Comp
           className={cn(glassButtonVariants({ size }), "btn-liquid liquid-glow-button", className)}
           ref={ref}
           {...props}
@@ -136,7 +139,7 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
           <span className={cn("btn-liquid-text relative z-10 w-full flex items-center justify-center gap-[inherit] select-none", contentClassName)}>
             {children}
           </span>
-        </button>
+        </Comp>
       </>
     );
   }
