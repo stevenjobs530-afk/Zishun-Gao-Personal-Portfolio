@@ -162,6 +162,34 @@ function Metrics({ content }: { content: PortfolioContent }) {
   );
 }
 
+function RecruiterQuickView({ content }: { content: PortfolioContent }) {
+  const quickView = content.recruiterQuickView;
+
+  return (
+    <section className="mx-auto w-[min(1180px,calc(100%-40px))] pt-10 max-sm:w-[calc(100%-28px)]">
+      <RevealBlock>
+        <LiquidGlass className="grid grid-cols-[.72fr_1.28fr] gap-8 p-7 md:p-8 max-lg:grid-cols-1">
+          <div className="relative z-[1]">
+            <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{quickView.label}</p>
+            <h2 className="apple-display-text mt-4 text-[clamp(1.8rem,3vw,3rem)] leading-none text-neutral-900">
+              {quickView.title}
+            </h2>
+            <p className="mt-5 text-sm leading-7 text-neutral-600">{quickView.body}</p>
+          </div>
+          <div className="relative z-[1] grid grid-cols-2 gap-4 max-md:grid-cols-1">
+            {quickView.items.map((item, index) => (
+              <RevealArticle key={item.title} className="border-t border-white/55 pt-4" delay={index * 0.05}>
+                <h3 className="apple-display-text text-base text-neutral-900">{item.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-neutral-600">{item.body}</p>
+              </RevealArticle>
+            ))}
+          </div>
+        </LiquidGlass>
+      </RevealBlock>
+    </section>
+  );
+}
+
 function SectionHeading({ label, title }: { label: string; title: string }) {
   return (
     <StaggerBlock>
@@ -208,6 +236,18 @@ function About({ content }: { content: PortfolioContent }) {
             <p>{paragraph}</p>
           </RevealBlock>
         ))}
+        <RevealBlock delay={0.18}>
+          <LiquidGlass className="mt-3 p-6">
+            <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.targetRoles.label}</p>
+            <h3 className="apple-display-text mt-3 text-xl leading-tight text-neutral-900">{content.targetRoles.title}</h3>
+            <p className="mt-3 text-sm leading-7 text-neutral-600">{content.targetRoles.body}</p>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {content.targetRoles.roles.map((role) => (
+                <Badge key={role}>{role}</Badge>
+              ))}
+            </div>
+          </LiquidGlass>
+        </RevealBlock>
       </div>
     </section>
   );
@@ -282,6 +322,12 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                     {study.title}
                   </h3>
                   <p className="mt-5 max-w-3xl text-base leading-8 text-neutral-600">{study.summary}</p>
+
+                  <div className="mt-6 border-t border-white/55 pt-5">
+                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.businessQuestion}</h4>
+                    <p className="mt-3 text-sm leading-7 text-neutral-600">{study.businessQuestion}</p>
+                  </div>
+
                   <ProjectDetailMenu studyId={study.id} labels={content.caseStudyLabels} className="mt-6" />
 
                   <div className="mt-8 border-t border-white/55 pt-6">
@@ -416,7 +462,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
 
 function ExperienceShowcase({ content }: { content: PortfolioContent }) {
   return (
-    <div className="h-full overflow-hidden bg-[radial-gradient(circle_at_12%_2%,rgba(0,122,255,.12),transparent_18%),radial-gradient(circle_at_8%_92%,rgba(21,214,180,.15),transparent_28%),linear-gradient(135deg,#f9fbff_0%,#eef5f8_52%,#f8f9fc_100%)] p-5 md:p-8">
+    <div className="h-full overflow-x-hidden overflow-y-auto bg-[radial-gradient(circle_at_12%_2%,rgba(0,122,255,.12),transparent_18%),radial-gradient(circle_at_8%_92%,rgba(21,214,180,.15),transparent_28%),linear-gradient(135deg,#f9fbff_0%,#eef5f8_52%,#f8f9fc_100%)] p-5 md:p-8">
       <div className="mx-auto max-w-[760px]">
         <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.sections.experience.label}</p>
         <LiquidGlass className="mt-5">
@@ -430,6 +476,27 @@ function ExperienceShowcase({ content }: { content: PortfolioContent }) {
                   <li key={bullet}>{bullet}</li>
                 ))}
               </ul>
+              {item.badges ? (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {item.badges.map((badge) => (
+                    <Badge key={badge}>{badge}</Badge>
+                  ))}
+                </div>
+              ) : null}
+              {item.caseStudy ? (
+                <div className="mt-6 border-t border-white/55 pt-5">
+                  <h4 className="apple-display-text text-base text-neutral-900">{item.caseStudy.title}</h4>
+                  <p className="mt-3 text-sm leading-7 text-neutral-600">{item.caseStudy.body}</p>
+                  <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 max-md:grid-cols-1">
+                    {item.caseStudy.details.map((detail) => (
+                      <article key={detail.title} className="border-t border-white/45 pt-4">
+                        <h5 className="text-sm font-semibold text-neutral-900">{detail.title}</h5>
+                        <p className="mt-1 text-sm leading-7 text-neutral-600">{detail.body}</p>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
             </RevealArticle>
           ))}
         </LiquidGlass>
@@ -468,6 +535,11 @@ function ExperienceSkills({ content }: { content: PortfolioContent }) {
               <RevealArticle key={skill.title} className={index > 0 ? "border-t border-white/50 p-7" : "p-7"} delay={index * 0.06}>
                 <h3 className="apple-display-text text-lg text-neutral-900">{skill.title}</h3>
                 <p className="mt-3 text-sm leading-7 text-neutral-600">{skill.body}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {skill.tags.map((tag) => (
+                    <Badge key={tag}>{tag}</Badge>
+                  ))}
+                </div>
               </RevealArticle>
             ))}
           </LiquidGlass>
@@ -591,6 +663,7 @@ export default function App() {
       <main>
         <Hero content={content} />
         <Metrics content={content} />
+        <RecruiterQuickView content={content} />
         <About content={content} />
         <Projects content={content} />
         <CaseStudies content={content} />

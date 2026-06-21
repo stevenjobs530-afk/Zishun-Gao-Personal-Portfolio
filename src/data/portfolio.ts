@@ -12,6 +12,15 @@ export type Experience = {
   role: string;
   company: string;
   bullets: string[];
+  badges?: string[];
+  caseStudy?: {
+    title: string;
+    body: string;
+    details: {
+      title: string;
+      body: string;
+    }[];
+  };
 };
 
 export type CaseStudyMetric = {
@@ -42,6 +51,7 @@ export type CaseStudy = {
   eyebrow: string;
   title: string;
   summary: string;
+  businessQuestion: string;
   problem: string;
   metrics: CaseStudyMetric[];
   method: string[];
@@ -126,6 +136,7 @@ export type PortfolioContent = {
     };
   };
   caseStudyLabels: {
+    businessQuestion: string;
     problem: string;
     method: string;
     result: string;
@@ -140,6 +151,8 @@ export type PortfolioContent = {
   };
   profile: typeof profile;
   metrics: typeof metrics;
+  recruiterQuickView: typeof recruiterQuickView;
+  targetRoles: typeof targetRoles;
   projects: Project[];
   caseStudies: CaseStudy[];
   experiences: Experience[];
@@ -171,6 +184,39 @@ export const metrics = [
   { value: "£10.6M+", label: "sales value analysed" },
   { value: "1.23M", label: "App Store records" },
 ];
+
+export const recruiterQuickView = {
+  label: "Recruiter Quick View",
+  title: "30-second fit for analyst roles.",
+  body:
+    "A finance-background analyst who connects business questions with practical SQL, Python, data cleaning and reporting work.",
+  items: [
+    {
+      title: "Finance background",
+      body: "International trade and financial risk management training, useful for reporting, KPI interpretation and commercial context.",
+    },
+    {
+      title: "SQL/Python data cleaning",
+      body: "Portfolio workflows cover million-row datasets, validation rules, issue flags and analysis-ready tables.",
+    },
+    {
+      title: "Business insight",
+      body: "Projects are framed around business questions, reporting outputs and interview-ready decision narratives.",
+    },
+    {
+      title: "Bilingual communication",
+      body: "Chinese native speaker with professional English communication for cross-cultural teams and stakeholder work.",
+    },
+  ],
+};
+
+export const targetRoles = {
+  label: "Target Roles",
+  title: "Currently seeking graduate or entry-level analyst roles.",
+  body:
+    "Open to industries where financial awareness, data cleaning, reporting, business process understanding and stakeholder communication support better decisions.",
+  roles: ["Data Analyst", "Business Analyst", "BI Analyst", "Finance Data Analyst", "Graduate Analyst"],
+};
 
 export const projects: Project[] = [
   {
@@ -216,6 +262,8 @@ export const caseStudies: CaseStudy[] = [
     title: "UK Retail Transactions: from raw export to analysis-ready reporting",
     summary:
       "A practical cleaning and reporting workflow for online retail transactions, connecting SQL validation in MySQL/DataGrip with Python chart outputs.",
+    businessQuestion:
+      "How can raw retail transactions be cleaned into an analysis-ready dataset that supports monthly revenue tracking, product performance review and business reporting?",
     problem:
       "The raw transaction export needed basic data discipline before analysis: Excel-style serial dates, missing descriptions and customer IDs, invalid quantity or unit-price values, and duplicate transaction rows all had to be checked before any business interpretation.",
     metrics: [
@@ -313,6 +361,8 @@ export const caseStudies: CaseStudy[] = [
     title: "Apple App Store: large-scale data cleaning and market-style analysis",
     summary:
       "A full SQL and Python workflow for a 1.2M+ row App Store dataset, focused on conservative data quality checks and analysis-ready structures.",
+    businessQuestion:
+      "How can a large app-market dataset be cleaned, validated and structured to compare free/paid models, genre distribution, developer activity and update behaviour?",
     problem:
       "The source dataset was large enough to require a repeatable workflow rather than manual inspection. Key risks included blank developer links, invalid timestamps, missing prices, price/free mismatches, missing app sizes and fields that needed consistent derived logic.",
     metrics: [
@@ -411,6 +461,8 @@ export const caseStudies: CaseStudy[] = [
     title: "Applied Extended Project: early-career wellbeing and employer support",
     summary:
       "An in-progress University of Bristol applied research project exploring education-to-employment transition challenges and employer-facing support needs.",
+    businessQuestion:
+      "How can early-career transition challenges and employer support needs be understood through an ethical, discussion-ready research prototype?",
     problem:
       "The project needed a careful public-facing research prototype that could explore wellbeing, job-search pressure, workplace connectedness, AI-related pressure, cross-cultural adjustment and employer support without overclaiming final findings or collecting live responses.",
     metrics: [
@@ -495,10 +547,46 @@ export const experiences: Experience[] = [
     role: "Data Analysis Intern",
     company: "Licheng Holdings Group Co., Ltd.",
     bullets: [
-      "Benchmarked six internal workflows and created baseline metrics for optimisation.",
-      "Supported DeepSeek reporting module integration and rule tuning, improving report efficiency and field matching by 40%.",
-      "Produced test cases and SOPs that contributed to a 20% reduction in manual rework.",
+      "Supported early-stage research, design and testing work for a DMS data management and analysis platform in the Data Asset Department.",
+      "Benchmarked Minitab, SPSS and SAS-style statistical functions to help decompose interface logic, workflows and user requirements.",
+      "Supported documentation and requirement understanding around a DeepSeek-enabled analysis/explanation module, while observing deployment and integration discussions.",
+      "Contributed to workflow analysis for a reporting module targeting a 40% report generation speed improvement and an estimated 20% reduction in repetitive chart-explanation work.",
     ],
+    badges: [
+      "DMS design/testing support",
+      "DeepSeek module research support",
+      "Workflow optimisation research",
+      "Multi-source data requirements",
+      "Data governance awareness",
+      "40% speed target",
+    ],
+    caseStudy: {
+      title: "Internship case study: DMS and DeepSeek research support",
+      body:
+        "This internship strengthened my understanding of how enterprise data platforms are shaped by business needs, user experience, technical feasibility and governance requirements.",
+      details: [
+        {
+          title: "Context",
+          body: "The team was exploring a DMS platform that could move enterprise users from data input to statistical analysis, explanation and reporting.",
+        },
+        {
+          title: "My role",
+          body: "As a Data Analysis Intern, I supported research, documentation, function decomposition, testing preparation and workflow understanding rather than senior ownership.",
+        },
+        {
+          title: "Key workstreams",
+          body: "I benchmarked statistical analysis tools, reviewed interface/function logic and helped translate platform behaviour into clearer requirements and test notes.",
+        },
+        {
+          title: "DeepSeek/DMS contribution",
+          body: "I supported early research around a localized DeepSeek explanation layer and observed deployment/API-related discussions; I did not independently implement the API interface.",
+        },
+        {
+          title: "Governance awareness",
+          body: "The work included data permissions, platform workflow documentation and compliance-aware thinking for enterprise data use.",
+        },
+      ],
+    },
   },
   {
     date: "Jul 2021 - Aug 2021",
@@ -516,18 +604,22 @@ export const skills = [
   {
     title: "SQL & Databases",
     body: "SQL, MySQL, SQLite, DataGrip, joins, aggregations, validation rules and ETL cleaning logic.",
+    tags: ["SQL", "MySQL", "SQLite", "DataGrip", "ETL rules"],
   },
   {
     title: "Python Analytics",
     body: "pandas, data profiling, missing and duplicate handling, extraction scripts, matplotlib and seaborn.",
+    tags: ["Python", "pandas", "matplotlib", "seaborn", "Data cleaning"],
   },
   {
     title: "BI & Reporting",
     body: "Power BI concepts, KPI cards, slicers, trend charts, Power Query, Excel PivotTables and reporting narratives.",
+    tags: ["Excel", "Power BI", "Power Query", "KPI reporting", "PivotTables"],
   },
   {
     title: "Business Analysis",
     body: "Business-question framing, KPI design, stakeholder communication, process improvement and insight storytelling.",
+    tags: ["Business analysis", "Stakeholder communication", "Research design", "Insight storytelling", "Process improvement"],
   },
 ];
 
@@ -575,6 +667,37 @@ const chineseMetrics: typeof metrics = [
   { value: "123万", label: "App Store 记录" },
 ];
 
+const chineseRecruiterQuickView: typeof recruiterQuickView = {
+  label: "HR 快速判断",
+  title: "30 秒理解我的分析岗位匹配度。",
+  body: "我有金融背景，也能把业务问题连接到 SQL、Python、数据清洗和报告产出。",
+  items: [
+    {
+      title: "金融与商业背景",
+      body: "国际贸易和金融风险管理训练，适合做报告解读、KPI 分析和商业语境判断。",
+    },
+    {
+      title: "SQL/Python 数据清洗",
+      body: "作品集覆盖百万级数据、验证规则、质量标记和可分析数据表构建。",
+    },
+    {
+      title: "业务洞察表达",
+      body: "项目以业务问题、报告输出和面试可解释的决策叙事为核心。",
+    },
+    {
+      title: "中英文沟通",
+      body: "中文母语，具备专业英语沟通能力，适合跨文化团队和 stakeholder 沟通场景。",
+    },
+  ],
+};
+
+const chineseTargetRoles: typeof targetRoles = {
+  label: "目标岗位",
+  title: "正在寻找 graduate 或 entry-level 分析岗位。",
+  body: "我对需要金融意识、数据清洗、报告能力、业务流程理解和沟通能力的行业保持开放。",
+  roles: ["Data Analyst", "Business Analyst", "BI Analyst", "Finance Data Analyst", "Graduate Analyst"],
+};
+
 const chineseProjects: Project[] = [
   {
     title: "英国零售交易 ETL、SQL 分析与 BI 报告",
@@ -619,6 +742,8 @@ const chineseCaseStudies: CaseStudy[] = [
     title: "英国零售交易：从原始导出到可分析报表",
     summary:
       "一个完整的零售交易清洗与报告流程，把 MySQL/DataGrip 中的 SQL 验证和 Python 图表输出连接起来。",
+    businessQuestion:
+      "如何把原始零售交易清洗成可分析数据集，用于月度收入跟踪、产品表现复盘和业务报告？",
     problem:
       "原始交易数据在分析前需要先建立数据纪律：Excel 序列日期、缺失描述和客户 ID、无效数量或单价、重复交易行都需要先检查，不能直接进入图表分析。",
     metrics: [
@@ -716,6 +841,8 @@ const chineseCaseStudies: CaseStudy[] = [
     title: "Apple App Store：大规模数据清洗与市场分析",
     summary:
       "围绕 120 万级 App Store 数据集构建 SQL + Python 工作流，重点是保守的数据质量检查和可分析数据结构。",
+    businessQuestion:
+      "如何清洗、验证并组织大规模应用市场数据，用于比较免费/付费模式、类别分布、开发者活跃度和更新行为？",
     problem:
       "数据规模较大，不能依赖手工检查。主要风险包括开发者链接缺失、App 名称空白、无效时间戳、价格逻辑不一致、App 大小缺失，以及需要统一派生逻辑的字段。",
     metrics: [
@@ -814,6 +941,8 @@ const chineseCaseStudies: CaseStudy[] = [
     title: "应用型拓展项目：初入职场 wellbeing 与雇主支持",
     summary:
       "布里斯托大学进行中的应用型研究项目，关注 education-to-employment transition 中的挑战和雇主侧支持需求。",
+    businessQuestion:
+      "如何通过符合伦理边界的讨论原型，理解 early-career 人群的过渡挑战和雇主支持需求？",
     problem:
       "项目需要一个谨慎的公开研究原型，能够探索 wellbeing、求职压力、职场连接感、AI 相关压力、跨文化适应和雇主支持，同时不能提前声称最终结论或收集真实回答。",
     metrics: [
@@ -898,10 +1027,45 @@ const chineseExperiences: Experience[] = [
     role: "数据分析实习生",
     company: "Licheng Holdings Group Co., Ltd.",
     bullets: [
-      "对标 6 个内部工作流程，并建立优化前的基线指标。",
-      "支持 DeepSeek 报告模块集成与规则调优，使报告效率和字段匹配表现提升 40%。",
-      "编写测试用例和 SOP，帮助减少 20% 的手工返工。",
+      "在 Data Asset Department 支持 DMS 数据管理与分析平台的早期研究、设计和测试工作。",
+      "对标 Minitab、SPSS、SAS 等统计分析工具，辅助拆解界面逻辑、功能流程和用户需求。",
+      "围绕 DeepSeek-enabled 分析/解释模块支持资料理解、需求梳理和文档工作，并观察部署与集成讨论。",
+      "参与报告模块流程分析；该项目阶段目标是提升约 40% 报告生成速度，并预计减少约 20% 重复图表解释工作。",
     ],
+    badges: [
+      "DMS 设计/测试支持",
+      "DeepSeek 模块研究支持",
+      "流程优化研究",
+      "多源数据需求理解",
+      "数据治理意识",
+      "40% 速度目标",
+    ],
+    caseStudy: {
+      title: "实习案例：DMS 与 DeepSeek 研究支持",
+      body: "这段实习让我更理解企业数据平台如何同时受到业务需求、用户体验、技术可行性和数据治理要求的影响。",
+      details: [
+        {
+          title: "背景",
+          body: "团队在探索一个 DMS 平台，帮助企业用户从数据输入进入统计分析、解释和报告输出。",
+        },
+        {
+          title: "我的角色",
+          body: "我作为数据分析实习生，支持研究、文档、功能拆解、测试准备和流程理解，而不是项目的主要负责人。",
+        },
+        {
+          title: "关键工作",
+          body: "我对标统计分析软件，梳理界面和功能逻辑，并把平台行为转化为更清楚的需求和测试记录。",
+        },
+        {
+          title: "DeepSeek/DMS 贡献",
+          body: "我支持本地化 DeepSeek 解释层的早期研究，并观察部署/API 相关讨论；不把自己表述为独立 API 实现者。",
+        },
+        {
+          title: "治理意识",
+          body: "工作涉及数据权限、平台流程文档和企业数据使用中的合规意识。",
+        },
+      ],
+    },
   },
   {
     date: "2021 年 7 月 - 2021 年 8 月",
@@ -919,18 +1083,22 @@ const chineseSkills: typeof skills = [
   {
     title: "SQL 与数据库",
     body: "SQL、MySQL、SQLite、DataGrip、表连接、聚合分析、验证规则和 ETL 清洗逻辑。",
+    tags: ["SQL", "MySQL", "SQLite", "DataGrip", "ETL 清洗"],
   },
   {
     title: "Python 数据分析",
     body: "pandas、数据画像、缺失值与重复值处理、数据抽取脚本、matplotlib 和 seaborn。",
+    tags: ["Python", "pandas", "matplotlib", "seaborn", "数据清洗"],
   },
   {
     title: "BI 与报告",
     body: "Power BI 思维、KPI 卡片、筛选器、趋势图、Power Query、Excel PivotTables 和报告叙事。",
+    tags: ["Excel", "Power BI", "Power Query", "KPI 报告", "透视表"],
   },
   {
     title: "业务分析",
     body: "业务问题拆解、KPI 设计、利益相关方沟通、流程优化和洞察表达。",
+    tags: ["业务分析", "Stakeholder communication", "Research design", "洞察表达", "流程优化"],
   },
 ];
 
@@ -1024,6 +1192,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       rights: "© 2026 Zishun Gao. All rights reserved.",
     },
     caseStudyLabels: {
+      businessQuestion: "Business Question",
       problem: "Problem",
       method: "Method",
       result: "Result",
@@ -1035,6 +1204,8 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     },
     profile,
     metrics,
+    recruiterQuickView,
+    targetRoles,
     projects,
     caseStudies,
     experiences,
@@ -1110,6 +1281,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       rights: "© 2026 高子舜。保留所有权利。",
     },
     caseStudyLabels: {
+      businessQuestion: "业务问题",
       problem: "问题",
       method: "方法",
       result: "结果",
@@ -1121,6 +1293,8 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     },
     profile: chineseProfile,
     metrics: chineseMetrics,
+    recruiterQuickView: chineseRecruiterQuickView,
+    targetRoles: chineseTargetRoles,
     projects: chineseProjects,
     caseStudies: chineseCaseStudies,
     experiences: chineseExperiences,
