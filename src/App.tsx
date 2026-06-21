@@ -13,6 +13,7 @@ import { RevealArticle, RevealBlock, RevealListItem, StaggerBlock, StaggerItem }
 import { DataCanvas } from "@/components/DataCanvas";
 import { HelloIntro } from "@/components/HelloIntro";
 import { ProjectVisual } from "@/components/ProjectVisual";
+import { SectionNavigator } from "@/components/SectionNavigator";
 import { languageOptions, portfolioByLanguage, type LanguageCode, type PortfolioContent } from "@/data/portfolio";
 
 const defaultLanguage: LanguageCode = "en";
@@ -663,6 +664,7 @@ export default function App() {
       <DataCanvas />
       <HelloIntro />
       <Header content={content} language={language} onLanguageChange={setLanguage} />
+      <SectionNavigator language={language} />
       <main>
         <Hero content={content} />
         <Metrics content={content} />
