@@ -3,11 +3,11 @@ import {
   motion,
   useMotionTemplate,
   useMotionValue,
-  useReducedMotion,
   useSpring,
   useTransform,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useDisableReveal } from "@/components/ui/text-animations";
 
 type Animated3DCardProps = {
   children: React.ReactNode;
@@ -24,7 +24,7 @@ export function Animated3DCard({
   delay = 0,
   intensity = 8,
 }: Animated3DCardProps) {
-  const reduceMotion = useReducedMotion();
+  const disableMotion = useDisableReveal();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -38,7 +38,7 @@ export function Animated3DCard({
 
   const handleMouseMove = React.useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
-      if (reduceMotion) {
+      if (disableMotion) {
         return;
       }
 
@@ -46,7 +46,7 @@ export function Animated3DCard({
       mouseX.set((event.clientX - rect.left) / rect.width - 0.5);
       mouseY.set((event.clientY - rect.top) / rect.height - 0.5);
     },
-    [mouseX, mouseY, reduceMotion],
+    [disableMotion, mouseX, mouseY],
   );
 
   const handleMouseLeave = React.useCallback(() => {
@@ -54,11 +54,19 @@ export function Animated3DCard({
     mouseY.set(0);
   }, [mouseX, mouseY]);
 
+  if (disableMotion) {
+    return (
+      <div className={cn("group/animated-card relative h-full", className)}>
+        <div className="relative h-full">{children}</div>
+      </div>
+    );
+  }
+
   return (
     <motion.div
       className={cn("group/animated-card relative h-full [perspective:1400px]", className)}
-      initial={reduceMotion ? false : { opacity: 0, y: 34, rotateX: -8, scale: 0.98 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, rotateX: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 34, rotateX: -8, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, rotateX: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.22, margin: "-80px" }}
       transition={{ duration: 0.72, delay, ease: [0.22, 1, 0.36, 1] }}
       onMouseMove={handleMouseMove}
@@ -67,11 +75,11 @@ export function Animated3DCard({
       <motion.div
         className="relative h-full transform-gpu"
         style={{
-          rotateX: reduceMotion ? 0 : rotateX,
-          rotateY: reduceMotion ? 0 : rotateY,
+          rotateX,
+          rotateY,
           transformStyle: "preserve-3d",
         }}
-        whileHover={reduceMotion ? undefined : { y: -5 }}
+        whileHover={{ y: -5 }}
         transition={spring}
       >
         <motion.span

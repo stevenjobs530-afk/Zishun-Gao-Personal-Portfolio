@@ -90,5 +90,5 @@ export function DataCanvas() {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 -z-20 opacity-40" aria-hidden="true" />;
+  return <canvas ref={canvasRef} className="pointer-events-none fixed inset-0 -z-20 opacity-40" aria-hidden="true" />;
 }

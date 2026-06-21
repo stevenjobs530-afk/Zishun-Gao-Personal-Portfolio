@@ -15,7 +15,6 @@ import { HelloIntro } from "@/components/HelloIntro";
 import { ProjectVisual } from "@/components/ProjectVisual";
 import { languageOptions, portfolioByLanguage, type LanguageCode, type PortfolioContent } from "@/data/portfolio";
 
-const LANGUAGE_STORAGE_KEY = "zishun-portfolio-language";
 const defaultLanguage: LanguageCode = "en";
 
 const navSectionIds = ["about", "projects", "experience", "skills", "education", "contact"] as const;
@@ -29,20 +28,15 @@ function publicAssetPath(path: string) {
   return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
 }
 
+function versionedScreenshotPath(path: string) {
+  return `${publicAssetPath(path)}?v=20260621`;
+}
+
 const cvPdfPath = publicAssetPath("cv/Zishun_Gao_CV_2_0_Data_BI_Analyst_2026.pdf");
 const cvDocxPath = publicAssetPath("cv/Zishun_Gao_CV_2_0_Data_BI_Analyst_2026.docx");
 
-function isLanguageCode(value: string | null): value is LanguageCode {
-  return value === "en" || value === "zh-CN";
-}
-
 function getInitialLanguage(): LanguageCode {
-  if (typeof window === "undefined") {
-    return defaultLanguage;
-  }
-
-  const storedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
-  return isLanguageCode(storedLanguage) ? storedLanguage : defaultLanguage;
+  return defaultLanguage;
 }
 
 function Header({
@@ -55,11 +49,11 @@ function Header({
   onLanguageChange: (language: LanguageCode) => void;
 }) {
   return (
-    <header className="fixed left-1/2 top-5 z-30 flex w-[min(1180px,calc(100%-40px))] -translate-x-1/2 items-center justify-between gap-5 rounded-lg border border-white/80 bg-white/55 px-4 py-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_55px_rgba(46,61,82,.14)] backdrop-blur-[44px] backdrop-saturate-150 max-sm:top-3 max-sm:w-[calc(100%-28px)]">
-      <a className="text-sm font-semibold text-neutral-950" href="#top">
+    <header className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+1.25rem)] z-30 flex w-[min(1180px,calc(100%-40px))] -translate-x-1/2 items-center justify-between gap-5 rounded-lg border border-white/80 bg-white/55 px-4 py-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_55px_rgba(46,61,82,.14)] backdrop-blur-[44px] backdrop-saturate-150 max-sm:top-[calc(env(safe-area-inset-top)+0.75rem)] max-sm:w-[calc(100%-28px)] max-sm:gap-3">
+      <a className="min-w-0 truncate text-sm font-semibold text-neutral-950" href="#top">
         {content.header.brandPrimary} <span className="text-neutral-500">{content.header.brandSecondary}</span>
       </a>
-      <div className="flex items-center gap-4">
+      <div className="flex shrink-0 items-center gap-4 max-sm:gap-3">
         <nav className="flex items-center gap-5 text-xs font-medium text-neutral-600 max-lg:hidden" aria-label="Primary navigation">
           {navSectionIds.map((sectionId) => (
             <a key={sectionId} className="transition hover:text-blue-700" href={`#${sectionId}`}>
@@ -80,7 +74,7 @@ function Header({
 
 function HeroGraphic() {
   return (
-    <LiquidGlass className="min-h-[500px] rounded-[2rem] max-lg:min-h-[360px] max-sm:min-h-[280px]" aria-hidden="true">
+    <LiquidGlass className="min-h-[500px] rounded-[2rem] max-lg:min-h-56 max-sm:min-h-[220px]" aria-hidden="true">
       <div className="liquid-chrome-artwork absolute inset-7 rounded-[1.65rem] max-sm:inset-5">
         <span className="chrome-ribbon chrome-ribbon-one" />
         <span className="chrome-ribbon chrome-ribbon-two" />
@@ -95,29 +89,29 @@ function Hero({ content }: { content: PortfolioContent }) {
   const { profile } = content;
 
   return (
-    <section id="top" className="mx-auto grid min-h-[88vh] w-[min(1180px,calc(100%-40px))] grid-cols-[minmax(0,1.05fr)_minmax(320px,.75fr)] items-center gap-16 pb-12 pt-32 max-lg:grid-cols-1 max-lg:gap-9 max-sm:w-[calc(100%-28px)] max-sm:pt-28">
+    <section id="top" className="mx-auto grid min-h-[88vh] w-[min(1180px,calc(100%-40px))] grid-cols-[minmax(0,1.05fr)_minmax(320px,.75fr)] items-center gap-16 pb-12 pt-32 max-lg:min-h-0 max-lg:grid-cols-1 max-lg:gap-6 max-lg:pb-8 max-sm:w-[calc(100%-28px)] max-sm:pt-28">
       <StaggerBlock className="max-w-[760px]" delay={0.15}>
         <StaggerItem>
-          <h1 className="apple-display-text text-[clamp(4.1rem,9vw,8.7rem)] leading-[.88] text-neutral-950 max-sm:text-[clamp(3.3rem,19vw,5rem)]">
+          <h1 className="apple-display-text text-[clamp(4.1rem,9vw,8.7rem)] leading-[.88] text-neutral-950 max-sm:text-[clamp(2.75rem,15vw,4rem)] max-sm:leading-[.96]">
             {profile.name}
           </h1>
         </StaggerItem>
         <StaggerItem>
-          <p className="mt-6 text-[clamp(1.35rem,2.4vw,2.35rem)] font-semibold text-neutral-800">{profile.title}</p>
+          <p className="mt-6 text-[clamp(1.35rem,2.4vw,2.35rem)] font-semibold text-neutral-800 max-sm:mt-4 max-sm:text-xl">{profile.title}</p>
         </StaggerItem>
         <StaggerItem>
-          <p className="mt-6 max-w-[760px] text-[clamp(1.02rem,1.55vw,1.22rem)] leading-8 text-neutral-700">
+          <p className="mt-6 max-w-[760px] text-[clamp(1.02rem,1.55vw,1.22rem)] leading-8 text-neutral-700 max-sm:mt-4 max-sm:text-base max-sm:leading-7">
             {profile.intro}
           </p>
         </StaggerItem>
         <StaggerItem>
-          <p className="mt-4 max-w-[760px] text-[clamp(1.02rem,1.55vw,1.22rem)] leading-8 text-neutral-500">
+          <p className="mt-4 max-w-[760px] text-[clamp(1.02rem,1.55vw,1.22rem)] leading-8 text-neutral-500 max-sm:text-base max-sm:leading-7">
             {profile.introSecondary}
           </p>
         </StaggerItem>
-        <StaggerItem className="mt-8 flex flex-wrap gap-4 max-sm:flex-col">
+        <StaggerItem className="mt-8 flex flex-wrap gap-4 max-sm:mt-6 max-sm:flex-col">
           <GlassButton
-            className="h-12 min-w-36 text-neutral-950"
+            className="h-12 min-w-36 text-neutral-950 max-sm:w-full"
             glassColor="oklch(from var(--foreground) l c h / 7%)"
             onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
           >
@@ -125,7 +119,7 @@ function Hero({ content }: { content: PortfolioContent }) {
           </GlassButton>
           <GlassButton
             asChild
-            className="h-12 min-w-36 text-neutral-950"
+            className="h-12 min-w-36 text-neutral-950 max-sm:w-full"
             glassColor="oklch(from var(--foreground) l c h / 5%)"
           >
             <a href={cvPdfPath} download>
@@ -133,7 +127,7 @@ function Hero({ content }: { content: PortfolioContent }) {
             </a>
           </GlassButton>
         </StaggerItem>
-        <StaggerItem className="mt-7 flex flex-wrap gap-5 text-sm font-medium text-neutral-600 max-sm:flex-col">
+        <StaggerItem className="mt-7 flex flex-wrap gap-5 text-sm font-medium text-neutral-600 max-sm:mt-6 max-sm:flex-col max-sm:gap-3">
           <a className="transition hover:text-blue-700" href={profile.github} target="_blank" rel="noreferrer">
             GitHub
           </a>
@@ -145,7 +139,7 @@ function Hero({ content }: { content: PortfolioContent }) {
           </a>
         </StaggerItem>
       </StaggerBlock>
-      <RevealBlock delay={0.35}>
+      <RevealBlock className="max-sm:hidden" delay={0.35}>
         <HeroGraphic />
       </RevealBlock>
     </section>
@@ -272,7 +266,7 @@ function Projects({ content }: { content: PortfolioContent }) {
       <div className="grid grid-cols-2 gap-5 max-lg:grid-cols-1">
         {content.projects.map((project, index) => (
           <Animated3DCard key={project.title} delay={index * 0.08}>
-            <Card className="flex min-h-[600px] flex-col overflow-hidden">
+            <Card className="flex min-h-0 flex-col overflow-hidden md:min-h-[600px]">
               <ProjectVisual visual={project.visual} />
               <CardHeader className="grow">
                 <CardTitle className="transition-transform duration-500 group-hover/animated-card:-translate-y-1">{project.title}</CardTitle>
@@ -413,7 +407,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                           <div className="overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl">
                             <img
                               className="max-h-[360px] w-full object-contain"
-                              src={publicAssetPath(screenshot.src)}
+                              src={versionedScreenshotPath(screenshot.src)}
                               alt={screenshot.alt}
                               loading="lazy"
                             />
@@ -467,7 +461,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
 
 function ExperienceShowcase({ content }: { content: PortfolioContent }) {
   return (
-    <div className="h-full overflow-x-hidden overflow-y-auto bg-[radial-gradient(circle_at_12%_2%,rgba(0,122,255,.12),transparent_18%),radial-gradient(circle_at_8%_92%,rgba(21,214,180,.15),transparent_28%),linear-gradient(135deg,#f9fbff_0%,#eef5f8_52%,#f8f9fc_100%)] p-5 md:p-8">
+    <div className="h-full overflow-x-hidden overflow-y-auto bg-[radial-gradient(circle_at_12%_2%,rgba(0,122,255,.12),transparent_18%),radial-gradient(circle_at_8%_92%,rgba(21,214,180,.15),transparent_28%),linear-gradient(135deg,#f9fbff_0%,#eef5f8_52%,#f8f9fc_100%)] p-5 max-lg:h-auto max-lg:overflow-visible max-lg:rounded-[1.5rem] md:p-8">
       <div className="mx-auto max-w-[760px]">
         <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.sections.experience.label}</p>
         <LiquidGlass className="mt-5">
@@ -658,7 +652,6 @@ export default function App() {
   const content = portfolioByLanguage[language];
 
   useEffect(() => {
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language);
     document.documentElement.lang = language;
     document.title = content.meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", content.meta.description);

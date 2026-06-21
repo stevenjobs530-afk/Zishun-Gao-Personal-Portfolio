@@ -37,7 +37,7 @@ function LanguageSelectorDropdown<TCode extends string>({
   }, []);
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block shrink-0 text-left" ref={dropdownRef}>
       <button
         type="button"
         aria-label={ariaLabel}
@@ -45,7 +45,7 @@ function LanguageSelectorDropdown<TCode extends string>({
         aria-expanded={open}
         onClick={() => setOpen((current) => !current)}
         className={cn(
-          "inline-flex h-10 min-w-24 items-center justify-center gap-2 rounded-full border border-white/80 bg-white/55 px-3 text-xs font-semibold text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_28px_rgba(46,61,82,.12)] backdrop-blur-[34px] backdrop-saturate-150 transition hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/35",
+          "inline-flex h-10 min-w-24 items-center justify-center gap-2 rounded-full border border-white/80 bg-white/55 px-3 text-xs font-semibold text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_28px_rgba(46,61,82,.12)] backdrop-blur-[34px] backdrop-saturate-150 transition hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/35 max-sm:min-w-14 max-sm:gap-1 max-sm:px-2",
         )}
       >
         <span>{selected.shortLabel}</span>

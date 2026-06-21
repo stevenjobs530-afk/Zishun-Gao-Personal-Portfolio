@@ -14,28 +14,41 @@ export function ContainerScroll({ titleComponent, children, className }: Contain
   const { scrollYProgress } = useScroll({
     target: containerRef,
   });
-  const [isMobile, setIsMobile] = React.useState(false);
+  const [useStaticLayout, setUseStaticLayout] = React.useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 1023px)").matches : false,
+  );
 
   React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    const media = window.matchMedia("(max-width: 1023px)");
+    const updateLayout = () => setUseStaticLayout(media.matches);
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+    updateLayout();
 
-    return () => {
-      window.removeEventListener("resize", checkMobile);
-    };
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", updateLayout);
+      return () => media.removeEventListener("change", updateLayout);
+    }
+
+    media.addListener(updateLayout);
+    return () => media.removeListener(updateLayout);
   }, []);
 
   const scaleDimensions = () => {
-    return isMobile ? [0.74, 0.92] : [1.05, 1];
+    return useStaticLayout ? [0.74, 0.92] : [1.05, 1];
   };
 
   const rotate = useTransform(scrollYProgress, [0, 1], [20, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions());
   const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
+  if (useStaticLayout) {
+    return (
+      <div className={cn("mx-auto w-[calc(100%-28px)] overflow-visible", className)} ref={containerRef}>
+        <div className="pb-7 text-center">{titleComponent}</div>
+        <div className="overflow-visible">{children}</div>
+      </div>
+    );
+  }
 
   return (
     <div

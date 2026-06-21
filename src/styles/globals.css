@@ -19,6 +19,7 @@
     --background: #f7f8fb;
     --foreground: #07090d;
     margin: 0;
+    width: 100%;
     min-height: 100vh;
     overflow-x: hidden;
     background: #f7f8fb;
@@ -37,6 +38,12 @@
 
   button {
     font: inherit;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   section {
