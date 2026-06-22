@@ -28,6 +28,29 @@ export type Interest = {
   body: string;
 };
 
+export type AwardPreview = {
+  id: string;
+  title: string;
+  year: string;
+  category: string;
+  note: string;
+  image: string;
+  alt: string;
+  privacy: string;
+};
+
+export type AwardsGallery = {
+  title: string;
+  body: string;
+  proofCountLabel: string;
+  yearLabel: string;
+  categoryLabel: string;
+  previousLabel: string;
+  nextLabel: string;
+  dotLabel: string;
+  cards: AwardPreview[];
+};
+
 export type CaseStudyMetric = {
   value: string;
   label: string;
@@ -169,6 +192,7 @@ export type PortfolioContent = {
   skills: typeof skills;
   education: typeof education;
   awards: string[];
+  awardsGallery: AwardsGallery;
   interests: Interest[];
 };
 
@@ -653,6 +677,60 @@ export const awards = [
   "Second Prize, China Marketing Analysis and Research Competition (2023)",
   "Second Class Academic Scholarship (2022 and 2023)",
 ];
+
+export const awardsGallery: AwardsGallery = {
+  title: "Selected Award Proofs",
+  body:
+    "Privacy-safe previews that support the award list while keeping detailed certificate scans out of the public portfolio.",
+  proofCountLabel: "selected proofs",
+  yearLabel: "Year",
+  categoryLabel: "Category",
+  previousLabel: "Previous certificate",
+  nextLabel: "Next certificate",
+  dotLabel: "Show certificate",
+  cards: [
+    {
+      id: "sanchuang",
+      title: "National College Student E-commerce Challenge - University Level Awards",
+      year: "2023",
+      category: "Innovation / Creativity / Entrepreneurship",
+      note: "Demonstrates business planning, team collaboration and entrepreneurship exposure.",
+      image: "certificates/sandbox/sanchuang-awards-2023.webp",
+      alt: "Privacy-safe preview of three Sanchuang university-level award certificates from 2023.",
+      privacy: "Certificate numbers hidden",
+    },
+    {
+      id: "cufe-scholarship",
+      title: "Central University of Finance and Economics Scholarship",
+      year: "2022 / 2023",
+      category: "Academic scholarship",
+      note: "Recognises consistent academic performance during undergraduate study.",
+      image: "certificates/sandbox/cufe-scholarship-2022-2023.webp",
+      alt: "Preview of Central University of Finance and Economics scholarship and honour certificates.",
+      privacy: "Low-resolution preview",
+    },
+    {
+      id: "cmau",
+      title: "CMAU Market Research and Business Planning Competition",
+      year: "2023",
+      category: "Market research / business planning",
+      note: "Supports business analysis, research thinking and presentation skills.",
+      image: "certificates/sandbox/cmau-2023.webp",
+      alt: "Privacy-safe preview of the 2023 CMAU market research and business planning competition certificate.",
+      privacy: "QR and certificate number hidden",
+    },
+    {
+      id: "research",
+      title: "Urban Residents Housing and Travel Trends Research Participation",
+      year: "2024",
+      category: "Questionnaire survey / research participation",
+      note: "Shows experience with survey research and field data collection.",
+      image: "certificates/sandbox/research-participation-2024.webp",
+      alt: "Low-resolution preview of a 2024 research participation certificate for housing and travel trend survey work.",
+      privacy: "Low-resolution preview",
+    },
+  ],
+};
 
 export const interests: Interest[] = [
   {
@@ -1152,6 +1230,59 @@ const chineseAwards: string[] = [
   "二等学业奖学金（2022、2023）",
 ];
 
+const chineseAwardsGallery: AwardsGallery = {
+  title: "奖项证明预览墙",
+  body: "用隐私安全、低分辨率的预览图补充荣誉列表，不直接公开原始高清扫描件。",
+  proofCountLabel: "项精选证明",
+  yearLabel: "年份",
+  categoryLabel: "类别",
+  previousLabel: "上一张证书",
+  nextLabel: "下一张证书",
+  dotLabel: "查看证书",
+  cards: [
+    {
+      id: "sanchuang",
+      title: "全国大学生电子商务“三创赛”校级奖项",
+      year: "2023",
+      category: "创新 / 创意 / 创业",
+      note: "体现商业策划、团队协作和创业项目参与经历。",
+      image: "certificates/sandbox/sanchuang-awards-2023.webp",
+      alt: "2023 年三创赛校级创业、创新、创意奖项证书的隐私安全预览图。",
+      privacy: "已隐藏证书编号",
+    },
+    {
+      id: "cufe-scholarship",
+      title: "中央财经大学奖学金 / 荣誉证明",
+      year: "2022 / 2023",
+      category: "学业奖学金",
+      note: "体现本科阶段稳定的学业表现。",
+      image: "certificates/sandbox/cufe-scholarship-2022-2023.webp",
+      alt: "中央财经大学奖学金和荣誉证书预览图。",
+      privacy: "低分辨率预览",
+    },
+    {
+      id: "cmau",
+      title: "CMAU 全国大学生市场研究与商业策划大赛",
+      year: "2023",
+      category: "市场研究 / 商业策划",
+      note: "体现商业分析、研究思维和展示表达能力。",
+      image: "certificates/sandbox/cmau-2023.webp",
+      alt: "2023 年 CMAU 市场研究与商业策划大赛证书的隐私安全预览图。",
+      privacy: "已隐藏二维码和证书编号",
+    },
+    {
+      id: "research",
+      title: "城市居民住房与出行趋势调研参与证明",
+      year: "2024",
+      category: "问卷调查 / 研究参与",
+      note: "体现问卷调研和数据收集相关经历。",
+      image: "certificates/sandbox/research-participation-2024.webp",
+      alt: "2024 年住房与出行趋势问卷调研参与证明的低分辨率预览图。",
+      privacy: "低分辨率预览",
+    },
+  ],
+};
+
 const chineseInterests: Interest[] = [
   {
     title: "架子鼓",
@@ -1266,6 +1397,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     skills,
     education,
     awards,
+    awardsGallery,
     interests,
   },
   "zh-CN": {
@@ -1361,6 +1493,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     skills: chineseSkills,
     education: chineseEducation,
     awards: chineseAwards,
+    awardsGallery: chineseAwardsGallery,
     interests: chineseInterests,
   },
 };

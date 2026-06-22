@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowUpRight, Camera, Code2, Drum, Dumbbell, ImageIcon, ListChecks, Palette } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, CheckCircle2, Code2, Drum, Dumbbell, ImageIcon, ListChecks, Palette, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Animated3DCard } from "@/components/ui/animated-3d-card";
 import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
@@ -612,6 +612,171 @@ function ExperienceSkills({ content }: { content: PortfolioContent }) {
   );
 }
 
+function useAwardWallControls(cardCount: number) {
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(cardCount > 1);
+
+  const updateState = () => {
+    const track = trackRef.current;
+
+    if (!track) {
+      return;
+    }
+
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const firstCard = track.firstElementChild instanceof HTMLElement ? track.firstElementChild : null;
+    const itemWidth = firstCard ? firstCard.offsetWidth + 18 : track.clientWidth;
+    const nextIndex = Math.min(cardCount - 1, Math.max(0, Math.round(track.scrollLeft / itemWidth)));
+
+    setActiveIndex(nextIndex);
+    setCanScrollPrev(track.scrollLeft > 4);
+    setCanScrollNext(track.scrollLeft < maxScroll - 4);
+  };
+
+  useEffect(() => {
+    updateState();
+    window.addEventListener("resize", updateState);
+
+    return () => window.removeEventListener("resize", updateState);
+  }, []);
+
+  const scrollToIndex = (index: number) => {
+    const target = trackRef.current?.children.item(index);
+
+    if (target instanceof HTMLElement) {
+      target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "nearest", inline: "start" });
+    }
+  };
+
+  const scrollByPage = (direction: -1 | 1) => {
+    scrollToIndex(Math.min(cardCount - 1, Math.max(0, activeIndex + direction)));
+  };
+
+  return {
+    activeIndex,
+    canScrollNext,
+    canScrollPrev,
+    scrollByPage,
+    scrollToIndex,
+    trackRef,
+    updateState,
+  };
+}
+
+function AwardPreviewCard({
+  card,
+  yearLabel,
+  categoryLabel,
+}: {
+  card: PortfolioContent["awardsGallery"]["cards"][number];
+  yearLabel: string;
+  categoryLabel: string;
+}) {
+  return (
+    <article className="snap-start">
+      <LiquidGlass className="flex h-full min-h-[450px] w-[min(76vw,285px)] flex-col p-4 sm:min-h-[470px] sm:w-[310px] lg:w-[326px]">
+        <div className="relative z-[1] flex h-full flex-col">
+          <div className="apple-inner-curve flex h-[185px] items-center justify-center overflow-hidden border border-white/70 bg-white/78 p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_48px_rgba(46,61,82,.12)] sm:h-[205px]">
+            <img className="max-h-full max-w-full object-contain" src={publicAssetPath(card.image)} alt={card.alt} loading="lazy" />
+          </div>
+
+          <div className="mt-5 min-w-0">
+            <h3 className="apple-display-text text-[1.05rem] leading-7 text-neutral-950">{card.title}</h3>
+            <dl className="mt-4 grid gap-2 text-sm leading-6 text-neutral-600">
+              <div className="flex gap-2">
+                <dt className="shrink-0 font-semibold text-neutral-900">{yearLabel}:</dt>
+                <dd>{card.year}</dd>
+              </div>
+              <div className="flex gap-2">
+                <dt className="shrink-0 font-semibold text-neutral-900">{categoryLabel}:</dt>
+                <dd>{card.category}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <p className="mt-4 text-[0.95rem] leading-7 text-neutral-600">{card.note}</p>
+
+          <div className="mt-auto flex items-center gap-2 pt-5 text-xs font-semibold text-emerald-700">
+            <ShieldCheck className="size-4" aria-hidden="true" />
+            <span>{card.privacy}</span>
+          </div>
+        </div>
+      </LiquidGlass>
+    </article>
+  );
+}
+
+function AwardPreviewWall({ content }: { content: PortfolioContent }) {
+  const gallery = content.awardsGallery;
+  const controls = useAwardWallControls(gallery.cards.length);
+
+  return (
+    <div className="col-span-full mt-12">
+      <div className="flex items-end justify-between gap-6 max-lg:flex-col max-lg:items-start">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.sections.awards.label}</p>
+          <h3 className="apple-display-text mt-4 text-[clamp(1.8rem,3.4vw,3.3rem)] leading-none text-neutral-900">{gallery.title}</h3>
+          <p className="mt-5 text-base leading-8 text-neutral-600">{gallery.body}</p>
+        </div>
+        <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:justify-start">
+          <div className="flex items-center gap-2 text-sm font-semibold text-neutral-600">
+            <CheckCircle2 className="size-4 text-emerald-600" aria-hidden="true" />
+            <span>
+              {gallery.cards.length} {gallery.proofCountLabel}
+            </span>
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="liquid-glow-button flex size-9 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-45 sm:size-11"
+              type="button"
+              onClick={() => controls.scrollByPage(-1)}
+              disabled={!controls.canScrollPrev}
+              aria-label={gallery.previousLabel}
+            >
+              <ArrowLeft className="size-4 sm:size-5" aria-hidden="true" />
+            </button>
+            <button
+              className="liquid-glow-button flex size-9 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-45 sm:size-11"
+              type="button"
+              onClick={() => controls.scrollByPage(1)}
+              disabled={!controls.canScrollNext}
+              aria-label={gallery.nextLabel}
+            >
+              <ArrowRight className="size-4 sm:size-5" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        ref={controls.trackRef}
+        className="-mx-3 mt-7 flex snap-x snap-mandatory gap-[18px] overflow-x-auto scroll-smooth px-3 pb-7 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        onScroll={controls.updateState}
+      >
+        {gallery.cards.map((card) => (
+          <AwardPreviewCard key={card.id} card={card} yearLabel={gallery.yearLabel} categoryLabel={gallery.categoryLabel} />
+        ))}
+      </div>
+
+      <div className="flex justify-center gap-2">
+        {gallery.cards.map((card, index) => (
+          <button
+            key={card.id}
+            type="button"
+            aria-label={`${gallery.dotLabel} ${index + 1}`}
+            className={`h-2.5 rounded-full transition-all ${
+              controls.activeIndex === index ? "w-8 bg-neutral-950" : "w-2.5 bg-neutral-950/20 hover:bg-neutral-950/40"
+            }`}
+            onClick={() => controls.scrollToIndex(index)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function EducationAwards({ content }: { content: PortfolioContent }) {
   return (
     <section id="education" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pb-10 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pb-8 max-sm:pt-24">
@@ -640,6 +805,7 @@ function EducationAwards({ content }: { content: PortfolioContent }) {
           </ul>
         </LiquidGlass>
       </div>
+      <AwardPreviewWall content={content} />
     </section>
   );
 }
