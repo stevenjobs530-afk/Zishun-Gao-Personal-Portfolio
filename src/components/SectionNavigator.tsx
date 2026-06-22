@@ -233,7 +233,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
 
   return (
     <>
-      <nav className="fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 lg:block" aria-label={navigationLabel}>
+      <nav className="fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 min-[1400px]:block" aria-label={navigationLabel}>
         <div className="group flex w-16 flex-col items-stretch gap-1.5 overflow-hidden rounded-[2rem] border border-white/80 bg-white/58 p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.96),0_18px_55px_rgba(46,61,82,.16),0_0_32px_rgba(126,217,255,.16)] backdrop-blur-[34px] backdrop-saturate-150 transition-[width] duration-300 ease-out hover:w-44 focus-within:w-44">
           {sectionItems.map((item) => {
             const active = activeSection === item.id;
@@ -270,7 +270,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
 
       <div
         ref={rootRef}
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-[calc(env(safe-area-inset-right)+1rem)] z-50 lg:hidden"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-[calc(env(safe-area-inset-right)+1rem)] z-50 min-[1400px]:hidden"
       >
         {mobileOpen ? (
           <nav

@@ -216,7 +216,7 @@ function Metrics({ content }: { content: PortfolioContent }) {
       <LiquidGlass className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-4 divide-x divide-white/50 max-lg:grid-cols-2 max-lg:divide-x-0 max-sm:w-[calc(100%-28px)] max-sm:grid-cols-1">
         {content.metrics.map((metric) => (
           <article key={metric.label} className="min-h-32 p-6">
-            <span className="apple-display-text block text-[clamp(1.8rem,3vw,2.75rem)] text-neutral-950">{metric.value}</span>
+            <span className="apple-display-text block whitespace-nowrap text-[clamp(1.55rem,2.7vw,2.75rem)] text-neutral-950">{metric.value}</span>
             <span className="mt-2 block text-sm leading-6 text-neutral-500">{metric.label}</span>
           </article>
         ))}
@@ -614,7 +614,7 @@ function ExperienceSkills({ content }: { content: PortfolioContent }) {
 
 function EducationAwards({ content }: { content: PortfolioContent }) {
   return (
-    <section id="education" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pt-24">
+    <section id="education" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pb-10 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pb-8 max-sm:pt-24">
       <div>
         <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.sections.education.label}</p>
         <LiquidGlass className="mt-5">
