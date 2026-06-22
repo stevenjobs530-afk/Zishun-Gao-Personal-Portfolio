@@ -23,6 +23,11 @@ export type Experience = {
   };
 };
 
+export type Interest = {
+  title: string;
+  body: string;
+};
+
 export type CaseStudyMetric = {
   value: string;
   label: string;
@@ -130,6 +135,10 @@ export type PortfolioContent = {
     awards: {
       label: string;
     };
+    interests: {
+      label: string;
+      title: string;
+    };
     contact: {
       label: string;
       title: string;
@@ -160,6 +169,7 @@ export type PortfolioContent = {
   skills: typeof skills;
   education: typeof education;
   awards: string[];
+  interests: Interest[];
 };
 
 export const profile = {
@@ -644,6 +654,25 @@ export const awards = [
   "Second Class Academic Scholarship (2022 and 2023)",
 ];
 
+export const interests: Interest[] = [
+  {
+    title: "Drums",
+    body: "Currently learning drums as a way to build rhythm, focus and consistent practice habits.",
+  },
+  {
+    title: "Drawing",
+    body: "Use drawing and visual thinking to develop patience, observation and design sensitivity.",
+  },
+  {
+    title: "Photography",
+    body: "Interested in composition, light and storytelling, which also supports visual communication.",
+  },
+  {
+    title: "Sports",
+    body: "Keep regular exercise as part of a balanced, resilient and energetic lifestyle.",
+  },
+];
+
 const chineseProfile: typeof profile = {
   name: "高子舜",
   title: "金融背景的数据分析师",
@@ -1123,6 +1152,25 @@ const chineseAwards: string[] = [
   "二等学业奖学金（2022、2023）",
 ];
 
+const chineseInterests: Interest[] = [
+  {
+    title: "架子鼓",
+    body: "正在学习架子鼓，用持续练习培养节奏感、专注力和稳定投入的习惯。",
+  },
+  {
+    title: "绘画",
+    body: "通过绘画和视觉思考训练观察力、耐心和设计敏感度。",
+  },
+  {
+    title: "摄影",
+    body: "关注构图、光线和叙事，也帮助我提升可视化表达意识。",
+  },
+  {
+    title: "运动",
+    body: "保持规律运动，让自己维持积极、平衡和有韧性的生活状态。",
+  },
+];
+
 export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
   en: {
     meta: {
@@ -1184,6 +1232,10 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       awards: {
         label: "Awards",
       },
+      interests: {
+        label: "Beyond Data",
+        title: "A little rhythm, observation and balance outside the screen.",
+      },
       contact: {
         label: "Contact",
         title: "Let's connect.",
@@ -1214,6 +1266,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     skills,
     education,
     awards,
+    interests,
   },
   "zh-CN": {
     meta: {
@@ -1226,7 +1279,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       languageLabel: "选择语言",
     },
     nav: {
-      about: "关于",
+      about: "关于我",
       projects: "项目",
       experience: "经历",
       skills: "技能",
@@ -1274,6 +1327,10 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       awards: {
         label: "荣誉",
       },
+      interests: {
+        label: "数据之外",
+        title: "在屏幕之外保留节奏、观察和生活平衡。",
+      },
       contact: {
         label: "联系",
         title: "期待交流。",
@@ -1304,5 +1361,6 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     skills: chineseSkills,
     education: chineseEducation,
     awards: chineseAwards,
+    interests: chineseInterests,
   },
 };

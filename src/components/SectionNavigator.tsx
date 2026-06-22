@@ -3,9 +3,9 @@ import { Compass, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { LanguageCode } from "@/data/portfolio";
 
-const sectionIds = ["top", "about", "projects", "case-studies", "experience", "skills", "education", "contact"] as const;
+const allSectionIds = ["top", "about", "projects", "case-studies", "experience", "skills", "education", "contact"] as const;
 
-type SectionId = (typeof sectionIds)[number];
+type SectionId = (typeof allSectionIds)[number];
 
 type SectionItem = {
   id: SectionId;
@@ -16,48 +16,57 @@ type SectionNavigatorProps = {
   language: LanguageCode;
 };
 
-function getSectionItems(language: LanguageCode): SectionItem[] {
-  if (language === "zh-CN") {
-    return [
-      { id: "top", label: "首页" },
-      { id: "about", label: "关于我" },
-      { id: "projects", label: "项目" },
-      { id: "case-studies", label: "案例" },
-      { id: "experience", label: "经历" },
-      { id: "skills", label: "技能" },
-      { id: "education", label: "教育" },
-      { id: "contact", label: "联系" },
-    ];
-  }
+const sectionIdsByLanguage = {
+  en: ["top", "about", "projects", "case-studies", "experience", "skills", "education", "contact"],
+  "zh-CN": ["top", "education", "case-studies", "projects", "experience", "skills", "about", "contact"],
+} as const satisfies Record<LanguageCode, readonly SectionId[]>;
 
-  return [
-    { id: "top", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "projects", label: "Projects" },
-    { id: "case-studies", label: "Case Studies" },
-    { id: "experience", label: "Experience" },
-    { id: "skills", label: "Skills" },
-    { id: "education", label: "Education" },
-    { id: "contact", label: "Contact" },
-  ];
+const sectionLabelsByLanguage: Record<LanguageCode, Record<SectionId, string>> = {
+  en: {
+    top: "Home",
+    about: "About",
+    projects: "Projects",
+    "case-studies": "Case Studies",
+    experience: "Experience",
+    skills: "Skills",
+    education: "Education",
+    contact: "Contact",
+  },
+  "zh-CN": {
+    top: "首页",
+    about: "关于我",
+    projects: "项目",
+    "case-studies": "案例",
+    experience: "经历",
+    skills: "技能",
+    education: "教育",
+    contact: "联系",
+  },
+};
+
+function getSectionItems(language: LanguageCode): SectionItem[] {
+  return sectionIdsByLanguage[language].map((sectionId) => ({
+    id: sectionId,
+    label: sectionLabelsByLanguage[language][sectionId],
+  }));
 }
 
 function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function getScrollActiveSection(): SectionId {
+function getScrollActiveSection(sectionIds: readonly SectionId[]): SectionId {
   if (typeof window === "undefined") {
     return "top";
   }
 
-  const marker = window.scrollY + Math.min(window.innerHeight * 0.5, 420);
+  const marker = Math.min(window.innerHeight * 0.5, 420);
   let activeSection: SectionId = "top";
 
   for (const sectionId of sectionIds) {
     const element = document.getElementById(sectionId);
 
-    if (element && element.offsetTop <= marker) {
+    if (element && element.getBoundingClientRect().top <= marker) {
       activeSection = sectionId;
     }
   }
@@ -72,11 +81,23 @@ function getScrollActiveSection(): SectionId {
   return activeSection;
 }
 
+function getSectionScrollOffset(sectionId: SectionId) {
+  return sectionId === "top" ? 0 : 110;
+}
+
+function scrollSectionIntoView(target: HTMLElement, sectionId: SectionId, behavior: ScrollBehavior) {
+  window.scrollTo({
+    top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - getSectionScrollOffset(sectionId)),
+    behavior,
+  });
+}
+
 export function SectionNavigator({ language }: SectionNavigatorProps) {
   const [activeSection, setActiveSection] = useState<SectionId>("top");
   const [mobileOpen, setMobileOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const sectionItems = useMemo(() => getSectionItems(language), [language]);
+  const activeSectionIds = useMemo(() => sectionIdsByLanguage[language], [language]);
   const panelId = "section-navigator-mobile-panel";
   const navigationLabel = language === "zh-CN" ? "页面章节导航" : "Section navigation";
   const mobilePrompt = language === "zh-CN" ? "章节" : "Sections";
@@ -93,10 +114,22 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
         return;
       }
 
-      target.scrollIntoView({
-        behavior: prefersReducedMotion() ? "auto" : "smooth",
-        block: "start",
-      });
+      const behavior = prefersReducedMotion() ? "auto" : "smooth";
+
+      scrollSectionIntoView(target, sectionId, behavior);
+
+      if (behavior === "smooth") {
+        window.setTimeout(() => {
+          const remainingOffset = target.getBoundingClientRect().top - getSectionScrollOffset(sectionId);
+
+          if (Math.abs(remainingOffset) > 24) {
+            window.scrollTo({
+              top: Math.max(0, window.scrollY + remainingOffset),
+              behavior: "auto",
+            });
+          }
+        }, 700);
+      }
 
       setActiveIfChanged(sectionId);
       setMobileOpen(false);
@@ -107,7 +140,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
   );
 
   useEffect(() => {
-    const updateFromScroll = () => setActiveIfChanged(getScrollActiveSection());
+    const updateFromScroll = () => setActiveIfChanged(getScrollActiveSection(activeSectionIds));
     let animationFrame = 0;
 
     const scheduleScrollUpdate = () => {
@@ -135,7 +168,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
                 observedEntries.set(entry.target.id as SectionId, entry);
               }
 
-              const visibleEntry = sectionIds
+              const visibleEntry = activeSectionIds
                 .map((sectionId) => observedEntries.get(sectionId))
                 .filter((entry): entry is IntersectionObserverEntry => Boolean(entry?.isIntersecting))
                 .sort((first, second) => Math.abs(first.boundingClientRect.top) - Math.abs(second.boundingClientRect.top))[0];
@@ -151,7 +184,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
           );
 
     if (observer) {
-      for (const sectionId of sectionIds) {
+      for (const sectionId of activeSectionIds) {
         const element = document.getElementById(sectionId);
 
         if (element) {
@@ -170,7 +203,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
 
       observer?.disconnect();
     };
-  }, [setActiveIfChanged]);
+  }, [activeSectionIds, setActiveIfChanged]);
 
   useEffect(() => {
     if (!mobileOpen) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft, ArrowUpRight, Code2, ImageIcon, ListChecks } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Camera, Code2, Drum, Dumbbell, ImageIcon, ListChecks, Palette } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Animated3DCard } from "@/components/ui/animated-3d-card";
 import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
@@ -18,12 +18,19 @@ import { languageOptions, portfolioByLanguage, type LanguageCode, type Portfolio
 
 const defaultLanguage: LanguageCode = "en";
 
-const navSectionIds = ["about", "projects", "experience", "skills", "education", "contact"] as const;
+type NavSectionId = keyof PortfolioContent["nav"];
+
+const navSectionIdsByLanguage = {
+  en: ["about", "projects", "experience", "skills", "education", "contact"],
+  "zh-CN": ["education", "projects", "experience", "skills", "about", "contact"],
+} as const satisfies Record<LanguageCode, readonly NavSectionId[]>;
+
 const caseStudyDetailTargets = [
   { id: "screenshots", Icon: ImageIcon },
   { id: "code", Icon: Code2 },
   { id: "conclusion", Icon: ListChecks },
 ] as const;
+const interestIcons = [Drum, Palette, Camera, Dumbbell] as const;
 
 function publicAssetPath(path: string) {
   return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -40,6 +47,45 @@ function getInitialLanguage(): LanguageCode {
   return defaultLanguage;
 }
 
+function prefersReducedMotion() {
+  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+function scrollToPageSection(sectionId: string) {
+  const target = document.getElementById(sectionId);
+
+  if (!target) {
+    return;
+  }
+
+  const headerOffset = sectionId === "top" ? 0 : 110;
+  const scrollToTarget = (behavior: ScrollBehavior) => {
+    window.scrollTo({
+      top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - headerOffset),
+      behavior,
+    });
+  };
+
+  if (prefersReducedMotion()) {
+    scrollToTarget("auto");
+  } else {
+    scrollToTarget("smooth");
+
+    window.setTimeout(() => {
+      const remainingOffset = target.getBoundingClientRect().top - headerOffset;
+
+      if (Math.abs(remainingOffset) > 24) {
+        window.scrollTo({
+          top: Math.max(0, window.scrollY + remainingOffset),
+          behavior: "auto",
+        });
+      }
+    }, 700);
+  }
+
+  window.history.replaceState(null, "", `#${sectionId}`);
+}
+
 function Header({
   content,
   language,
@@ -49,15 +95,32 @@ function Header({
   language: LanguageCode;
   onLanguageChange: (language: LanguageCode) => void;
 }) {
+  const navSectionIds = navSectionIdsByLanguage[language];
+
   return (
     <header className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+1.25rem)] z-30 flex w-[min(1180px,calc(100%-40px))] -translate-x-1/2 items-center justify-between gap-5 rounded-lg border border-white/80 bg-white/55 px-4 py-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_55px_rgba(46,61,82,.14)] backdrop-blur-[44px] backdrop-saturate-150 max-sm:top-[calc(env(safe-area-inset-top)+0.75rem)] max-sm:w-[calc(100%-28px)] max-sm:gap-3">
-      <a className="min-w-0 truncate text-sm font-semibold text-neutral-950" href="#top">
+      <a
+        className="min-w-0 truncate text-sm font-semibold text-neutral-950"
+        href="#top"
+        onClick={(event) => {
+          event.preventDefault();
+          scrollToPageSection("top");
+        }}
+      >
         {content.header.brandPrimary} <span className="text-neutral-500">{content.header.brandSecondary}</span>
       </a>
       <div className="flex shrink-0 items-center gap-4 max-sm:gap-3">
         <nav className="flex items-center gap-5 text-xs font-medium text-neutral-600 max-lg:hidden" aria-label="Primary navigation">
           {navSectionIds.map((sectionId) => (
-            <a key={sectionId} className="transition hover:text-blue-700" href={`#${sectionId}`}>
+            <a
+              key={sectionId}
+              className="transition hover:text-blue-700"
+              href={`#${sectionId}`}
+              onClick={(event) => {
+                event.preventDefault();
+                scrollToPageSection(sectionId);
+              }}
+            >
               {content.nav[sectionId]}
             </a>
           ))}
@@ -114,7 +177,7 @@ function Hero({ content }: { content: PortfolioContent }) {
           <GlassButton
             className="h-12 min-w-36 text-neutral-950 max-sm:w-full"
             glassColor="oklch(from var(--foreground) l c h / 7%)"
-            onClick={() => document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => scrollToPageSection("projects")}
           >
             {content.actions.viewProjects}
           </GlassButton>
@@ -174,13 +237,13 @@ function RecruiterQuickView({ content }: { content: PortfolioContent }) {
             <h2 className="apple-display-text mt-4 text-[clamp(1.8rem,3vw,3rem)] leading-none text-neutral-900">
               {quickView.title}
             </h2>
-            <p className="mt-5 text-sm leading-7 text-neutral-600">{quickView.body}</p>
+            <p className="mt-5 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{quickView.body}</p>
           </div>
           <div className="relative z-[1] grid grid-cols-2 gap-4 max-md:grid-cols-1">
             {quickView.items.map((item, index) => (
               <RevealArticle key={item.title} className="border-t border-white/55 pt-4" delay={index * 0.05}>
                 <h3 className="apple-display-text text-base text-neutral-900">{item.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-neutral-600">{item.body}</p>
+                <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{item.body}</p>
               </RevealArticle>
             ))}
           </div>
@@ -325,20 +388,20 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
 
                   <div className="mt-6 border-t border-white/55 pt-5">
                     <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.businessQuestion}</h4>
-                    <p className="mt-3 text-sm leading-7 text-neutral-600">{study.businessQuestion}</p>
+                    <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.businessQuestion}</p>
                   </div>
 
                   <ProjectDetailMenu studyId={study.id} labels={content.caseStudyLabels} className="mt-6" />
 
                   <div className="mt-8 border-t border-white/55 pt-6">
                     <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.problem}</h4>
-                    <p className="mt-3 text-sm leading-7 text-neutral-600">{study.problem}</p>
+                    <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.problem}</p>
                   </div>
 
                   <div className="mt-8 grid grid-cols-2 gap-8 max-md:grid-cols-1">
                     <div>
                       <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.method}</h4>
-                      <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
+                      <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
                         {study.method.map((item) => (
                           <li key={item} className="flex gap-3">
                             <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500/70" aria-hidden="true" />
@@ -350,7 +413,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
 
                     <div>
                       <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.result}</h4>
-                      <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
+                      <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
                         {study.results.map((item) => (
                           <li key={item} className="flex gap-3">
                             <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500/70" aria-hidden="true" />
@@ -363,7 +426,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
 
                   <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-96 border-t border-white/55 pt-6">
                     <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.conclusion}</h4>
-                    <ul className="mt-3 grid gap-3 text-sm leading-7 text-neutral-600">
+                    <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
                       {study.conclusion.map((item) => (
                         <li key={item} className="flex gap-3">
                           <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/70" aria-hidden="true" />
@@ -414,8 +477,8 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                             />
                           </div>
                           <figcaption className="mt-3">
-                            <span className="text-sm font-semibold text-neutral-900">{screenshot.title}</span>
-                            <p className="mt-1 text-sm leading-7 text-neutral-600">{screenshot.caption}</p>
+                            <span className="text-[0.95rem] font-semibold text-neutral-900">{screenshot.title}</span>
+                            <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{screenshot.caption}</p>
                           </figcaption>
                         </figure>
                       ))}
@@ -428,7 +491,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                       {study.evidence.map((item) => (
                         <article key={item.title}>
                           <h5 className="text-sm font-semibold text-neutral-900">{item.title}</h5>
-                          <p className="mt-1 text-sm leading-7 text-neutral-600">{item.body}</p>
+                          <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{item.body}</p>
                         </article>
                       ))}
                     </div>
@@ -471,7 +534,7 @@ function ExperienceShowcase({ content }: { content: PortfolioContent }) {
               <time className="text-sm leading-6 text-neutral-500">{item.date}</time>
               <h3 className="apple-display-text mt-1 text-lg text-neutral-900">{item.role}</h3>
               <p className="mt-1 text-sm text-neutral-500">{item.company}</p>
-              <ul className="mt-4 list-disc pl-5 text-sm leading-6 text-neutral-600">
+              <ul className="mt-4 list-disc pl-5 text-[0.95rem] leading-7 text-neutral-600">
                 {item.bullets.map((bullet) => (
                   <li key={bullet}>{bullet}</li>
                 ))}
@@ -486,12 +549,12 @@ function ExperienceShowcase({ content }: { content: PortfolioContent }) {
               {item.caseStudy ? (
                 <div className="mt-6 border-t border-white/55 pt-5">
                   <h4 className="apple-display-text text-base text-neutral-900">{item.caseStudy.title}</h4>
-                  <p className="mt-3 text-sm leading-7 text-neutral-600">{item.caseStudy.body}</p>
+                  <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600">{item.caseStudy.body}</p>
                   <div className="mt-5 grid grid-cols-2 gap-x-6 gap-y-4 max-md:grid-cols-1">
                     {item.caseStudy.details.map((detail) => (
                       <article key={detail.title} className="border-t border-white/45 pt-4">
                         <h5 className="text-sm font-semibold text-neutral-900">{detail.title}</h5>
-                        <p className="mt-1 text-sm leading-7 text-neutral-600">{detail.body}</p>
+                        <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{detail.body}</p>
                       </article>
                     ))}
                   </div>
@@ -534,7 +597,7 @@ function ExperienceSkills({ content }: { content: PortfolioContent }) {
             {content.skills.map((skill, index) => (
               <RevealArticle key={skill.title} className={index > 0 ? "border-t border-white/50 p-7" : "p-7"} delay={index * 0.06}>
                 <h3 className="apple-display-text text-lg text-neutral-900">{skill.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-neutral-600">{skill.body}</p>
+                <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{skill.body}</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   {skill.tags.map((tag) => (
                     <Badge key={tag}>{tag}</Badge>
@@ -576,6 +639,37 @@ function EducationAwards({ content }: { content: PortfolioContent }) {
             ))}
           </ul>
         </LiquidGlass>
+      </div>
+    </section>
+  );
+}
+
+function Interests({ content }: { content: PortfolioContent }) {
+  return (
+    <section id="interests" className="mx-auto w-[min(1180px,calc(100%-40px))] pt-24 lg:pr-20 max-sm:w-[calc(100%-28px)] max-sm:pt-20">
+      <div className="grid grid-cols-[.82fr_1.18fr] gap-20 max-lg:grid-cols-1">
+        <SectionHeading label={content.sections.interests.label} title={content.sections.interests.title} />
+        <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
+          {content.interests.map((interest, index) => {
+            const Icon = interestIcons[index % interestIcons.length];
+
+            return (
+              <RevealArticle key={interest.title} delay={index * 0.05}>
+                <LiquidGlass className="h-full p-5 md:p-6">
+                  <div className="relative z-[1] flex h-full flex-col gap-4">
+                    <span className="flex size-10 items-center justify-center rounded-lg border border-white/65 bg-white/45 text-blue-600 shadow-[inset_0_1px_1px_rgba(255,255,255,.9)]">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h3 className="apple-display-text text-lg text-neutral-900">{interest.title}</h3>
+                      <p className="mt-2 text-[0.95rem] leading-7 text-neutral-600">{interest.body}</p>
+                    </div>
+                  </div>
+                </LiquidGlass>
+              </RevealArticle>
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -641,10 +735,51 @@ function Footer({ content }: { content: PortfolioContent }) {
   return (
     <footer className="mx-auto flex w-[min(1180px,calc(100%-40px))] items-center justify-between gap-5 py-12 text-sm text-neutral-500 max-sm:w-[calc(100%-28px)] max-sm:flex-col max-sm:items-start">
       <span>{content.footer.rights}</span>
-      <a className="transition hover:text-blue-700" href="#top">
+      <a
+        className="transition hover:text-blue-700"
+        href="#top"
+        onClick={(event) => {
+          event.preventDefault();
+          scrollToPageSection("top");
+        }}
+      >
         {content.actions.backToTop}
       </a>
     </footer>
+  );
+}
+
+function MainContent({ content, language }: { content: PortfolioContent; language: LanguageCode }) {
+  if (language === "zh-CN") {
+    return (
+      <main>
+        <Hero content={content} />
+        <EducationAwards content={content} />
+        <Metrics content={content} />
+        <RecruiterQuickView content={content} />
+        <CaseStudies content={content} />
+        <Projects content={content} />
+        <ExperienceSkills content={content} />
+        <About content={content} />
+        <Interests content={content} />
+        <Contact content={content} />
+      </main>
+    );
+  }
+
+  return (
+    <main>
+      <Hero content={content} />
+      <Metrics content={content} />
+      <RecruiterQuickView content={content} />
+      <About content={content} />
+      <Projects content={content} />
+      <CaseStudies content={content} />
+      <ExperienceSkills content={content} />
+      <EducationAwards content={content} />
+      <Interests content={content} />
+      <Contact content={content} />
+    </main>
   );
 }
 
@@ -665,17 +800,7 @@ export default function App() {
       <HelloIntro />
       <Header content={content} language={language} onLanguageChange={setLanguage} />
       <SectionNavigator language={language} />
-      <main>
-        <Hero content={content} />
-        <Metrics content={content} />
-        <RecruiterQuickView content={content} />
-        <About content={content} />
-        <Projects content={content} />
-        <CaseStudies content={content} />
-        <ExperienceSkills content={content} />
-        <EducationAwards content={content} />
-        <Contact content={content} />
-      </main>
+      <MainContent content={content} language={language} />
       <Footer content={content} />
     </>
   );
