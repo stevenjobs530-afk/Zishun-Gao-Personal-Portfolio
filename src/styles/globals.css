@@ -93,6 +93,24 @@
     corner-shape: superellipse(0.72);
   }
 
+  .award-preview-track {
+    --award-wall-edge-fade: 28px;
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 var(--award-wall-edge-fade),
+      #000 calc(100% - var(--award-wall-edge-fade)),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      #000 var(--award-wall-edge-fade),
+      #000 calc(100% - var(--award-wall-edge-fade)),
+      transparent 100%
+    );
+  }
+
   .liquid-glow-button {
     position: relative;
     isolation: isolate;

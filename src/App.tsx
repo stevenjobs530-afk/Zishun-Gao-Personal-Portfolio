@@ -706,7 +706,7 @@ function AwardPreviewCard({
 }) {
   return (
     <article className="snap-start">
-      <LiquidGlass className="flex h-full min-h-[450px] w-[min(76vw,285px)] flex-col p-4 transition-transform duration-500 ease-out hover:-translate-y-1 sm:min-h-[470px] sm:w-[310px] lg:w-[326px]">
+      <LiquidGlass className="flex h-full min-h-[450px] w-[min(76vw,285px)] flex-col p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,.92),inset_0_-1px_14px_rgba(255,255,255,.34),0_0_0_1px_rgba(255,255,255,.24),0_14px_34px_rgba(46,61,82,.07)] transition-transform duration-500 ease-out hover:-translate-y-1 sm:min-h-[470px] sm:w-[310px] lg:w-[326px]">
         <div className="relative z-[1] flex h-full flex-col">
           <div className="apple-inner-curve flex h-[185px] items-center justify-center overflow-hidden border border-white/70 bg-white/78 p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_48px_rgba(46,61,82,.12)] sm:h-[205px]">
             <img className="media-fade-in max-h-full max-w-full object-contain" src={publicAssetPath(card.image)} alt={card.alt} loading="lazy" />
@@ -782,7 +782,7 @@ function AwardPreviewWall({ content }: { content: PortfolioContent }) {
 
       <div
         ref={controls.trackRef}
-        className="-mx-3 mt-7 flex snap-x snap-mandatory gap-[18px] overflow-x-auto scroll-smooth px-3 pb-7 pt-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="award-preview-track -mx-8 -mb-12 mt-0 flex snap-x snap-mandatory gap-[18px] overflow-x-auto scroll-smooth px-8 pb-20 pt-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         onScroll={controls.updateState}
       >
         {gallery.cards.map((card) => (
