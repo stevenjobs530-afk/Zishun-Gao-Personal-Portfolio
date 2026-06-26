@@ -40,6 +40,7 @@ function LanguageSelectorDropdown<TCode extends string>({
     <div className="relative inline-block shrink-0 text-left" ref={dropdownRef}>
       <button
         type="button"
+        data-guide-target="language"
         aria-label={ariaLabel}
         aria-haspopup="listbox"
         aria-expanded={open}

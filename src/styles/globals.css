@@ -301,3 +301,87 @@
     transition-duration: 1ms !important;
   }
 }
+
+@layer base {
+  @supports (scrollbar-width: thin) {
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(46, 61, 82, 0.28) transparent;
+    }
+  }
+
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+    background-color: rgba(46, 61, 82, 0.26);
+    transition: background-color 200ms ease;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(46, 61, 82, 0.42);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:focus-visible {
+    outline: none;
+    border-radius: 0.6rem;
+    box-shadow:
+      0 0 0 2px rgba(247, 248, 251, 0.95),
+      0 0 0 4px rgba(0, 122, 255, 0.42);
+    transition: box-shadow 180ms ease;
+  }
+}
+
+@layer components {
+  .nav-link {
+    position: relative;
+    transition: color 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1.5px;
+    width: 100%;
+    border-radius: 999px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left center;
+    opacity: 0.65;
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  @keyframes media-fade-in {
+    from {
+      opacity: 0;
+      transform: scale(1.012);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .media-fade-in {
+    animation: media-fade-in 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
