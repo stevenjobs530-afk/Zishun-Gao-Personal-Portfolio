@@ -981,6 +981,7 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
 
 export default function App() {
   const [language, setLanguage] = useState<LanguageCode>(getInitialLanguage);
+  const [helloIntroComplete, setHelloIntroComplete] = useState(false);
   const content = portfolioByLanguage[language];
 
   useEffect(() => {
@@ -993,10 +994,10 @@ export default function App() {
     <>
       <BackgroundComponents />
       <DataCanvas />
-      <HelloIntro />
+      <HelloIntro onComplete={() => setHelloIntroComplete(true)} />
       <Header content={content} language={language} onLanguageChange={setLanguage} />
       <SectionNavigator language={language} />
-      <PortfolioGuidedHints language={language} />
+      <PortfolioGuidedHints introComplete={helloIntroComplete} language={language} />
       <MainContent content={content} language={language} />
       <Footer content={content} />
     </>

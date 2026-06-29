@@ -41,9 +41,10 @@ function AppleHelloVietnameseEffect({
 
   return (
     <motion.svg
-      className={cn("h-20", className)}
+      className={cn("block h-20 max-w-full overflow-visible", className)}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 1009 200"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       stroke="currentColor"
       strokeWidth="14.8883"
@@ -168,9 +169,10 @@ function AppleHelloEnglishEffect({
 
   return (
     <motion.svg
-      className={cn("h-20", className)}
+      className={cn("block h-20 max-w-full overflow-visible", className)}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 638 200"
+      preserveAspectRatio="xMidYMid meet"
       fill="none"
       stroke="currentColor"
       strokeWidth="14.8883"

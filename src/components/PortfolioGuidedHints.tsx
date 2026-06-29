@@ -20,16 +20,20 @@ type HintCopy = {
 
 const hintStorageKey = "zishun-portfolio-guided-hints-dismissed";
 const viewportPadding = 16;
+const initialVisibleHints: Record<HintId, boolean> = {
+  language: false,
+  sections: false,
+};
 
 const hintCopyByLanguage: Record<LanguageCode, Record<HintId, HintCopy>> = {
   en: {
     language: {
-      eyebrow: "Language",
+      eyebrow: "LANGUAGE",
       body: "Choose your preferred version here. English works well for UK / overseas recruiters, while 简体中文 is available for Chinese readers.",
       closeLabel: "Close guided hints",
     },
     sections: {
-      eyebrow: "Sections",
+      eyebrow: "SECTIONS",
       body: "Want to jump faster? Open Sections to move directly to Projects, Case Studies, Experience, Skills, Education, or Contact.",
       closeLabel: "Close guided hints",
     },
@@ -217,8 +221,14 @@ function HintCard({
   );
 }
 
-export function PortfolioGuidedHints({ language }: { language: LanguageCode }) {
-  const [visible, setVisible] = useState(false);
+export function PortfolioGuidedHints({
+  introComplete,
+  language,
+}: {
+  introComplete: boolean;
+  language: LanguageCode;
+}) {
+  const [visibleHints, setVisibleHints] = useState<Record<HintId, boolean>>(initialVisibleHints);
   const [positions, setPositions] = useState<Record<HintId, HintPosition | null>>({
     language: null,
     sections: null,
@@ -228,15 +238,35 @@ export function PortfolioGuidedHints({ language }: { language: LanguageCode }) {
     sections: null,
   });
   const copy = useMemo(() => hintCopyByLanguage[language], [language]);
+  const hasVisibleHints = visibleHints.language || visibleHints.sections;
 
-  const dismiss = useCallback(() => {
+  const dismissAll = useCallback(() => {
     try {
-      window.sessionStorage.setItem(hintStorageKey, "true");
+      window.localStorage.setItem(hintStorageKey, "true");
     } catch {
-      // Session storage is a convenience only; dismissal should still work.
+      // Local storage is a convenience only; dismissal should still work.
     }
 
-    setVisible(false);
+    setVisibleHints(initialVisibleHints);
+  }, []);
+
+  const dismissHint = useCallback((hintId: HintId) => {
+    setVisibleHints((currentHints) => {
+      const nextHints = {
+        ...currentHints,
+        [hintId]: false,
+      };
+
+      if (!nextHints.language && !nextHints.sections) {
+        try {
+          window.localStorage.setItem(hintStorageKey, "true");
+        } catch {
+          // Local storage is a convenience only; dismissal should still work.
+        }
+      }
+
+      return nextHints;
+    });
   }, []);
 
   const updatePositions = useCallback(() => {
@@ -247,19 +277,26 @@ export function PortfolioGuidedHints({ language }: { language: LanguageCode }) {
   }, []);
 
   useEffect(() => {
+    if (!introComplete) {
+      return;
+    }
+
     try {
-      if (window.sessionStorage.getItem(hintStorageKey) === "true") {
+      if (window.localStorage.getItem(hintStorageKey) === "true") {
         return;
       }
     } catch {
       // If storage is unavailable, show the hints for this render cycle.
     }
 
-    setVisible(true);
-  }, []);
+    setVisibleHints({
+      language: true,
+      sections: true,
+    });
+  }, [introComplete]);
 
   useEffect(() => {
-    if (!visible) {
+    if (!hasVisibleHints) {
       return;
     }
 
@@ -272,25 +309,14 @@ export function PortfolioGuidedHints({ language }: { language: LanguageCode }) {
 
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        dismiss();
+        dismissAll();
       }
-    };
-
-    const closeOnOutsidePointer = (event: PointerEvent) => {
-      const target = event.target as Node;
-
-      if (cardRefs.current.language?.contains(target) || cardRefs.current.sections?.contains(target)) {
-        return;
-      }
-
-      dismiss();
     };
 
     window.addEventListener("resize", scheduleUpdate);
     window.addEventListener("scroll", scheduleUpdate, { passive: true });
     window.addEventListener("orientationchange", scheduleUpdate);
     window.addEventListener("keydown", closeOnEscape);
-    document.addEventListener("pointerdown", closeOnOutsidePointer);
 
     return () => {
       window.cancelAnimationFrame(frame);
@@ -298,42 +324,45 @@ export function PortfolioGuidedHints({ language }: { language: LanguageCode }) {
       window.removeEventListener("scroll", scheduleUpdate);
       window.removeEventListener("orientationchange", scheduleUpdate);
       window.removeEventListener("keydown", closeOnEscape);
-      document.removeEventListener("pointerdown", closeOnOutsidePointer);
     };
-  }, [dismiss, updatePositions, visible]);
+  }, [dismissAll, hasVisibleHints, updatePositions]);
 
   useEffect(() => {
-    if (!visible) {
+    if (!hasVisibleHints) {
       return;
     }
 
     updatePositions();
-  }, [language, updatePositions, visible]);
+  }, [hasVisibleHints, language, updatePositions]);
 
-  if (!visible || !positions.language || !positions.sections) {
+  if (!hasVisibleHints) {
     return null;
   }
 
   return (
     <>
-      <HintCard
-        hintId="language"
-        copy={copy.language}
-        position={positions.language}
-        cardRef={(node) => {
-          cardRefs.current.language = node;
-        }}
-        onDismiss={dismiss}
-      />
-      <HintCard
-        hintId="sections"
-        copy={copy.sections}
-        position={positions.sections}
-        cardRef={(node) => {
-          cardRefs.current.sections = node;
-        }}
-        onDismiss={dismiss}
-      />
+      {visibleHints.language && positions.language ? (
+        <HintCard
+          hintId="language"
+          copy={copy.language}
+          position={positions.language}
+          cardRef={(node) => {
+            cardRefs.current.language = node;
+          }}
+          onDismiss={() => dismissHint("language")}
+        />
+      ) : null}
+      {visibleHints.sections && positions.sections ? (
+        <HintCard
+          hintId="sections"
+          copy={copy.sections}
+          position={positions.sections}
+          cardRef={(node) => {
+            cardRefs.current.sections = node;
+          }}
+          onDismiss={() => dismissHint("sections")}
+        />
+      ) : null}
     </>
   );
 }
