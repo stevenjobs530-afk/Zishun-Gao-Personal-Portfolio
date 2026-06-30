@@ -305,6 +305,72 @@
     transform: rotate(-20deg);
     opacity: 0.72;
   }
+
+  /* Hello intro: translucent liquid-glass shell that matches the site background
+     palette (warm centre, indigo top-right, cyan bottom-left) so the fade-out
+     blends smoothly into the homepage instead of a flat white panel. */
+  .hello-intro-shell {
+    background:
+      radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.66) 36%, transparent 72%),
+      radial-gradient(circle at 76% 16%, rgba(99, 102, 241, 0.16), transparent 38%),
+      radial-gradient(circle at 16% 80%, rgba(34, 211, 238, 0.15), transparent 40%),
+      radial-gradient(circle at 50% 90%, rgba(255, 187, 122, 0.13), transparent 44%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 247, 252, 0.82) 56%, rgba(236, 242, 248, 0.88) 100%);
+  }
+
+  .hello-rainbow-glow {
+    position: absolute;
+    pointer-events: none;
+    border-radius: 999px;
+    filter: blur(60px) saturate(135%);
+    mix-blend-mode: screen;
+    opacity: 0.7;
+    animation: hello-aurora-drift 11s ease-in-out infinite;
+    will-change: transform, opacity;
+  }
+
+  .hello-rainbow-glow-one {
+    top: 12%;
+    left: 14%;
+    width: 42vw;
+    max-width: 560px;
+    height: 30vh;
+    background: radial-gradient(ellipse at center, rgba(120, 158, 255, 0.5), rgba(160, 140, 255, 0.28) 55%, transparent 72%);
+  }
+
+  .hello-rainbow-glow-two {
+    right: 8%;
+    top: 20%;
+    width: 38vw;
+    max-width: 520px;
+    height: 32vh;
+    background: radial-gradient(ellipse at center, rgba(255, 168, 196, 0.42), rgba(255, 198, 142, 0.3) 52%, transparent 72%);
+    animation-delay: -3.5s;
+    animation-duration: 13s;
+  }
+
+  .hello-rainbow-glow-three {
+    bottom: 8%;
+    left: 38%;
+    width: 40vw;
+    max-width: 540px;
+    height: 28vh;
+    background: radial-gradient(ellipse at center, rgba(150, 230, 205, 0.42), rgba(120, 200, 255, 0.26) 55%, transparent 74%);
+    animation-delay: -6.5s;
+    animation-duration: 15s;
+  }
+
+  @keyframes hello-aurora-drift {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1);
+      opacity: 0.58;
+    }
+    50% {
+      transform: translate3d(2.5%, -3%, 0) scale(1.08);
+      opacity: 0.82;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

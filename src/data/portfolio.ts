@@ -194,6 +194,19 @@ export type PortfolioContent = {
   awards: string[];
   awardsGallery: AwardsGallery;
   interests: Interest[];
+  projectShowcase?: ProjectShowcaseCopy;
+};
+
+export type ProjectShowcaseCopy = {
+  eyebrow: string;
+  description: string;
+  focusLabel: string;
+  dragHint: string;
+  prevLabel: string;
+  nextLabel: string;
+  slideLabel: string;
+  caseStudyCta: string;
+  exploreCta: string;
 };
 
 export const profile = {
@@ -1399,6 +1412,18 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     awards,
     awardsGallery,
     interests,
+    projectShowcase: {
+      eyebrow: "Featured work",
+      description:
+        "Three analyst case studies built from real SQL, Python and research files — plus the smaller tools I build on the side. Drag, swipe or use the arrows to move through them.",
+      focusLabel: "Focus areas",
+      dragHint: "Drag to shuffle",
+      prevLabel: "Previous project",
+      nextLabel: "Next project",
+      slideLabel: "Go to project",
+      caseStudyCta: "Read case study",
+      exploreCta: "View on GitHub",
+    },
   },
   "zh-CN": {
     meta: {
@@ -1495,5 +1520,17 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     awards: chineseAwards,
     awardsGallery: chineseAwardsGallery,
     interests: chineseInterests,
+    projectShowcase: {
+      eyebrow: "重点项目",
+      description:
+        "三个基于真实 SQL、Python 与研究文件构建的数据分析案例，以及业余打造的小工具。可拖拽、滑动或使用箭头浏览。",
+      focusLabel: "核心方向",
+      dragHint: "拖动卡片切换",
+      prevLabel: "上一个项目",
+      nextLabel: "下一个项目",
+      slideLabel: "跳转到项目",
+      caseStudyCta: "查看案例",
+      exploreCta: "在 GitHub 查看",
+    },
   },
 };

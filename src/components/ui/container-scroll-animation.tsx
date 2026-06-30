@@ -14,12 +14,16 @@ export function ContainerScroll({ titleComponent, children, className }: Contain
   const { scrollYProgress } = useScroll({
     target: containerRef,
   });
+  // Use the static (natural-flow) layout on narrow OR short viewports. The fixed
+  // 58rem/76rem 3D container clips its scroll content on small/short windows
+  // (e.g. split-screen), making Experience entries appear to disappear.
+  const staticLayoutQuery = "(max-width: 1023px), (max-height: 780px)";
   const [useStaticLayout, setUseStaticLayout] = React.useState(() =>
-    typeof window !== "undefined" ? window.matchMedia("(max-width: 1023px)").matches : false,
+    typeof window !== "undefined" ? window.matchMedia(staticLayoutQuery).matches : false,
   );
 
   React.useEffect(() => {
-    const media = window.matchMedia("(max-width: 1023px)");
+    const media = window.matchMedia(staticLayoutQuery);
     const updateLayout = () => setUseStaticLayout(media.matches);
 
     updateLayout();

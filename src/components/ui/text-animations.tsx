@@ -26,11 +26,17 @@ const lightRevealVariants: Variants = {
   },
 };
 
-const viewport = { once: true, amount: 0.28, margin: "-70px" };
+// `amount: "some"` reveals as soon as any part of the element enters the viewport.
+// A fixed fraction (e.g. 0.28) can never be met by elements taller than the
+// viewport, which left tall case-study/experience cards stuck at opacity 0.
+const viewport = { once: true, amount: "some", margin: "-70px" } as const;
 const ease = [0.22, 1, 0.36, 1] as const;
 const fullTransition = { duration: 0.72, ease };
 const lightTransition = { duration: 0.5, ease };
 const smallScreenQuery = "(max-width: 1023px)";
+// Render content statically (no reveal) on narrow OR short viewports so nothing
+// can stay hidden while scrolling (split-screen / mobile / low-height windows).
+const staticRevealQuery = "(max-width: 1023px), (max-height: 780px)";
 
 type RevealProps = {
   children: React.ReactNode;
@@ -69,7 +75,7 @@ function useMediaQuery(query: string) {
 
 export function useDisableReveal() {
   const reduceMotion = useReducedMotion();
-  const isSmallScreen = useMediaQuery(smallScreenQuery);
+  const forceStatic = useMediaQuery(staticRevealQuery);
   const [isObserverUnsupported, setIsObserverUnsupported] = React.useState(
     () => typeof IntersectionObserver === "undefined",
   );
@@ -78,12 +84,13 @@ export function useDisableReveal() {
     setIsObserverUnsupported(typeof IntersectionObserver === "undefined");
   }, []);
 
-  return Boolean(reduceMotion || isSmallScreen || isObserverUnsupported);
+  return Boolean(reduceMotion || forceStatic || isObserverUnsupported);
 }
 
 function useRevealConfig() {
   const reduceMotion = useReducedMotion();
   const isSmallScreen = useMediaQuery(smallScreenQuery);
+  const forceStatic = useMediaQuery(staticRevealQuery);
   const [isObserverUnsupported, setIsObserverUnsupported] = React.useState(
     () => typeof IntersectionObserver === "undefined",
   );
@@ -93,7 +100,7 @@ function useRevealConfig() {
   }, []);
 
   return {
-    disabled: Boolean(reduceMotion || isObserverUnsupported),
+    disabled: Boolean(reduceMotion || isObserverUnsupported || forceStatic),
     light: isSmallScreen,
   };
 }
