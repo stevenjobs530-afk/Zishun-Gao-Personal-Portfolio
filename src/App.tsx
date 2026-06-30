@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, CheckCircle2, Code2, Drum, Dumbbell, ImageIcon, ListChecks, Palette, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Animated3DCard } from "@/components/ui/animated-3d-card";
 import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
 import { BackgroundComponents } from "@/components/ui/background-components";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ContainerScroll } from "@/components/ui/container-scroll-animation";
 import { LanguageSelectorDropdown } from "@/components/ui/language-selector-dropdown";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
@@ -13,7 +11,7 @@ import { RevealArticle, RevealBlock, RevealListItem, StaggerBlock, StaggerItem }
 import { DataCanvas } from "@/components/DataCanvas";
 import { HelloIntro } from "@/components/HelloIntro";
 import { PortfolioGuidedHints } from "@/components/PortfolioGuidedHints";
-import { ProjectVisual } from "@/components/ProjectVisual";
+import { ProjectGalleryShowcase } from "@/components/ProjectGalleryShowcase";
 import { SectionNavigator } from "@/components/SectionNavigator";
 import { languageOptions, portfolioByLanguage, type CaseStudy, type LanguageCode, type PortfolioContent } from "@/data/portfolio";
 
@@ -380,39 +378,7 @@ function Projects({ content }: { content: PortfolioContent }) {
           </a>
         </Button>
       </div>
-      <div className="grid grid-cols-2 gap-5 max-lg:grid-cols-1">
-        {content.projects.map((project, index) => (
-          <Animated3DCard key={project.title} delay={index * 0.08}>
-            <Card className="flex min-h-0 flex-col overflow-hidden md:min-h-[600px]">
-              <ProjectVisual visual={project.visual} />
-              <CardHeader className="grow">
-                <CardTitle className="transition-transform duration-500 group-hover/animated-card:-translate-y-1">{project.title}</CardTitle>
-                <CardDescription className="transition-opacity duration-500 group-hover/animated-card:text-neutral-700">{project.summary}</CardDescription>
-              </CardHeader>
-              <CardContent className="mt-auto flex flex-col gap-6">
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <Badge key={tag}>{tag}</Badge>
-                  ))}
-                </div>
-                {project.caseStudyId ? (
-                  <ProjectDetailMenu studyId={project.caseStudyId} labels={content.caseStudyLabels} />
-                ) : project.href ? (
-                  <Button asChild variant="glass" size="sm" className="w-fit gap-2">
-                    <a href={project.href} target="_blank" rel="noreferrer">
-                      {content.actions.viewProject} <ArrowUpRight className="size-4" aria-hidden="true" />
-                    </a>
-                  </Button>
-                ) : (
-                  <Button asChild variant="glass" size="sm" className="w-fit">
-                    <a href="#contact">{content.actions.discussProject}</a>
-                  </Button>
-                )}
-              </CardContent>
-            </Card>
-          </Animated3DCard>
-        ))}
-      </div>
+      <ProjectGalleryShowcase content={content} />
     </section>
   );
 }
@@ -953,8 +919,8 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
         <EducationAwards content={content} />
         <Metrics content={content} />
         <RecruiterQuickView content={content} />
-        <CaseStudies content={content} />
         <Projects content={content} />
+        <CaseStudies content={content} />
         <ExperienceSkills content={content} />
         <About content={content} />
         <Interests content={content} />

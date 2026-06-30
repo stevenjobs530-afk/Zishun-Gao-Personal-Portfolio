@@ -53,14 +53,19 @@ export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
       <AnimatePresence onExitComplete={handleExitComplete}>
         {!isComplete ? (
           <motion.div
-            className="fixed inset-0 z-50 grid place-items-center bg-white/80 px-6 pt-[env(safe-area-inset-top)] backdrop-blur-2xl max-sm:bg-white/70 max-sm:backdrop-blur-md"
-            exit={{ opacity: 0, y: -18, scale: 0.98 }}
-            transition={{ duration: shouldShortCircuit ? 0.22 : 0.65, ease: [0.22, 1, 0.36, 1] }}
+            className="hello-intro-shell fixed inset-0 z-50 grid place-items-center overflow-hidden px-6 pt-[env(safe-area-inset-top)] backdrop-blur-2xl max-sm:backdrop-blur-md"
+            exit={{ opacity: 0, scale: 1.015, filter: "blur(6px)" }}
+            transition={{ duration: shouldShortCircuit ? 0.22 : 0.7, ease: [0.22, 1, 0.36, 1] }}
           >
+            {/* Liquid-glass atmosphere: soft blurred rainbow caustics that echo the site background */}
+            <div className="hello-rainbow-glow hello-rainbow-glow-one" aria-hidden="true" />
+            <div className="hello-rainbow-glow hello-rainbow-glow-two" aria-hidden="true" />
+            <div className="hello-rainbow-glow hello-rainbow-glow-three" aria-hidden="true" />
             <div className="relative w-[min(92vw,56rem)]">
-              <div className="absolute inset-x-[8%] top-1/2 h-20 -translate-y-1/2 rounded-full bg-yellow-200/35 blur-3xl" />
+              <div className="pointer-events-none absolute inset-x-[6%] top-1/2 h-24 -translate-y-1/2 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,.85),transparent_70%)] blur-2xl" />
               <AppleHelloEnglishEffect
-                className="relative h-auto w-full text-neutral-950 drop-shadow-[0_22px_42px_rgba(46,61,82,.14)]"
+                className="relative h-auto w-full"
+                tone="rainbow"
                 speed={shouldShortCircuit ? 0 : introSpeed.current}
                 drawn={shouldShortCircuit}
                 onAnimationComplete={() => setIsComplete(true)}
