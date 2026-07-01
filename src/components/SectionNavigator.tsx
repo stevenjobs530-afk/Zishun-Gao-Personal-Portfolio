@@ -234,7 +234,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
   return (
     <>
       <nav
-        className="fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 min-[1400px]:block"
+        className="fixed right-7 top-1/2 z-40 hidden -translate-y-1/2 min-[1728px]:block"
         aria-label={navigationLabel}
         data-guide-target="sections-rail"
       >
@@ -274,7 +274,7 @@ export function SectionNavigator({ language }: SectionNavigatorProps) {
 
       <div
         ref={rootRef}
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-[calc(env(safe-area-inset-right)+1rem)] z-50 min-[1400px]:hidden"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+1rem)] right-[calc(env(safe-area-inset-right)+1rem)] z-50 min-[1728px]:hidden"
       >
         {mobileOpen ? (
           <nav

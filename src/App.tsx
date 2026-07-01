@@ -174,6 +174,7 @@ function Hero({ content }: { content: PortfolioContent }) {
         </StaggerItem>
         <StaggerItem className="mt-8 flex flex-wrap gap-4 max-sm:mt-6 max-sm:flex-col">
           <GlassButton
+            liquid
             className="h-12 min-w-36 text-neutral-950 max-sm:w-full"
             glassColor="oklch(from var(--foreground) l c h / 7%)"
             onClick={() => scrollToPageSection("projects")}
@@ -182,6 +183,7 @@ function Hero({ content }: { content: PortfolioContent }) {
           </GlassButton>
           <GlassButton
             asChild
+            liquid
             className="h-12 min-w-36 text-neutral-950 max-sm:w-full"
             glassColor="oklch(from var(--foreground) l c h / 5%)"
           >

@@ -235,7 +235,12 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
         </div>
 
         {highlightItems.length > 0 ? (
-          <div className="hidden lg:block">
+          // The card stack fans ~190px to the right of its box; pull the whole
+          // block left on xl+ so the fanned back card aligns to the content column
+          // instead of overflowing (and clipping) past the right screen edge. Only
+          // xl+ has the horizontal room — at narrower lg widths the shift would push
+          // the front card into the left text column, so it's left in place there.
+          <div className="hidden lg:block xl:-translate-x-44">
             <p className="mb-5 text-xs font-semibold uppercase tracking-normal text-blue-600">{copy.focusLabel}</p>
             <ProjectHighlightStack items={highlightItems} dragHint={copy.dragHint} ctaLabel={copy.caseStudyCta} />
           </div>

@@ -28,17 +28,23 @@ export interface GlassButtonProps
   asChild?: boolean;
   contentClassName?: string;
   glassColor?: string; // e.g. "oklch(from var(--foreground) l c h / 10%)"
+  /**
+   * Opt-in "liquid" refraction: layers an organic feTurbulence + feDisplacementMap
+   * ripple on top of the smooth lens map (the reference liquid-glass technique) and
+   * enriches the backdrop a touch. Off by default so shared usages stay unchanged.
+   */
+  liquid?: boolean;
 }
 
 const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
-  ({ className, children, size, asChild = false, contentClassName, glassColor, ...props }, ref) => {
+  ({ className, children, size, asChild = false, contentClassName, glassColor, liquid = false, ...props }, ref) => {
     // Generate a unique ID so multiple buttons don't conflict with each other's SVG filters
     const filterId = React.useId().replace(/:/g, "");
     const rootClassName = cn(glassButtonVariants({ size }), "btn-liquid liquid-glow-button", className);
     const buttonContent = (innerChildren: React.ReactNode) => (
       <>
         {/* ISOLATED BACKGROUND LENS */}
-        <span className="btn-liquid-lens absolute inset-0 -z-10 rounded-[inherit] pointer-events-none" />
+        <span className={cn("btn-liquid-lens absolute inset-0 -z-10 rounded-[inherit] pointer-events-none", `lens-${filterId}`)} />
 
         {/* TEXT CONTENT (Composited safely ABOVE the backdrop filter) */}
         <span className={cn("btn-liquid-text relative z-10 w-full flex items-center justify-center gap-[inherit] select-none", contentClassName)}>
@@ -80,25 +86,48 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
         */}
         <svg className="pointer-events-none absolute h-0 w-0 overflow-hidden" aria-hidden="true">
           <filter id={`liquid-glass-${filterId}`} primitiveUnits="objectBoundingBox">
-            <feImage 
-              result="map" 
-              width="100%" 
-              height="100%" 
-              x="0" 
-              y="0" 
-              href={WEBP_DISPLACEMENT_MAP} 
-              preserveAspectRatio="none" 
+            <feImage
+              result="map"
+              width="100%"
+              height="100%"
+              x="0"
+              y="0"
+              href={WEBP_DISPLACEMENT_MAP}
+              preserveAspectRatio="none"
             />
+            {/* Organic liquid ripple (reference technique): fractal noise, gently
+                smoothed, used as a second displacement so the refraction wobbles
+                like real poured glass rather than a perfectly uniform lens. */}
+            {liquid ? (
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="2.4 5"
+                numOctaves="2"
+                seed="11"
+                stitchTiles="stitch"
+                result="ripple"
+              />
+            ) : null}
             {/* The pre-blur helps smooth out the underlying image before refraction */}
             <feGaussianBlur in="SourceGraphic" stdDeviation="0.01" result="blur" />
-            <feDisplacementMap 
-              id="disp" 
-              in="blur" 
-              in2="map" 
-              scale="0.5" 
-              xChannelSelector="R" 
-              yChannelSelector="G" 
+            <feDisplacementMap
+              id="disp"
+              in="blur"
+              in2="map"
+              scale={liquid ? "0.62" : "0.5"}
+              xChannelSelector="R"
+              yChannelSelector="G"
+              result={liquid ? "lensed" : undefined}
             />
+            {liquid ? (
+              <feDisplacementMap
+                in="lensed"
+                in2="ripple"
+                scale="0.035"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
+            ) : null}
           </filter>
         </svg>
 
@@ -112,19 +141,23 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
             --glass-reflex-dark: 1;
           }
 
-          /* 
+          /*
              THE LENS LAYER (-z-10)
              This must remain completely empty of content.
-             Because it is empty, Chrome's backdrop-filter engine will only grab 
+             Because it is empty, Chrome's backdrop-filter engine will only grab
              the background behind the button, guaranteeing zero text-ghosting!
+
+             Scoped to a per-instance class (lens-${filterId}) so multiple buttons on
+             one page each keep their own glassColor / backdrop-filter / liquid state
+             instead of the last-rendered global rule winning for all of them.
           */
-          .btn-liquid-lens {
+          .lens-${filterId} {
             /* If no glassColor is provided, default to a subtle, neutral frosted glass */
             background-color: ${glassColor || "oklch(from var(--foreground) l c h / 5%)"};
             
             /* Chrome/Edge mathematically refracts via the SVG. Safari falls back to blur. */
-            backdrop-filter: blur(8px) url(#liquid-glass-${filterId}) saturate(150%);
-            -webkit-backdrop-filter: blur(8px) saturate(150%);
+            backdrop-filter: blur(${liquid ? "9px" : "8px"}) url(#liquid-glass-${filterId}) saturate(${liquid ? "168%" : "150%"});
+            -webkit-backdrop-filter: blur(${liquid ? "9px" : "8px"}) saturate(${liquid ? "168%" : "150%"});
             
             /* The intricate, highly realistic Box Shadow stack from the CodePen */
             box-shadow: 
@@ -138,8 +171,8 @@ const GlassButton = React.forwardRef<HTMLButtonElement, GlassButtonProps>(
               inset 2px -6.5px 1px -4px color-mix(in srgb, black calc(var(--glass-reflex-dark) * 10%), transparent), 
               0px 1px 5px 0px color-mix(in srgb, black calc(var(--glass-reflex-dark) * 10%), transparent), 
               0px 6px 16px 0px color-mix(in srgb, black calc(var(--glass-reflex-dark) * 8%), transparent),
-              0 0 22px rgba(255, 255, 255, 0.48),
-              0 0 38px rgba(126, 217, 255, 0.24);
+              0 0 22px rgba(255, 255, 255, ${liquid ? "0.6" : "0.48"}),
+              0 0 38px rgba(126, 217, 255, ${liquid ? "0.34" : "0.24"});
               
             transition: background-color 400ms cubic-bezier(1, 0.0, 0.4, 1), box-shadow 400ms cubic-bezier(1, 0.0, 0.4, 1);
           }

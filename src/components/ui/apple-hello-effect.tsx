@@ -186,7 +186,7 @@ function AppleHelloEnglishEffect({
       preserveAspectRatio="xMidYMid meet"
       fill="none"
       stroke={strokePaint}
-      strokeWidth="14.8883"
+      strokeWidth="15.8"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
@@ -196,53 +196,75 @@ function AppleHelloEnglishEffect({
 
       {isRainbow ? (
         <defs>
-          {/* Soft, cyclic Apple-style rainbow that spans the word horizontally */}
+          {/* Reference-matched spectrum: aqua/cyan at the left, through blue and
+              violet, a pink core, warm orange/yellow to the right-centre, then
+              resolving to green/aqua with a cool blue tail on the final o. A single
+              static pass across the word, so the colour reads as light held inside
+              the glass rather than a travelling neon band. */}
           <linearGradient
             id={gradientId}
             gradientUnits="userSpaceOnUse"
-            x1="0"
+            x1="10"
             y1="100"
-            x2="460"
+            x2="628"
             y2="100"
-            spreadMethod="repeat"
           >
-            <stop offset="0" stopColor="#7FB8FF" />
-            <stop offset="0.16" stopColor="#9C8CFF" />
-            <stop offset="0.32" stopColor="#C99BF5" />
-            <stop offset="0.48" stopColor="#FF9DBB" />
-            <stop offset="0.64" stopColor="#FFC58C" />
-            <stop offset="0.8" stopColor="#A7E5C8" />
-            <stop offset="1" stopColor="#7FB8FF" />
-            {!drawn ? (
-              <animateTransform
-                attributeName="gradientTransform"
-                type="translate"
-                from="0 0"
-                to="460 0"
-                dur="9s"
-                repeatCount="indefinite"
-              />
-            ) : null}
+            <stop offset="0" stopColor="#6FE0D0" />
+            <stop offset="0.1" stopColor="#83DEAE" />
+            <stop offset="0.2" stopColor="#7CB6FF" />
+            <stop offset="0.33" stopColor="#9A8CFF" />
+            <stop offset="0.45" stopColor="#C58CF0" />
+            <stop offset="0.57" stopColor="#FF8FBE" />
+            <stop offset="0.69" stopColor="#FFAD7E" />
+            <stop offset="0.79" stopColor="#FFD27A" />
+            <stop offset="0.9" stopColor="#8FE0B0" />
+            <stop offset="1" stopColor="#79C6FF" />
           </linearGradient>
 
-          {/* Dimensional depth: soft drop shadow + colored refraction glow under the crisp stroke */}
-          <filter
-            id={filterId}
-            x="-30%"
-            y="-60%"
-            width="160%"
-            height="240%"
-            colorInterpolationFilters="sRGB"
-          >
-            <feGaussianBlur in="SourceAlpha" stdDeviation="9" result="shadowBlur" />
-            <feOffset in="shadowBlur" dx="0" dy="11" result="shadowOffset" />
-            <feFlood floodColor="#2e3d52" floodOpacity="0.18" result="shadowColor" />
-            <feComposite in="shadowColor" in2="shadowOffset" operator="in" result="shadow" />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="glow" />
+          {/* Liquid-glass tube. Layers, back to front: a soft colored bloom in the
+              letters' own hues; a gentle refraction echo hugging the stroke; inner
+              shading along the lower edge that gives the tube roundness; a broad
+              top gloss; and a crisp specular streak at the crown where overhead
+              light catches the rounded glass. Everything is derived from the drawn
+              alpha, so the material builds up with the writing. The grounded shadow
+              and colored spill are layered in CSS so they can track the pointer and
+              sit on the background. */}
+          <filter id={filterId} x="-30%" y="-60%" width="160%" height="260%" colorInterpolationFilters="sRGB">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6.5" result="bloom" />
+            <feComponentTransfer in="bloom" result="bloomSoft">
+              <feFuncA type="linear" slope="0.4" />
+            </feComponentTransfer>
+
+            <feGaussianBlur in="SourceGraphic" stdDeviation="1.6" result="refract" />
+
+            {/* lower-edge inner shading → tube volume */}
+            <feOffset in="SourceAlpha" dx="0" dy="-3.6" result="upShift" />
+            <feComposite in="SourceAlpha" in2="upShift" operator="out" result="botStrip" />
+            <feGaussianBlur in="botStrip" stdDeviation="1.5" result="botSoft" />
+            <feFlood floodColor="#33456b" floodOpacity="0.24" result="botFlood" />
+            <feComposite in="botFlood" in2="botSoft" operator="in" result="botShade" />
+
+            {/* broad soft top highlight */}
+            <feOffset in="SourceAlpha" dx="0" dy="4" result="dnShift" />
+            <feComposite in="SourceAlpha" in2="dnShift" operator="out" result="topStrip" />
+            <feGaussianBlur in="topStrip" stdDeviation="1.5" result="topSoft" />
+            <feFlood floodColor="#ffffff" floodOpacity="0.6" result="topFlood" />
+            <feComposite in="topFlood" in2="topSoft" operator="in" result="topGloss" />
+
+            {/* crisp specular streak at the very crown of the tube */}
+            <feOffset in="SourceAlpha" dx="-0.5" dy="1.5" result="spShift" />
+            <feComposite in="SourceAlpha" in2="spShift" operator="out" result="spStrip" />
+            <feGaussianBlur in="spStrip" stdDeviation="0.5" result="spSoft" />
+            <feFlood floodColor="#ffffff" floodOpacity="0.85" result="spFlood" />
+            <feComposite in="spFlood" in2="spSoft" operator="in" result="specHi" />
+
             <feMerge>
-              <feMergeNode in="shadow" />
-              <feMergeNode in="glow" />
+              <feMergeNode in="bloomSoft" />
+              <feMergeNode in="refract" />
               <feMergeNode in="SourceGraphic" />
+              <feMergeNode in="botShade" />
+              <feMergeNode in="topGloss" />
+              <feMergeNode in="specHi" />
             </feMerge>
           </filter>
         </defs>
