@@ -121,7 +121,6 @@ export type PortfolioContent = {
   actions: {
     viewProjects: string;
     downloadCV: string;
-    downloadWordCV: string;
     cvPendingTitle: string;
     emailMe: string;
     viewGithub: string;
@@ -1338,7 +1337,6 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     actions: {
       viewProjects: "View Projects",
       downloadCV: "Download CV",
-      downloadWordCV: "Word CV",
       cvPendingTitle: "CV download will be added later",
       emailMe: "Email Me",
       viewGithub: "View GitHub",
@@ -1446,7 +1444,6 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     actions: {
       viewProjects: "查看项目",
       downloadCV: "下载简历",
-      downloadWordCV: "Word 简历",
       cvPendingTitle: "公开版简历链接稍后添加",
       emailMe: "发送邮件",
       viewGithub: "查看 GitHub",

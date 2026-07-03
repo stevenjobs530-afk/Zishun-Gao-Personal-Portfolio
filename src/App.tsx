@@ -39,8 +39,10 @@ function versionedScreenshotPath(path: string) {
   return `${publicAssetPath(path)}?v=20260621`;
 }
 
-const cvPdfPath = publicAssetPath("cv/Zishun_Gao_CV_2_0_Data_BI_Analyst_2026.pdf");
-const cvDocxPath = publicAssetPath("cv/Zishun_Gao_CV_2_0_Data_BI_Analyst_2026.docx");
+const cvPdfPaths = {
+  en: publicAssetPath("cv/Zishun_Gao_CV_UK_2026.pdf"),
+  "zh-CN": publicAssetPath("cv/Zishun_Gao_CV_CN_2026.pdf"),
+} as const satisfies Record<LanguageCode, string>;
 
 function getInitialLanguage(): LanguageCode {
   return defaultLanguage;
@@ -148,8 +150,9 @@ function HeroGraphic() {
   );
 }
 
-function Hero({ content }: { content: PortfolioContent }) {
+function Hero({ content, language }: { content: PortfolioContent; language: LanguageCode }) {
   const { profile } = content;
+  const cvPdfPath = cvPdfPaths[language];
 
   return (
     <section id="top" className="mx-auto grid min-h-[88vh] w-[min(1180px,calc(100%-40px))] grid-cols-[minmax(0,1.05fr)_minmax(320px,.75fr)] items-center gap-16 pb-12 pt-32 max-lg:min-h-0 max-lg:grid-cols-1 max-lg:gap-6 max-lg:pb-8 max-sm:w-[calc(100%-28px)] max-sm:pt-28">
@@ -839,7 +842,9 @@ function Interests({ content }: { content: PortfolioContent }) {
   );
 }
 
-function Contact({ content }: { content: PortfolioContent }) {
+function Contact({ content, language }: { content: PortfolioContent; language: LanguageCode }) {
+  const cvPdfPath = cvPdfPaths[language];
+
   return (
     <section id="contact" className="mx-auto mt-32 w-[min(1180px,calc(100%-40px))] max-sm:mt-24 max-sm:w-[calc(100%-28px)]">
       <RevealBlock>
@@ -884,8 +889,8 @@ function Contact({ content }: { content: PortfolioContent }) {
             GitHub
           </GlassButton>
           <GlassButton asChild className="h-12 text-neutral-950" glassColor="oklch(from var(--foreground) l c h / 5%)">
-            <a href={cvDocxPath} download>
-              {content.actions.downloadWordCV}
+            <a href={cvPdfPath} download>
+              {content.actions.downloadCV}
             </a>
           </GlassButton>
         </div>
@@ -917,7 +922,7 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
   if (language === "zh-CN") {
     return (
       <main>
-        <Hero content={content} />
+        <Hero content={content} language={language} />
         <EducationAwards content={content} />
         <Metrics content={content} />
         <RecruiterQuickView content={content} />
@@ -926,14 +931,14 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
         <ExperienceSkills content={content} />
         <About content={content} />
         <Interests content={content} />
-        <Contact content={content} />
+        <Contact content={content} language={language} />
       </main>
     );
   }
 
   return (
     <main>
-      <Hero content={content} />
+      <Hero content={content} language={language} />
       <Metrics content={content} />
       <RecruiterQuickView content={content} />
       <About content={content} />
@@ -942,7 +947,7 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
       <ExperienceSkills content={content} />
       <EducationAwards content={content} />
       <Interests content={content} />
-      <Contact content={content} />
+      <Contact content={content} language={language} />
     </main>
   );
 }

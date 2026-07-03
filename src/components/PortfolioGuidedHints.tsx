@@ -197,7 +197,7 @@ function HintCard({
     <aside
       ref={cardRef}
       data-guide-card={hintId}
-      className="fixed z-[70] max-h-[min(19rem,calc(100vh-2rem))] w-[min(21.5rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-white/80 bg-white/68 p-4 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.96),0_22px_60px_rgba(46,61,82,.18),0_0_34px_rgba(126,217,255,.17)] backdrop-blur-[38px] backdrop-saturate-150 motion-safe:animate-fade-in max-[430px]:p-3.5"
+      className="pointer-events-none fixed z-[70] max-h-[min(19rem,calc(100vh-2rem))] w-[min(21.5rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-white/80 bg-white/68 p-4 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.96),0_22px_60px_rgba(46,61,82,.18),0_0_34px_rgba(126,217,255,.17)] backdrop-blur-[38px] backdrop-saturate-150 motion-safe:animate-fade-in max-[430px]:p-3.5"
       style={{ top: position.top, left: position.left }}
       role="status"
     >
@@ -211,7 +211,7 @@ function HintCard({
         <button
           type="button"
           aria-label={copy.closeLabel}
-          className="-mr-1 -mt-1 inline-flex size-10 shrink-0 items-center justify-center rounded-full text-neutral-500 outline-none transition hover:bg-white/70 hover:text-neutral-950 focus-visible:ring-2 focus-visible:ring-blue-500/45"
+          className="pointer-events-auto -mr-1 -mt-1 inline-flex size-10 shrink-0 items-center justify-center rounded-full text-neutral-500 outline-none transition hover:bg-white/70 hover:text-neutral-950 focus-visible:ring-2 focus-visible:ring-blue-500/45"
           onClick={onDismiss}
         >
           <X className="size-4" aria-hidden="true" />
