@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, CheckCircle2, Code2, Drum, Dumbbell, ImageIcon, ListChecks, Palette, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, CheckCircle2, Code2, Download, Drum, Dumbbell, FileText, ImageIcon, ListChecks, Palette, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
 import { BackgroundComponents } from "@/components/ui/background-components";
@@ -778,6 +778,85 @@ function AwardPreviewWall({ content }: { content: PortfolioContent }) {
   );
 }
 
+function AcademicTranscriptCard({
+  transcript,
+}: {
+  transcript: PortfolioContent["academicTranscripts"]["cards"][number];
+}) {
+  const previewImage = publicAssetPath(transcript.previewImage);
+  const downloadHref = publicAssetPath(transcript.downloadHref);
+
+  return (
+    <RevealArticle>
+      <LiquidGlass className="h-full overflow-hidden p-4 transition-transform duration-500 ease-out hover:-translate-y-1 md:p-5">
+        <div className="relative z-[1] grid h-full grid-cols-[minmax(150px,.55fr)_minmax(0,1fr)] gap-5 max-sm:grid-cols-1">
+          <a
+            className="block overflow-hidden rounded-lg border border-white/75 bg-white/55 shadow-[inset_0_1px_1px_rgba(255,255,255,.92),0_16px_38px_rgba(46,61,82,.12)]"
+            href={downloadHref}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img
+              className="aspect-[595/842] h-full w-full object-cover object-top"
+              src={previewImage}
+              alt={transcript.previewAlt}
+              loading="lazy"
+            />
+          </a>
+          <div className="flex min-w-0 flex-col">
+            <span className="flex size-10 items-center justify-center rounded-lg border border-white/65 bg-white/45 text-blue-600 shadow-[inset_0_1px_1px_rgba(255,255,255,.9)]">
+              <FileText className="size-5" aria-hidden="true" />
+            </span>
+            <h3 className="apple-display-text mt-4 text-xl text-neutral-900">{transcript.title}</h3>
+            <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600">{transcript.body}</p>
+            <div className="mt-auto flex flex-col gap-4 pt-5">
+              <div className="flex items-center gap-2 text-xs font-semibold text-emerald-700">
+                <ShieldCheck className="size-4" aria-hidden="true" />
+                <span>{transcript.privacy}</span>
+              </div>
+              <GlassButton asChild className="h-11 w-full text-neutral-950 sm:w-fit" glassColor="oklch(from var(--foreground) l c h / 5%)">
+                <a href={downloadHref} download>
+                  <span className="inline-flex items-center gap-2">
+                    {transcript.downloadLabel}
+                    <Download className="size-4" aria-hidden="true" />
+                  </span>
+                </a>
+              </GlassButton>
+            </div>
+          </div>
+        </div>
+      </LiquidGlass>
+    </RevealArticle>
+  );
+}
+
+function AcademicTranscripts({ content }: { content: PortfolioContent }) {
+  const transcripts = content.academicTranscripts;
+
+  return (
+    <div className="col-span-full mt-12">
+      <div className="flex items-end justify-between gap-6 max-lg:flex-col max-lg:items-start">
+        <div className="max-w-3xl">
+          <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.sections.education.label}</p>
+          <h3 className="apple-display-text mt-4 text-[clamp(1.8rem,3.4vw,3.3rem)] leading-none text-neutral-900">{transcripts.title}</h3>
+          <p className="mt-5 text-base leading-8 text-neutral-600">{transcripts.body}</p>
+        </div>
+        <div className="flex items-center gap-2 text-sm font-semibold text-neutral-600">
+          <CheckCircle2 className="size-4 text-emerald-600" aria-hidden="true" />
+          <span>
+            {transcripts.cards.length} {transcripts.proofCountLabel}
+          </span>
+        </div>
+      </div>
+      <div className="mt-7 grid grid-cols-2 gap-4 max-lg:grid-cols-1">
+        {transcripts.cards.map((transcript) => (
+          <AcademicTranscriptCard key={transcript.id} transcript={transcript} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function EducationAwards({ content }: { content: PortfolioContent }) {
   return (
     <section id="education" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pb-10 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pb-8 max-sm:pt-24">
@@ -806,6 +885,7 @@ function EducationAwards({ content }: { content: PortfolioContent }) {
           </ul>
         </LiquidGlass>
       </div>
+      <AcademicTranscripts content={content} />
       <AwardPreviewWall content={content} />
     </section>
   );

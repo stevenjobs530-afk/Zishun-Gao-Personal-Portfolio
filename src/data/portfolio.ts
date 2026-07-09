@@ -51,6 +51,24 @@ export type AwardsGallery = {
   cards: AwardPreview[];
 };
 
+export type AcademicTranscript = {
+  id: string;
+  title: string;
+  body: string;
+  previewImage: string;
+  previewAlt: string;
+  downloadHref: string;
+  downloadLabel: string;
+  privacy: string;
+};
+
+export type AcademicTranscripts = {
+  title: string;
+  body: string;
+  proofCountLabel: string;
+  cards: AcademicTranscript[];
+};
+
 export type CaseStudyMetric = {
   value: string;
   label: string;
@@ -192,6 +210,7 @@ export type PortfolioContent = {
   education: typeof education;
   awards: string[];
   awardsGallery: AwardsGallery;
+  academicTranscripts: AcademicTranscripts;
   interests: Interest[];
   projectShowcase?: ProjectShowcaseCopy;
 };
@@ -740,6 +759,35 @@ export const awardsGallery: AwardsGallery = {
       image: "certificates/sandbox/research-participation-2024.webp",
       alt: "Low-resolution preview of a 2024 research participation certificate for housing and travel trend survey work.",
       privacy: "Low-resolution preview",
+    },
+  ],
+};
+
+export const academicTranscripts: AcademicTranscripts = {
+  title: "Academic Transcript",
+  body:
+    "Redacted CUFE transcript files that evidence undergraduate coursework, grades and GPA while keeping the student number private.",
+  proofCountLabel: "redacted files",
+  cards: [
+    {
+      id: "cufe-transcript-cn",
+      title: "Chinese transcript",
+      body: "Central University of Finance and Economics undergraduate transcript, redacted for public viewing.",
+      previewImage: "transcripts/Zishun_Gao_CUFE_Transcript_CN_Redacted_2025.webp",
+      previewAlt: "Low-resolution redacted preview of the Chinese CUFE undergraduate transcript.",
+      downloadHref: "transcripts/Zishun_Gao_CUFE_Transcript_CN_Redacted_2025.pdf",
+      downloadLabel: "Download Chinese transcript",
+      privacy: "Student number hidden",
+    },
+    {
+      id: "cufe-transcript-en",
+      title: "English transcript",
+      body: "English version of the CUFE undergraduate transcript, prepared as a public-safe PDF.",
+      previewImage: "transcripts/Zishun_Gao_CUFE_Transcript_EN_Redacted_2025.webp",
+      previewAlt: "Low-resolution redacted preview of the English CUFE undergraduate transcript.",
+      downloadHref: "transcripts/Zishun_Gao_CUFE_Transcript_EN_Redacted_2025.pdf",
+      downloadLabel: "Download English transcript",
+      privacy: "Student number hidden",
     },
   ],
 };
@@ -1295,6 +1343,34 @@ const chineseAwardsGallery: AwardsGallery = {
   ],
 };
 
+const chineseAcademicTranscripts: AcademicTranscripts = {
+  title: "成绩单",
+  body: "已脱敏的中央财经大学本科成绩单文件，用于展示课程、成绩与 GPA，同时隐藏学号信息。",
+  proofCountLabel: "份脱敏文件",
+  cards: [
+    {
+      id: "cufe-transcript-cn",
+      title: "中文成绩单",
+      body: "中央财经大学本科中文成绩单，已处理为适合公开展示和下载的版本。",
+      previewImage: "transcripts/Zishun_Gao_CUFE_Transcript_CN_Redacted_2025.webp",
+      previewAlt: "中文中央财经大学本科成绩单的低清脱敏预览图。",
+      downloadHref: "transcripts/Zishun_Gao_CUFE_Transcript_CN_Redacted_2025.pdf",
+      downloadLabel: "下载中文成绩单",
+      privacy: "已隐藏学号",
+    },
+    {
+      id: "cufe-transcript-en",
+      title: "英文成绩单",
+      body: "中央财经大学本科英文成绩单，保留课程与成绩信息，并隐藏学号。",
+      previewImage: "transcripts/Zishun_Gao_CUFE_Transcript_EN_Redacted_2025.webp",
+      previewAlt: "英文中央财经大学本科成绩单的低清脱敏预览图。",
+      downloadHref: "transcripts/Zishun_Gao_CUFE_Transcript_EN_Redacted_2025.pdf",
+      downloadLabel: "下载英文成绩单",
+      privacy: "已隐藏学号",
+    },
+  ],
+};
+
 const chineseInterests: Interest[] = [
   {
     title: "架子鼓",
@@ -1409,6 +1485,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     education,
     awards,
     awardsGallery,
+    academicTranscripts,
     interests,
     projectShowcase: {
       eyebrow: "Featured work",
@@ -1516,6 +1593,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     education: chineseEducation,
     awards: chineseAwards,
     awardsGallery: chineseAwardsGallery,
+    academicTranscripts: chineseAcademicTranscripts,
     interests: chineseInterests,
     projectShowcase: {
       eyebrow: "重点项目",
