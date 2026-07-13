@@ -1,16 +1,30 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import PersonalTrainingConceptShowcase from "./components/personal-training-concept/PersonalTrainingConceptShowcase";
 import "./styles/globals.css";
 
-const normalizedPath = window.location.pathname.replace(/\/+$/, "");
-const normalizedHash = window.location.hash.replace(/^#\/?/, "");
-const isPersonalTrainingConcept =
-  normalizedPath.endsWith("/personal-training-concept") || normalizedHash === "personal-training-concept";
+function isPersonalTrainingConceptRoute(hash: string) {
+  const normalizedPath = window.location.pathname.replace(/\/+$/, "");
+  const normalizedHash = hash.replace(/^#\/?/, "");
+
+  return normalizedPath.endsWith("/personal-training-concept") || normalizedHash === "personal-training-concept";
+}
+
+function RootRoute() {
+  const [hash, setHash] = useState(() => window.location.hash);
+
+  useEffect(() => {
+    const syncHash = () => setHash(window.location.hash);
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, []);
+
+  return isPersonalTrainingConceptRoute(hash) ? <PersonalTrainingConceptShowcase /> : <App />;
+}
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    {isPersonalTrainingConcept ? <PersonalTrainingConceptShowcase /> : <App />}
+    <RootRoute />
   </StrictMode>,
 );
