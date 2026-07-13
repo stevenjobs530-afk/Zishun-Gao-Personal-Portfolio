@@ -389,6 +389,51 @@ function Projects({ content }: { content: PortfolioContent }) {
   );
 }
 
+function PersonalTrainingPortal({ content }: { content: PortfolioContent }) {
+  const project = content.projects.find((item) => item.href === "#/personal-training-concept");
+
+  if (!project?.cover || !project.preview || !project.href) {
+    return null;
+  }
+
+  const href = `${import.meta.env.BASE_URL}${project.href}`;
+
+  return (
+    <RevealArticle className="mt-6">
+      <LiquidGlass
+        as="a"
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`${project.preview.ctaLabel}: ${project.title}. ${project.preview.newTabLabel}`}
+        className="group grid min-w-0 grid-cols-[minmax(220px,.72fr)_minmax(0,1.28fr)] items-center overflow-hidden p-0 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] hover:-translate-y-1 max-md:grid-cols-1"
+      >
+        <div className="relative z-[1] min-w-0 self-stretch border-r border-white/55 bg-[radial-gradient(circle_at_22%_18%,rgba(0,122,255,.17),transparent_44%),radial-gradient(circle_at_84%_86%,rgba(21,214,180,.16),transparent_46%),rgba(240,247,252,.56)] p-4 max-md:border-b max-md:border-r-0 md:p-5">
+          <img
+            className="media-fade-in aspect-video h-full max-h-[240px] w-full rounded-lg border border-white/75 bg-white/75 object-contain shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_16px_42px_rgba(46,61,82,.13)] transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.025] max-md:max-h-none"
+            src={publicAssetPath(project.cover.src)}
+            alt={project.cover.alt}
+            loading="lazy"
+          />
+        </div>
+        <div className="relative z-[1] min-w-0 p-6 md:p-8">
+          <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{project.preview.label}</p>
+          <h3 className="apple-display-text mt-3 text-[clamp(1.45rem,2.8vw,2.4rem)] leading-tight text-neutral-950">{project.title}</h3>
+          <p className="mt-4 max-w-2xl text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{project.summary}</p>
+          <p className="mt-3 text-xs leading-5 text-neutral-500">{project.preview.disclosure}</p>
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <span className="inline-flex min-h-11 items-center gap-2 rounded-full border border-blue-500/15 bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(18,97,255,.2)]">
+              {project.preview.ctaLabel}
+              <ArrowUpRight className="size-4" aria-hidden="true" />
+            </span>
+            <span className="text-xs font-medium text-neutral-500">{project.preview.newTabLabel}</span>
+          </div>
+        </div>
+      </LiquidGlass>
+    </RevealArticle>
+  );
+}
+
 function CaseStudies({ content }: { content: PortfolioContent }) {
   return (
     <section id="case-studies" className="mx-auto w-[min(1180px,calc(100%-40px))] pt-24 max-sm:w-[calc(100%-28px)]">
@@ -527,6 +572,7 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
                 </div>
               </LiquidGlass>
             </RevealArticle>
+            {study.id === "aep" ? <PersonalTrainingPortal content={content} /> : null}
           </div>
         ))}
       </div>

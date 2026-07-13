@@ -1,4 +1,4 @@
-import { AppWindow, ArrowRight, ArrowUp, Ban, BarChart3, Database, Dumbbell, LockKeyhole, Monitor, ShieldCheck, UserRound } from "lucide-react";
+import { AppWindow, ArrowLeft, ArrowRight, ArrowUp, Ban, BarChart3, Database, Dumbbell, LockKeyhole, Monitor, ShieldCheck, UserRound } from "lucide-react";
 import { GlassPanel, Reveal } from "./ConceptPrimitives";
 import { architectureSteps } from "./concept-data";
 import { scrollToConceptSection } from "./concept-utils";
@@ -48,7 +48,7 @@ export function TechnologySection() {
           <div><strong>Personal Training Website V2</strong><p>An ongoing personal project and interface study using fictional data and browser-only interactions.</p></div>
         </div>
         <div className="pt-footer-actions">
-          <a href={import.meta.env.BASE_URL}><ArrowRight aria-hidden="true" /> Back to Portfolio</a>
+          <a href={import.meta.env.BASE_URL}><ArrowLeft aria-hidden="true" /> Back to Portfolio</a>
           <button type="button" onClick={() => scrollToConceptSection("top")}><ArrowUp aria-hidden="true" /> Back to top</button>
         </div>
       </footer>
