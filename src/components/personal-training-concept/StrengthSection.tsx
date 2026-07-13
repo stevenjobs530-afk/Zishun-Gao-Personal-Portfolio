@@ -55,9 +55,9 @@ export function StrengthSection() {
     <section id="strength" className="pt-story-section pt-shell pt-strength-section">
       <Reveal>
         <SectionCopy
-          label="Strength Training"
-          title={<>Record the set.<br />Keep the rhythm.</>}
-          body={<p>Warm-up and working sets stay clear, fast and connected to your own exercise library.</p>}
+          label="Strength session study"
+          title="Exploring a structured way to record sets."
+          body={<p>Warm-up and working sets are shown separately, linked to a personal library item, with an optional rest timer. Sets added in this preview exist only until the page is refreshed.</p>}
         />
       </Reveal>
       <Reveal delay={0.1}>

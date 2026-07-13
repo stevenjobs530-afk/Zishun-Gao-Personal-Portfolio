@@ -10,13 +10,14 @@ export function TechnologySection() {
     <section id="technology" className="pt-technology-section pt-shell">
       <Reveal>
         <div className="pt-technology-title">
-          <span className="pt-future-badge"><span aria-hidden="true" /> Technology Overview</span>
-          <h2>Designed to keep<br />private training private.</h2>
-          <p>A simplified view of the intended product architecture.</p>
+          <span className="pt-future-badge"><span aria-hidden="true" /> Technology overview</span>
+          <h2>Separating the public showcase from the private product.</h2>
+          <p>The diagram outlines the intended architecture for the private training product. This public portfolio showcase is a separate static React interface: it does not connect to Supabase, authenticate users or store training data.</p>
         </div>
       </Reveal>
       <Reveal delay={0.08}>
         <GlassPanel className="pt-architecture-panel">
+          <h3 className="pt-architecture-heading">Intended private product architecture</h3>
           <div className="pt-architecture-flow">
             {architectureSteps.map((step, index) => {
               const Icon = architectureIcons[index];
@@ -35,18 +36,21 @@ export function TechnologySection() {
           </div>
         </GlassPanel>
         <GlassPanel className="pt-privacy-strip">
-          <article><span><LockKeyhole aria-hidden="true" /></span><div><strong>Login-protected product</strong><p>Access is required to view and use the intended system.</p></div></article>
-          <article><span><UserRound aria-hidden="true" /></span><div><strong>User-level data access</strong><p>Users can only access their own information.</p></div></article>
-          <article><span><Ban aria-hidden="true" /></span><div><strong>No public registration</strong><p>Sign-ups are disabled in this conceptual showcase.</p></div></article>
-          <p className="pt-privacy-disclosure"><strong>Concept showcase only</strong><span>·</span> No live database connection <span>·</span> No data collection</p>
+          <article><span><LockKeyhole aria-hidden="true" /></span><div><strong>Private product intent</strong><p>The intended product architecture includes authenticated access.</p></div></article>
+          <article><span><UserRound aria-hidden="true" /></span><div><strong>Scoped private records</strong><p>The private product is intended to keep each account’s records separate.</p></div></article>
+          <article><span><Ban aria-hidden="true" /></span><div><strong>Static public showcase</strong><p>This portfolio page has no sign-in, database or data submission.</p></div></article>
+          <p className="pt-privacy-disclosure"><strong>Public concept showcase</strong><span>·</span> Fictional data <span>·</span> No live database connection <span>·</span> No data collection</p>
         </GlassPanel>
       </Reveal>
       <footer className="pt-concept-footer">
         <div className="pt-footer-brand">
           <span><Dumbbell aria-hidden="true" /></span>
-          <div><strong>Personal Training Website V2</strong><p>A local design exploration of a highly customisable training system.</p></div>
+          <div><strong>Personal Training Website V2</strong><p>An ongoing personal project and interface study using fictional data and browser-only interactions.</p></div>
         </div>
-        <button type="button" onClick={() => scrollToConceptSection("top")}><ArrowUp aria-hidden="true" /> Back to top</button>
+        <div className="pt-footer-actions">
+          <a href={import.meta.env.BASE_URL}><ArrowRight aria-hidden="true" /> Back to Portfolio</a>
+          <button type="button" onClick={() => scrollToConceptSection("top")}><ArrowUp aria-hidden="true" /> Back to top</button>
+        </div>
       </footer>
     </section>
   );

@@ -1,23 +1,23 @@
 import { ArrowRight, BookOpen } from "lucide-react";
 import { GlassPanel, Reveal, SectionCopy } from "./ConceptPrimitives";
-import { libraryItems } from "./concept-data";
+import { defaultTrainingLibraryItems } from "./concept-data";
 
-const philosophyMachines = libraryItems.slice(0, 3);
+const philosophyMachines = defaultTrainingLibraryItems.slice(0, 3);
 
 export function PhilosophySection() {
   return (
     <section id="philosophy" className="pt-story-section pt-shell pt-philosophy">
       <Reveal>
         <SectionCopy
-          label="Product Philosophy"
-          title={<>Every gym<br />is different.</>}
+          label="Design motivation"
+          title="Why I started this project"
           body={
             <>
-              <p>Fixed exercise catalogues cannot reflect every machine, setup or training style.</p>
+              <p>Different gyms can have very different equipment, layouts and naming conventions. A fixed exercise catalogue cannot describe every machine or the way each person understands their training environment.</p>
               <blockquote>
                 The software should adapt to the user’s gym and training style, rather than forcing the user to adapt to a fixed exercise catalogue.
               </blockquote>
-              <p className="pt-philosophy-close">Create your own exercises. Name your own equipment.<br />Build a training library that feels like your gym.</p>
+              <p className="pt-philosophy-close">This project explores a personal library in which people can define their own exercise, equipment and progress names.</p>
             </>
           }
         />
@@ -44,7 +44,7 @@ export function PhilosophySection() {
             {philosophyMachines.map((item) => (
               <article key={item.id}>
                 {item.image ? <img src={item.image} alt="" /> : null}
-                <span><strong>{item.name}</strong><small>{item.category}</small></span>
+                <span><strong>{item.trainingName}</strong><small>{item.category}</small></span>
                 <ArrowRight aria-hidden="true" />
               </article>
             ))}

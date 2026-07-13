@@ -30,9 +30,9 @@ export function CardioSection() {
     <section id="cardio" className="pt-story-section pt-shell pt-cardio-section">
       <Reveal>
         <SectionCopy
-          label="Cardio & Recovery"
-          title={<>Move. Recover.<br />See the whole week.</>}
-          body={<p>Strength, cardio and rest remain distinct—then come together in one clear activity history.</p>}
+          label="Cardio and recovery study"
+          title="Exploring cardio and rest-day records."
+          body={<p>This concept keeps strength, cardio and rest-day entries distinct while presenting them in one weekly view. A rest day is recorded as a user choice, not interpreted as a health judgement.</p>}
         />
       </Reveal>
       <Reveal delay={0.1}>
