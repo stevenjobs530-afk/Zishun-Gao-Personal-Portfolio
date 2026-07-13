@@ -3,6 +3,11 @@ export type Project = {
   summary: string;
   tags: string[];
   href?: string;
+  linkLabel?: string;
+  cover?: {
+    src: string;
+    alt: string;
+  };
   caseStudyId?: string;
   visual: "bars" | "apps" | "wave" | "code";
 };
@@ -310,6 +315,19 @@ export const projects: Project[] = [
     tags: ["Live questionnaire", "Supabase", "Research"],
     caseStudyId: "aep",
     visual: "wave",
+  },
+  {
+    title: "Personal Training Website V2 · Concept Showcase",
+    summary:
+      "An interactive, privacy-conscious product concept for a highly customisable strength, cardio and recovery training system.",
+    tags: ["React", "Product Design", "Responsive UI", "Privacy"],
+    href: "#/personal-training-concept",
+    linkLabel: "Open concept",
+    cover: {
+      src: "project-assets/personal-training-v2/concept-overview.png",
+      alt: "Personal Training Website V2 concept dashboard with strength, cardio and recovery cards.",
+    },
+    visual: "code",
   },
   {
     title: "Selected GitHub Tools & Mini Projects",
@@ -898,6 +916,18 @@ const chineseProjects: Project[] = [
     tags: ["在线问卷", "Supabase", "研究"],
     caseStudyId: "aep",
     visual: "wave",
+  },
+  {
+    title: "Personal Training Website V2 · 概念展示",
+    summary: "一个注重隐私、可高度自定义的力量训练、有氧运动与恢复记录交互式产品概念。",
+    tags: ["React", "产品设计", "响应式界面", "隐私"],
+    href: "#/personal-training-concept",
+    linkLabel: "打开概念站",
+    cover: {
+      src: "project-assets/personal-training-v2/concept-overview.png",
+      alt: "Personal Training Website V2 概念仪表盘，展示力量训练、有氧运动和恢复卡片。",
+    },
+    visual: "code",
   },
   {
     title: "GitHub 工具与小型项目精选",
@@ -1503,7 +1533,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     projectShowcase: {
       eyebrow: "Featured work",
       description:
-        "Three analyst case studies built from real SQL, Python and research files — plus the smaller tools I build on the side. Drag, swipe or use the arrows to move through them.",
+        "Three analyst case studies built from real SQL, Python and research files — plus a product concept and smaller tools I build on the side. Drag, swipe or use the arrows to move through them.",
       focusLabel: "Focus areas",
       dragHint: "Drag to shuffle",
       prevLabel: "Previous project",
@@ -1611,7 +1641,7 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
     projectShowcase: {
       eyebrow: "重点项目",
       description:
-        "三个基于真实 SQL、Python 与研究文件构建的数据分析案例，以及业余打造的小工具。可拖拽、滑动或使用箭头浏览。",
+        "三个基于真实 SQL、Python 与研究文件构建的数据分析案例，以及产品概念与业余打造的小工具。可拖拽、滑动或使用箭头浏览。",
       focusLabel: "核心方向",
       dragHint: "拖动卡片切换",
       prevLabel: "上一个项目",

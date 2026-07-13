@@ -170,7 +170,7 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
               {project.href ? (
                 <Button asChild variant="glass" size="sm" className="gap-1.5">
                   <a href={project.href} target="_blank" rel="noreferrer">
-                    {project.caseStudyId ? <ExternalLink className="size-4" aria-hidden="true" /> : copy.exploreCta}
+                    {project.caseStudyId ? <ExternalLink className="size-4" aria-hidden="true" /> : project.linkLabel ?? copy.exploreCta}
                     {project.caseStudyId ? null : <ArrowUpRight className="size-4" aria-hidden="true" />}
                   </a>
                 </Button>
@@ -194,7 +194,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
 
   const items: ShowcaseItem[] = content.projects.map((project) => {
     const study = project.caseStudyId ? studyById.get(project.caseStudyId) : undefined;
-    const hero = study?.screenshots[0];
+    const hero = study?.screenshots[0] ?? project.cover;
     return { project, study, heroSrc: hero?.src, heroAlt: hero?.alt };
   });
 
