@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, ArrowUpRight, Code2, ExternalLink } from "lucide
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
+import { ProjectEmblem } from "@/components/ProjectEmblems";
 import { ProjectHighlightStack, type HighlightCard } from "@/components/ProjectHighlightStack";
 import { type CaseStudy, type PortfolioContent, type Project, type ProjectShowcaseCopy } from "@/data/portfolio";
 
@@ -82,6 +83,14 @@ function useCarouselControls(cardCount: number) {
 }
 
 function ShowcaseCover({ item }: { item: ShowcaseItem }) {
+  const emblem = item.project.caseStudyId ? (
+    <ProjectEmblem
+      caseStudyId={item.project.caseStudyId}
+      size="sm"
+      className="absolute right-6 top-6 z-[3] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/gallery-card:-translate-y-0.5"
+    />
+  ) : null;
+
   if (item.heroSrc) {
     return (
       <div className="relative h-[210px] overflow-hidden border-b border-white/55 bg-[radial-gradient(circle_at_25%_18%,rgba(0,122,255,.18),transparent_42%),radial-gradient(circle_at_82%_88%,rgba(21,214,180,.18),transparent_46%),linear-gradient(135deg,rgba(255,255,255,.5),rgba(236,245,251,.7))]">
@@ -94,6 +103,7 @@ function ShowcaseCover({ item }: { item: ShowcaseItem }) {
             loading="lazy"
           />
         </div>
+        {emblem}
       </div>
     );
   }
@@ -104,6 +114,7 @@ function ShowcaseCover({ item }: { item: ShowcaseItem }) {
       <span className="apple-inner-curve relative z-[2] flex size-16 items-center justify-center border border-white/70 bg-white/55 text-blue-600 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_12px_28px_rgba(40,56,76,.1)] backdrop-blur-2xl transition-transform duration-700 ease-out group-hover/gallery-card:-translate-y-1">
         <Code2 className="size-7" aria-hidden="true" />
       </span>
+      {emblem}
     </div>
   );
 }
@@ -115,7 +126,7 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
 
   return (
     <article className="snap-start shrink-0 pl-5 first:pl-0">
-      <LiquidGlass className="group/gallery-card flex h-full min-h-[540px] w-[min(85vw,330px)] flex-col overflow-hidden p-0 transition-transform duration-500 ease-out hover:-translate-y-1 sm:w-[360px] lg:w-[396px]">
+      <LiquidGlass className="group/gallery-card flex h-full min-h-[540px] w-[min(85vw,330px)] flex-col overflow-hidden p-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 sm:w-[360px] lg:w-[396px]">
         <div className="relative z-[1] flex h-full flex-col">
           <ShowcaseCover item={item} />
 
@@ -211,7 +222,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
             <div className="flex gap-2">
               <button
                 type="button"
-                className="liquid-glow-button flex size-11 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-45"
+                className="liquid-glow-button flex size-11 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05] active:scale-95 active:duration-150 disabled:cursor-not-allowed disabled:opacity-45"
                 onClick={() => controls.scrollByPage(-1)}
                 disabled={!controls.canScrollPrev}
                 aria-label={copy.prevLabel}
@@ -220,7 +231,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
               </button>
               <button
                 type="button"
-                className="liquid-glow-button flex size-11 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-45"
+                className="liquid-glow-button flex size-11 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05] active:scale-95 active:duration-150 disabled:cursor-not-allowed disabled:opacity-45"
                 onClick={() => controls.scrollByPage(1)}
                 disabled={!controls.canScrollNext}
                 aria-label={copy.nextLabel}
@@ -263,7 +274,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
             key={item.project.title}
             type="button"
             aria-label={`${copy.slideLabel} ${index + 1}`}
-            className={`h-2.5 rounded-full transition-all ${
+            className={`h-2.5 rounded-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               controls.activeIndex === index ? "w-8 bg-neutral-950" : "w-2.5 bg-neutral-950/20 hover:bg-neutral-950/40"
             }`}
             onClick={() => controls.scrollToIndex(index)}

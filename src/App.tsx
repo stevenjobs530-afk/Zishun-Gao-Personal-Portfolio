@@ -11,6 +11,7 @@ import { RevealArticle, RevealBlock, RevealListItem, StaggerBlock, StaggerItem }
 import { DataCanvas } from "@/components/DataCanvas";
 import { HelloIntro } from "@/components/HelloIntro";
 import { PortfolioGuidedHints } from "@/components/PortfolioGuidedHints";
+import { ProjectEmblem } from "@/components/ProjectEmblems";
 import { ProjectGalleryShowcase } from "@/components/ProjectGalleryShowcase";
 import { SectionNavigator } from "@/components/SectionNavigator";
 import { languageOptions, portfolioByLanguage, type CaseStudy, type LanguageCode, type PortfolioContent } from "@/data/portfolio";
@@ -323,7 +324,7 @@ function CaseStudyCodeSection({
   labels: PortfolioContent["caseStudyLabels"];
 }) {
   return (
-    <div id={`case-${study.id}-code`} className="min-w-0 scroll-mt-96 max-lg:border-t max-lg:border-white/55 max-lg:pt-6">
+    <div id={`case-${study.id}-code`} className="min-w-0 scroll-mt-96">
       <h4 className="apple-display-text text-lg text-neutral-900">{labels.code}</h4>
       <div className="mt-4 grid min-w-0 gap-4">
         {study.codeSamples.map((sample) => (
@@ -402,118 +403,127 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
         {content.caseStudies.map((study, index) => (
           <div key={study.id} id={`case-${study.id}`} className="scroll-mt-40">
             <RevealArticle delay={index * 0.08}>
-              <LiquidGlass className="grid grid-cols-[minmax(0,1.08fr)_minmax(320px,.92fr)] gap-8 p-7 md:p-9 max-lg:grid-cols-1">
-                <div className="relative z-[1] min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{study.eyebrow}</p>
-                  <h3 className="apple-display-text mt-4 break-words text-[clamp(1.7rem,2.6vw,2.75rem)] leading-[1.12] text-neutral-950">
-                    {study.title}
-                  </h3>
-                  <p className="mt-5 max-w-3xl text-base leading-8 text-neutral-600">{study.summary}</p>
+              <LiquidGlass className="grid grid-cols-[minmax(0,1.08fr)_minmax(320px,.92fr)] items-start gap-8 p-7 md:p-9 max-lg:grid-cols-1">
+                <div className="flex min-w-0 flex-col max-lg:contents">
+                  <div className="relative z-[1] min-w-0 max-lg:order-1">
+                    <div className="flex items-center gap-4">
+                      <ProjectEmblem caseStudyId={study.id} size="lg" />
+                      <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{study.eyebrow}</p>
+                    </div>
+                    <h3 className="apple-display-text mt-4 break-words text-[clamp(1.7rem,2.6vw,2.75rem)] leading-[1.12] text-neutral-950">
+                      {study.title}
+                    </h3>
+                    <p className="mt-5 max-w-3xl text-base leading-8 text-neutral-600">{study.summary}</p>
 
-                  <div className="mt-6 border-t border-white/55 pt-5">
-                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.businessQuestion}</h4>
-                    <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.businessQuestion}</p>
-                  </div>
-
-                  <ProjectDetailMenu studyId={study.id} labels={content.caseStudyLabels} className="mt-6" />
-
-                  <div className="mt-8 border-t border-white/55 pt-6">
-                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.problem}</h4>
-                    <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.problem}</p>
-                  </div>
-
-                  <div className="mt-8 grid grid-cols-2 gap-8 max-md:grid-cols-1">
-                    <div>
-                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.method}</h4>
-                      <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
-                        {study.method.map((item) => (
-                          <li key={item} className="flex gap-3">
-                            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500/70" aria-hidden="true" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <div className="mt-6 border-t border-white/55 pt-5">
+                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.businessQuestion}</h4>
+                      <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.businessQuestion}</p>
                     </div>
 
-                    <div>
-                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.result}</h4>
-                      <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
-                        {study.results.map((item) => (
-                          <li key={item} className="flex gap-3">
-                            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500/70" aria-hidden="true" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
+                    <ProjectDetailMenu studyId={study.id} labels={content.caseStudyLabels} className="mt-6" />
+
+                    <div className="mt-8 border-t border-white/55 pt-6">
+                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.problem}</h4>
+                      <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.problem}</p>
                     </div>
-                  </div>
 
-                  <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-96 border-t border-white/55 pt-6">
-                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.conclusion}</h4>
-                    <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
-                      {study.conclusion.map((item) => (
-                        <li key={item} className="flex gap-3">
-                          <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/70" aria-hidden="true" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
-                      <a href="#projects">
-                        <ArrowLeft className="size-4" aria-hidden="true" />
-                        {content.caseStudyLabels.backToProjects}
-                      </a>
-                    </Button>
-                  </div>
-
-                  {study.href && study.linkLabel ? (
-                    <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
-                      <a href={study.href} target="_blank" rel="noreferrer">
-                        {study.linkLabel} <ArrowUpRight className="size-4" aria-hidden="true" />
-                      </a>
-                    </Button>
-                  ) : null}
-                </div>
-
-                <div className="relative z-[1] flex min-w-0 flex-col gap-6">
-                  <div className="grid grid-cols-2 gap-3">
-                    {study.metrics.map((metric) => (
-                      <div key={`${study.id}-${metric.label}`} className="border-t border-white/60 pt-4">
-                        <span className="apple-display-text block text-[clamp(1.45rem,2.5vw,2.35rem)] leading-none text-neutral-950">
-                          {metric.value}
-                        </span>
-                        <span className="mt-2 block text-xs leading-5 text-neutral-500">{metric.label}</span>
+                    <div className="mt-8 grid grid-cols-2 gap-8 max-md:grid-cols-1">
+                      <div>
+                        <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.method}</h4>
+                        <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
+                          {study.method.map((item) => (
+                            <li key={item} className="flex gap-3">
+                              <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500/70" aria-hidden="true" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
-                    ))}
+
+                      <div>
+                        <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.result}</h4>
+                        <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
+                          {study.results.map((item) => (
+                            <li key={item} className="flex gap-3">
+                              <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500/70" aria-hidden="true" />
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-96 border-t border-white/55 pt-6">
+                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.conclusion}</h4>
+                      <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
+                        {study.conclusion.map((item) => (
+                          <li key={item} className="flex gap-3">
+                            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/70" aria-hidden="true" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
+                        <a href="#projects">
+                          <ArrowLeft className="size-4" aria-hidden="true" />
+                          {content.caseStudyLabels.backToProjects}
+                        </a>
+                      </Button>
+                    </div>
+
+                    {study.href && study.linkLabel ? (
+                      <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
+                        <a href={study.href} target="_blank" rel="noreferrer">
+                          {study.linkLabel} <ArrowUpRight className="size-4" aria-hidden="true" />
+                        </a>
+                      </Button>
+                    ) : null}
                   </div>
 
-                  <div id={`case-${study.id}-screenshots`} className="scroll-mt-96 border-t border-white/55 pt-5">
-                    <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.screenshots}</h4>
-                    <div className="mt-4 grid gap-5">
-                      {study.screenshots.map((screenshot) => (
-                        <figure key={screenshot.src}>
-                          <div className="overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl">
-                            <img
-                              className="media-fade-in max-h-[360px] w-full object-contain"
-                              src={versionedScreenshotPath(screenshot.src)}
-                              alt={screenshot.alt}
-                              loading="lazy"
-                            />
-                          </div>
-                          <figcaption className="mt-3">
-                            <span className="text-[0.95rem] font-semibold text-neutral-900">{screenshot.title}</span>
-                            <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{screenshot.caption}</p>
-                          </figcaption>
-                        </figure>
+                  <div className="relative z-[1] mt-8 min-w-0 border-t border-white/55 pt-6 max-lg:order-3 max-lg:mt-0">
+                    <CaseStudyEvidenceSection study={study} labels={content.caseStudyLabels} />
+                  </div>
+                </div>
+
+                <div className="flex min-w-0 flex-col max-lg:contents">
+                  <div className="relative z-[1] flex min-w-0 flex-col gap-6 max-lg:order-2">
+                    <div className="grid grid-cols-2 gap-3">
+                      {study.metrics.map((metric) => (
+                        <div key={`${study.id}-${metric.label}`} className="border-t border-white/60 pt-4">
+                          <span className="apple-display-text block text-[clamp(1.45rem,2.5vw,2.35rem)] leading-none text-neutral-950">
+                            {metric.value}
+                          </span>
+                          <span className="mt-2 block text-xs leading-5 text-neutral-500">{metric.label}</span>
+                        </div>
                       ))}
+                    </div>
+
+                    <div id={`case-${study.id}-screenshots`} className="scroll-mt-96 border-t border-white/55 pt-5">
+                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.screenshots}</h4>
+                      <div className="mt-4 grid gap-5">
+                        {study.screenshots.map((screenshot) => (
+                          <figure key={screenshot.src} className="group/shot">
+                            <div className="overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl">
+                              <img
+                                className="media-fade-in max-h-[360px] w-full object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover/shot:scale-[1.025]"
+                                src={versionedScreenshotPath(screenshot.src)}
+                                alt={screenshot.alt}
+                                loading="lazy"
+                              />
+                            </div>
+                            <figcaption className="mt-3">
+                              <span className="text-[0.95rem] font-semibold text-neutral-900">{screenshot.title}</span>
+                              <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{screenshot.caption}</p>
+                            </figcaption>
+                          </figure>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                </div>
-
-                <div className="relative z-[1] col-span-full grid min-w-0 grid-cols-[minmax(0,.78fr)_minmax(0,1.22fr)] gap-6 border-t border-white/55 pt-6 max-lg:grid-cols-1">
-                  <CaseStudyEvidenceSection study={study} labels={content.caseStudyLabels} />
-                  <CaseStudyCodeSection study={study} labels={content.caseStudyLabels} />
+                  <div className="relative z-[1] mt-8 min-w-0 border-t border-white/55 pt-6 max-lg:order-4 max-lg:mt-0">
+                    <CaseStudyCodeSection study={study} labels={content.caseStudyLabels} />
+                  </div>
                 </div>
               </LiquidGlass>
             </RevealArticle>
@@ -677,7 +687,7 @@ function AwardPreviewCard({
 }) {
   return (
     <article className="snap-start">
-      <LiquidGlass className="flex h-full min-h-[450px] w-[min(76vw,285px)] flex-col p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,.92),inset_0_-1px_14px_rgba(255,255,255,.34),0_0_0_1px_rgba(255,255,255,.24),0_14px_34px_rgba(46,61,82,.07)] transition-transform duration-500 ease-out hover:-translate-y-1 sm:min-h-[470px] sm:w-[310px] lg:w-[326px]">
+      <LiquidGlass className="flex h-full min-h-[450px] w-[min(76vw,285px)] flex-col p-4 shadow-[inset_0_1px_1px_rgba(255,255,255,.92),inset_0_-1px_14px_rgba(255,255,255,.34),0_0_0_1px_rgba(255,255,255,.24),0_14px_34px_rgba(46,61,82,.07)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 sm:min-h-[470px] sm:w-[310px] lg:w-[326px]">
         <div className="relative z-[1] flex h-full flex-col">
           <div className="apple-inner-curve flex h-[185px] items-center justify-center overflow-hidden border border-white/70 bg-white/78 p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_48px_rgba(46,61,82,.12)] sm:h-[205px]">
             <img className="media-fade-in max-h-full max-w-full object-contain" src={publicAssetPath(card.image)} alt={card.alt} loading="lazy" />
@@ -730,7 +740,7 @@ function AwardPreviewWall({ content }: { content: PortfolioContent }) {
           </div>
           <div className="flex gap-2">
             <button
-              className="liquid-glow-button flex size-9 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-45 sm:size-11"
+              className="liquid-glow-button flex size-9 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05] active:scale-95 active:duration-150 disabled:cursor-not-allowed disabled:opacity-45 sm:size-11"
               type="button"
               onClick={() => controls.scrollByPage(-1)}
               disabled={!controls.canScrollPrev}
@@ -739,7 +749,7 @@ function AwardPreviewWall({ content }: { content: PortfolioContent }) {
               <ArrowLeft className="size-4 sm:size-5" aria-hidden="true" />
             </button>
             <button
-              className="liquid-glow-button flex size-9 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-45 sm:size-11"
+              className="liquid-glow-button flex size-9 items-center justify-center rounded-full border border-white/80 bg-white/55 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_12px_34px_rgba(46,61,82,.12)] backdrop-blur-[34px] transition duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.05] active:scale-95 active:duration-150 disabled:cursor-not-allowed disabled:opacity-45 sm:size-11"
               type="button"
               onClick={() => controls.scrollByPage(1)}
               disabled={!controls.canScrollNext}
@@ -767,7 +777,7 @@ function AwardPreviewWall({ content }: { content: PortfolioContent }) {
             key={card.id}
             type="button"
             aria-label={`${gallery.dotLabel} ${index + 1}`}
-            className={`h-2.5 rounded-full transition-all ${
+            className={`h-2.5 rounded-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
               controls.activeIndex === index ? "w-8 bg-neutral-950" : "w-2.5 bg-neutral-950/20 hover:bg-neutral-950/40"
             }`}
             onClick={() => controls.scrollToIndex(index)}
@@ -788,7 +798,7 @@ function AcademicTranscriptCard({
 
   return (
     <RevealArticle>
-      <LiquidGlass className="h-full overflow-hidden p-4 transition-transform duration-500 ease-out hover:-translate-y-1 md:p-5">
+      <LiquidGlass className="h-full overflow-hidden p-4 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 md:p-5">
         <div className="relative z-[1] grid h-full grid-cols-[minmax(150px,.55fr)_minmax(0,1fr)] gap-5 max-sm:grid-cols-1">
           <a
             className="block overflow-hidden rounded-lg border border-white/75 bg-white/55 shadow-[inset_0_1px_1px_rgba(255,255,255,.92),0_16px_38px_rgba(46,61,82,.12)]"
@@ -902,7 +912,7 @@ function Interests({ content }: { content: PortfolioContent }) {
 
             return (
               <RevealArticle key={interest.title} delay={index * 0.05}>
-                <LiquidGlass className="h-full p-5 transition-transform duration-500 ease-out hover:-translate-y-1 md:p-6">
+                <LiquidGlass className="h-full p-5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 md:p-6">
                   <div className="relative z-[1] flex h-full flex-col gap-4">
                     <span className="flex size-10 items-center justify-center rounded-lg border border-white/65 bg-white/45 text-blue-600 shadow-[inset_0_1px_1px_rgba(255,255,255,.9)]">
                       <Icon className="size-5" aria-hidden="true" />

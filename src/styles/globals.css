@@ -545,6 +545,84 @@
     transform: scaleX(1);
   }
 
+  /* Project emblems: waving flags + app icon. The sway anchors near the hoist
+     so the fly end travels furthest, like cloth pinned to a pole. The shade
+     layer sweeps a soft highlight/shadow pair across the cloth to sell the
+     ripple that the SVG displacement filter starts. */
+  .emblem-flag {
+    transform-origin: 6% 50%;
+    animation: emblem-flag-sway 6.5s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    will-change: transform;
+  }
+
+  .emblem-flag-shade {
+    pointer-events: none;
+    background: linear-gradient(
+      104deg,
+      rgba(255, 255, 255, 0) 12%,
+      rgba(255, 255, 255, 0.32) 26%,
+      rgba(15, 26, 42, 0.18) 42%,
+      rgba(255, 255, 255, 0.2) 58%,
+      rgba(15, 26, 42, 0.12) 74%,
+      rgba(255, 255, 255, 0) 88%
+    );
+    background-size: 280% 100%;
+    mix-blend-mode: soft-light;
+    animation: emblem-flag-ripple 5.5s linear infinite;
+  }
+
+  @keyframes emblem-flag-sway {
+    0%,
+    100% {
+      transform: rotate(-1.4deg) skewY(-0.6deg);
+    }
+
+    50% {
+      transform: rotate(1.6deg) skewY(0.7deg);
+    }
+  }
+
+  @keyframes emblem-flag-ripple {
+    from {
+      background-position: 130% 0;
+    }
+
+    to {
+      background-position: -150% 0;
+    }
+  }
+
+  /* Scroll-driven glint: a soft diagonal light band. Its horizontal position is
+     set from scroll progress in ProjectEmblems.tsx, so the light appears to
+     travel across each logo as it moves through the viewport. */
+  .emblem-glint {
+    pointer-events: none;
+    z-index: 2;
+    background: linear-gradient(
+      104deg,
+      rgba(255, 255, 255, 0) 8%,
+      rgba(255, 255, 255, 0.42) 38%,
+      rgba(255, 255, 255, 0.62) 50%,
+      rgba(255, 255, 255, 0.42) 62%,
+      rgba(255, 255, 255, 0) 92%
+    );
+    filter: blur(2px);
+    mix-blend-mode: screen;
+    opacity: 0.85;
+  }
+
+  .emblem-app-icon {
+    background: transparent;
+    box-shadow: none;
+    filter: none;
+    transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .group\/gallery-card:hover .emblem-app-icon,
+  .emblem-app-icon:hover {
+    transform: translateY(-2px) scale(1.04);
+  }
+
   @keyframes media-fade-in {
     from {
       opacity: 0;
