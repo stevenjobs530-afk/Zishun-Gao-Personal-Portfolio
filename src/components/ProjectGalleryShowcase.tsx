@@ -1,11 +1,26 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Code2, ExternalLink } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Code2,
+  ExternalLink,
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { ProjectEmblem } from "@/components/ProjectEmblems";
-import { ProjectHighlightStack, type HighlightCard } from "@/components/ProjectHighlightStack";
-import { type CaseStudy, type PortfolioContent, type Project, type ProjectShowcaseCopy } from "@/data/portfolio";
+import {
+  ProjectHighlightStack,
+  type HighlightCard,
+} from "@/components/ProjectHighlightStack";
+import { TrainingProjectSpotlight } from "@/components/TrainingProjectSpotlight";
+import {
+  type CaseStudy,
+  type PortfolioContent,
+  type Project,
+  type ProjectShowcaseCopy,
+} from "@/data/portfolio";
 
 const showcaseFallbackCopy: ProjectShowcaseCopy = {
   eyebrow: "Featured work",
@@ -31,7 +46,10 @@ function assetUrl(path: string) {
 }
 
 function prefersReducedMotion() {
-  return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 }
 
 function useCarouselControls(cardCount: number) {
@@ -46,9 +64,17 @@ function useCarouselControls(cardCount: number) {
       return;
     }
     const maxScroll = track.scrollWidth - track.clientWidth;
-    const firstCard = track.firstElementChild instanceof HTMLElement ? track.firstElementChild : null;
-    const itemWidth = firstCard ? firstCard.offsetWidth + 20 : track.clientWidth;
-    const nextIndex = Math.min(cardCount - 1, Math.max(0, Math.round(track.scrollLeft / itemWidth)));
+    const firstCard =
+      track.firstElementChild instanceof HTMLElement
+        ? track.firstElementChild
+        : null;
+    const itemWidth = firstCard
+      ? firstCard.offsetWidth + 20
+      : track.clientWidth;
+    const nextIndex = Math.min(
+      cardCount - 1,
+      Math.max(0, Math.round(track.scrollLeft / itemWidth)),
+    );
     setActiveIndex(nextIndex);
     setCanScrollPrev(track.scrollLeft > 4);
     setCanScrollNext(track.scrollLeft < maxScroll - 4);
@@ -64,7 +90,11 @@ function useCarouselControls(cardCount: number) {
   const scrollToIndex = (index: number) => {
     const target = trackRef.current?.children.item(index);
     if (target instanceof HTMLElement) {
-      target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "nearest", inline: "start" });
+      target.scrollIntoView({
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+        block: "nearest",
+        inline: "start",
+      });
     }
   };
 
@@ -72,14 +102,32 @@ function useCarouselControls(cardCount: number) {
     const track = trackRef.current;
     let currentIndex = activeIndex;
     if (track) {
-      const firstCard = track.firstElementChild instanceof HTMLElement ? track.firstElementChild : null;
-      const itemWidth = firstCard ? firstCard.offsetWidth + 20 : track.clientWidth;
-      currentIndex = Math.min(cardCount - 1, Math.max(0, Math.round(track.scrollLeft / itemWidth)));
+      const firstCard =
+        track.firstElementChild instanceof HTMLElement
+          ? track.firstElementChild
+          : null;
+      const itemWidth = firstCard
+        ? firstCard.offsetWidth + 20
+        : track.clientWidth;
+      currentIndex = Math.min(
+        cardCount - 1,
+        Math.max(0, Math.round(track.scrollLeft / itemWidth)),
+      );
     }
-    scrollToIndex(Math.min(cardCount - 1, Math.max(0, currentIndex + direction)));
+    scrollToIndex(
+      Math.min(cardCount - 1, Math.max(0, currentIndex + direction)),
+    );
   };
 
-  return { activeIndex, canScrollNext, canScrollPrev, scrollByPage, scrollToIndex, trackRef, updateState };
+  return {
+    activeIndex,
+    canScrollNext,
+    canScrollPrev,
+    scrollByPage,
+    scrollToIndex,
+    trackRef,
+    updateState,
+  };
 }
 
 function ShowcaseCover({ item }: { item: ShowcaseItem }) {
@@ -119,7 +167,13 @@ function ShowcaseCover({ item }: { item: ShowcaseItem }) {
   );
 }
 
-function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcaseCopy }) {
+function ShowcaseCard({
+  item,
+  copy,
+}: {
+  item: ShowcaseItem;
+  copy: ProjectShowcaseCopy;
+}) {
   const { project, study } = item;
   const eyebrow = study?.eyebrow ?? project.tags[0];
   const headlineMetrics = study?.metrics.slice(0, 2) ?? [];
@@ -133,20 +187,31 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
           <div className="flex flex-1 flex-col gap-5 p-6 md:p-7">
             <div>
               {eyebrow ? (
-                <p className="text-[0.68rem] font-semibold uppercase tracking-wide text-blue-600">{eyebrow}</p>
+                <p className="text-[0.68rem] font-semibold uppercase tracking-wide text-blue-600">
+                  {eyebrow}
+                </p>
               ) : null}
-              <h3 className="apple-display-text mt-2 text-[1.2rem] leading-snug text-neutral-950">{project.title}</h3>
-              <p className="mt-3 line-clamp-3 text-[0.92rem] leading-7 text-neutral-600">{project.summary}</p>
+              <h3 className="apple-display-text mt-2 text-[1.2rem] leading-snug text-neutral-950">
+                {project.title}
+              </h3>
+              <p className="mt-3 line-clamp-3 text-[0.92rem] leading-7 text-neutral-600">
+                {project.summary}
+              </p>
             </div>
 
             {headlineMetrics.length > 0 ? (
               <div className="grid grid-cols-2 gap-3">
                 {headlineMetrics.map((metric) => (
-                  <div key={metric.label} className="border-t border-white/55 pt-3">
+                  <div
+                    key={metric.label}
+                    className="border-t border-white/55 pt-3"
+                  >
                     <span className="apple-display-text block text-[clamp(1.15rem,2vw,1.5rem)] leading-none text-neutral-950">
                       {metric.value}
                     </span>
-                    <span className="mt-1.5 block text-[0.72rem] leading-5 text-neutral-500">{metric.label}</span>
+                    <span className="mt-1.5 block text-[0.72rem] leading-5 text-neutral-500">
+                      {metric.label}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -160,18 +225,32 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
 
             <div className="mt-auto flex flex-wrap items-center gap-2.5 pt-1">
               {project.caseStudyId ? (
-                <Button asChild variant="glass" size="sm" className="group/cta gap-1.5">
+                <Button
+                  asChild
+                  variant="glass"
+                  size="sm"
+                  className="group/cta gap-1.5"
+                >
                   <a href={`#case-${project.caseStudyId}`}>
                     {copy.caseStudyCta}
-                    <ArrowRight className="size-4 transition-transform duration-300 group-hover/cta:translate-x-1" aria-hidden="true" />
+                    <ArrowRight
+                      className="size-4 transition-transform duration-300 group-hover/cta:translate-x-1"
+                      aria-hidden="true"
+                    />
                   </a>
                 </Button>
               ) : null}
               {project.href ? (
                 <Button asChild variant="glass" size="sm" className="gap-1.5">
                   <a href={project.href} target="_blank" rel="noreferrer">
-                    {project.caseStudyId ? <ExternalLink className="size-4" aria-hidden="true" /> : copy.exploreCta}
-                    {project.caseStudyId ? null : <ArrowUpRight className="size-4" aria-hidden="true" />}
+                    {project.caseStudyId ? (
+                      <ExternalLink className="size-4" aria-hidden="true" />
+                    ) : (
+                      copy.exploreCta
+                    )}
+                    {project.caseStudyId ? null : (
+                      <ArrowUpRight className="size-4" aria-hidden="true" />
+                    )}
                   </a>
                 </Button>
               ) : null}
@@ -188,12 +267,20 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
   );
 }
 
-export function ProjectGalleryShowcase({ content }: { content: PortfolioContent }) {
+export function ProjectGalleryShowcase({
+  content,
+}: {
+  content: PortfolioContent;
+}) {
   const copy = content.projectShowcase ?? showcaseFallbackCopy;
-  const studyById = new Map(content.caseStudies.map((study) => [study.id, study]));
+  const studyById = new Map(
+    content.caseStudies.map((study) => [study.id, study]),
+  );
 
   const items: ShowcaseItem[] = content.projects.map((project) => {
-    const study = project.caseStudyId ? studyById.get(project.caseStudyId) : undefined;
+    const study = project.caseStudyId
+      ? studyById.get(project.caseStudyId)
+      : undefined;
     const hero = study?.screenshots[0];
     return { project, study, heroSrc: hero?.src, heroAlt: hero?.alt };
   });
@@ -214,10 +301,16 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
 
   return (
     <div>
+      <TrainingProjectSpotlight content={content} />
+
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
         <div className="max-w-xl">
-          <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{copy.eyebrow}</p>
-          <p className="mt-4 text-[0.98rem] leading-8 text-neutral-600 md:text-base">{copy.description}</p>
+          <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">
+            {copy.eyebrow}
+          </p>
+          <p className="mt-4 text-[0.98rem] leading-8 text-neutral-600 md:text-base">
+            {copy.description}
+          </p>
           <div className="mt-7 flex items-center gap-4">
             <div className="flex gap-2">
               <button
@@ -240,7 +333,8 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
               </button>
             </div>
             <span className="text-sm font-medium tabular-nums text-neutral-500">
-              {String(controls.activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}
+              {String(controls.activeIndex + 1).padStart(2, "0")} /{" "}
+              {String(items.length).padStart(2, "0")}
             </span>
           </div>
         </div>
@@ -252,8 +346,14 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
           // xl+ has the horizontal room — at narrower lg widths the shift would push
           // the front card into the left text column, so it's left in place there.
           <div className="hidden lg:block xl:-translate-x-44">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-normal text-blue-600">{copy.focusLabel}</p>
-            <ProjectHighlightStack items={highlightItems} dragHint={copy.dragHint} ctaLabel={copy.caseStudyCta} />
+            <p className="mb-5 text-xs font-semibold uppercase tracking-normal text-blue-600">
+              {copy.focusLabel}
+            </p>
+            <ProjectHighlightStack
+              items={highlightItems}
+              dragHint={copy.dragHint}
+              ctaLabel={copy.caseStudyCta}
+            />
           </div>
         ) : null}
       </div>
@@ -275,7 +375,9 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
             type="button"
             aria-label={`${copy.slideLabel} ${index + 1}`}
             className={`h-2.5 rounded-full transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-              controls.activeIndex === index ? "w-8 bg-neutral-950" : "w-2.5 bg-neutral-950/20 hover:bg-neutral-950/40"
+              controls.activeIndex === index
+                ? "w-8 bg-neutral-950"
+                : "w-2.5 bg-neutral-950/20 hover:bg-neutral-950/40"
             }`}
             onClick={() => controls.scrollToIndex(index)}
           />
