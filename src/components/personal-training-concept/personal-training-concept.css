@@ -1237,7 +1237,7 @@
 
 .pt-strength-grid {
   display: grid;
-  grid-template-columns: minmax(390px, 1.15fr) minmax(250px, 0.85fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: 28px;
   margin-top: 24px;
 }
@@ -1351,6 +1351,10 @@
 }
 
 .pt-choose-exercise { margin-top: 12px; }
+
+.pt-recorded-sets {
+  min-width: 0;
+}
 
 .pt-recorded-sets h3,
 .pt-rest-timer h3 {
@@ -2395,6 +2399,11 @@
   color: var(--pt-blue);
 }
 
+@media (max-width: 1220px) {
+  .pt-strength-grid { grid-template-columns: 1fr; }
+  .pt-strength-form { padding-right: 0; padding-bottom: 26px; border-right: 0; border-bottom: 1px solid rgba(111, 133, 168, 0.14); }
+}
+
 @media (max-width: 1080px) {
   .pt-header nav { gap: 11px; }
   .pt-header nav button { font-size: 0.75rem; }
@@ -2421,7 +2430,6 @@
   .pt-library-detail { grid-template-columns: 0.8fr 1.2fr; gap: 18px; padding: 18px; }
   .pt-library-detail-art { min-height: 230px; }
   .pt-library-detail-art img { height: 225px; }
-  .pt-strength-grid { grid-template-columns: minmax(330px, 1.05fr) minmax(230px, 0.95fr); }
   .pt-architecture-flow { gap: 16px; }
   .pt-architecture-arrow { right: -16px; }
   .pt-privacy-strip { grid-template-columns: repeat(3, 1fr); }
@@ -2461,8 +2469,6 @@
   .pt-library-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pt-library-detail { grid-template-columns: minmax(230px, 0.8fr) 1.2fr; }
   .pt-progress-definition-meta { grid-template-columns: 1fr; }
-  .pt-strength-grid { grid-template-columns: 1fr; }
-  .pt-strength-form { padding-right: 0; padding-bottom: 26px; border-right: 0; border-bottom: 1px solid rgba(111, 133, 168, 0.14); }
   .pt-cardio-stack { max-width: none; }
   .pt-progress-canvas { grid-template-columns: 0.78fr 1.22fr; }
   .pt-technology-section { padding-top: 100px; }
