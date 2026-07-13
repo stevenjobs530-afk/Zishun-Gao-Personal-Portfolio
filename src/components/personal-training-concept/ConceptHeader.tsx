@@ -1,7 +1,8 @@
+import { ArrowLeft } from "lucide-react";
 import { scrollToConceptSection } from "./concept-utils";
 
 const navigation = [
-  ["philosophy", "Philosophy"],
+  ["philosophy", "Why"],
   ["library", "Library"],
   ["strength", "Strength"],
   ["cardio", "Cardio"],
@@ -12,32 +13,22 @@ const navigation = [
 export function ConceptHeader() {
   return (
     <header className="pt-header">
-      <a
-        className="pt-wordmark"
-        href="#top"
-        onClick={(event) => {
-          event.preventDefault();
-          scrollToConceptSection("top");
-        }}
-      >
-        PT V2
+      <a className="pt-back-link" href={import.meta.env.BASE_URL}>
+        <ArrowLeft aria-hidden="true" /> Back to Portfolio
       </a>
-      <nav aria-label="Concept showcase navigation">
+      <nav aria-label="Concept showcase sections">
         {navigation.map(([id, label]) => (
-          <a
+          <button
             key={id}
-            href={`#${id}`}
-            onClick={(event) => {
-              event.preventDefault();
-              scrollToConceptSection(id);
-            }}
+            type="button"
+            onClick={() => scrollToConceptSection(id)}
           >
             {label}
-          </a>
+          </button>
         ))}
       </nav>
       <span className="pt-showcase-status">
-        <span aria-hidden="true" /> Concept Showcase
+        <span aria-hidden="true" /> Personal project · Concept study
       </span>
     </header>
   );

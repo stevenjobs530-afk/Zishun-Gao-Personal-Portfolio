@@ -86,15 +86,16 @@ export function HeroSection() {
   return (
     <section id="top" className="pt-hero pt-shell">
       <Reveal className="pt-hero-copy">
+        <p className="pt-section-label">Personal project · Concept and interface study</p>
         <h1>Personal<br />Training<br />Website V2</h1>
-        <p className="pt-hero-positioning">Built around your gym.<br /><strong>Structured around your training.</strong></p>
-        <p className="pt-hero-description">A highly customisable system for strength, cardio and recovery.</p>
+        <p className="pt-hero-positioning">A personal project exploring a more flexible way to record training.</p>
+        <p className="pt-hero-description">I started it after noticing that equipment and terminology can vary considerably between gyms. The concept explores user-defined exercises, machines and progress measures alongside strength, cardio and rest-day records.</p>
         <button className="pt-primary-button" type="button" onClick={() => scrollToConceptSection("philosophy")}>
-          Explore the concept <span><ArrowRight aria-hidden="true" /></span>
+          Explore the interface <span><ArrowRight aria-hidden="true" /></span>
         </button>
-        <p className="pt-disclosure">Fictional data · No sign-in · No data collection</p>
+        <p className="pt-disclosure">Concept preview · Fictional data · No sign-in · Nothing is saved</p>
         <button className="pt-scroll-prompt" type="button" onClick={() => scrollToConceptSection("philosophy")}>
-          <Mouse aria-hidden="true" /> Scroll to explore <ArrowDown aria-hidden="true" />
+          <Mouse aria-hidden="true" /> Scroll through the study <ArrowDown aria-hidden="true" />
         </button>
       </Reveal>
       <Reveal className="pt-hero-dashboard" delay={0.12}>

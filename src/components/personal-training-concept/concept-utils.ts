@@ -10,5 +10,4 @@ export function scrollToConceptSection(id: string) {
   }
 
   target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "start" });
-  window.history.replaceState(null, "", `#${id}`);
 }

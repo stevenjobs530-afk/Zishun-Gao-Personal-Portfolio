@@ -8,6 +8,15 @@ export type Project = {
     src: string;
     alt: string;
   };
+  preview?: {
+    label: string;
+    title: string;
+    description: string;
+    disclosure: string;
+    ctaLabel: string;
+    closeLabel: string;
+    newTabLabel: string;
+  };
   caseStudyId?: string;
   visual: "bars" | "apps" | "wave" | "code";
 };
@@ -319,13 +328,22 @@ export const projects: Project[] = [
   {
     title: "Personal Training Website V2 · Concept Showcase",
     summary:
-      "An interactive, privacy-conscious product concept for a highly customisable strength, cardio and recovery training system.",
-    tags: ["React", "Product Design", "Responsive UI", "Privacy"],
+      "An ongoing personal project exploring how users can define their own exercises, equipment and progress measures for the gym they actually use.",
+    tags: ["React", "Interface Study", "Responsive UI", "Privacy"],
     href: "#/personal-training-concept",
-    linkLabel: "Open concept",
+    linkLabel: "Project preview",
     cover: {
       src: "project-assets/personal-training-v2/concept-overview.png",
-      alt: "Personal Training Website V2 concept dashboard with strength, cardio and recovery cards.",
+      alt: "Personal Training Website V2 concept interface showing fictional strength, cardio and recovery entries.",
+    },
+    preview: {
+      label: "Personal project · Concept and interface study",
+      title: "Personal Training Website V2",
+      description: "I started this project after noticing how much equipment and terminology can vary between gyms. It explores a more flexible model in which people can define their own exercises, machines and progress measures rather than rely only on a fixed catalogue. This public showcase uses fictional data and browser-only interactions to demonstrate the current design direction.",
+      disclosure: "Concept preview · Fictional data · Nothing is saved",
+      ctaLabel: "View full showcase",
+      closeLabel: "Close",
+      newTabLabel: "Opens in a new tab",
     },
     visual: "code",
   },
@@ -919,13 +937,22 @@ const chineseProjects: Project[] = [
   },
   {
     title: "Personal Training Website V2 · 概念展示",
-    summary: "一个注重隐私、可高度自定义的力量训练、有氧运动与恢复记录交互式产品概念。",
-    tags: ["React", "产品设计", "响应式界面", "隐私"],
+    summary: "一个持续开发中的个人项目，探索用户如何自定义训练动作、器械和进度指标，以适应不同健身房的器械配置与命名方式。",
+    tags: ["React", "界面研究", "响应式设计", "隐私边界"],
     href: "#/personal-training-concept",
-    linkLabel: "打开概念站",
+    linkLabel: "项目预览",
     cover: {
       src: "project-assets/personal-training-v2/concept-overview.png",
-      alt: "Personal Training Website V2 概念仪表盘，展示力量训练、有氧运动和恢复卡片。",
+      alt: "Personal Training Website V2 概念界面，展示虚构的力量训练、有氧运动和恢复记录。",
+    },
+    preview: {
+      label: "个人项目 · 概念与界面研究",
+      title: "Personal Training Website V2",
+      description: "我开始这个项目，是因为不同健身房的器械配置和命名方式差异很大。它探索一种更灵活的记录模式：用户可以按照自己的训练环境定义动作、器械和进度指标，而不必只依赖固定目录。这个公开展示仅使用虚构数据和浏览器内交互，呈现目前的设计方向。",
+      disclosure: "概念预览 · 虚构数据 · 不会保存任何内容",
+      ctaLabel: "查看完整展示",
+      closeLabel: "关闭",
+      newTabLabel: "将在新标签页打开",
     },
     visual: "code",
   },

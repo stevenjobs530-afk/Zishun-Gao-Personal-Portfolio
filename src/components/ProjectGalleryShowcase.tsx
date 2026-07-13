@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { ProjectEmblem } from "@/components/ProjectEmblems";
 import { ProjectHighlightStack, type HighlightCard } from "@/components/ProjectHighlightStack";
+import { ProjectPreviewDialog } from "@/components/ProjectPreviewDialog";
 import { type CaseStudy, type PortfolioContent, type Project, type ProjectShowcaseCopy } from "@/data/portfolio";
 
 const showcaseFallbackCopy: ProjectShowcaseCopy = {
@@ -119,7 +120,15 @@ function ShowcaseCover({ item }: { item: ShowcaseItem }) {
   );
 }
 
-function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcaseCopy }) {
+function ShowcaseCard({
+  item,
+  copy,
+  onOpenPreview,
+}: {
+  item: ShowcaseItem;
+  copy: ProjectShowcaseCopy;
+  onOpenPreview: (project: Project, trigger: HTMLButtonElement) => void;
+}) {
   const { project, study } = item;
   const eyebrow = study?.eyebrow ?? project.tags[0];
   const headlineMetrics = study?.metrics.slice(0, 2) ?? [];
@@ -167,7 +176,19 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
                   </a>
                 </Button>
               ) : null}
-              {project.href ? (
+              {project.preview ? (
+                <Button
+                  type="button"
+                  variant="glass"
+                  size="sm"
+                  className="gap-1.5"
+                  aria-haspopup="dialog"
+                  onClick={(event) => onOpenPreview(project, event.currentTarget)}
+                >
+                  {project.linkLabel ?? copy.exploreCta}
+                  <ArrowUpRight className="size-4" aria-hidden="true" />
+                </Button>
+              ) : project.href ? (
                 <Button asChild variant="glass" size="sm" className="gap-1.5">
                   <a href={project.href} target="_blank" rel="noreferrer">
                     {project.caseStudyId ? <ExternalLink className="size-4" aria-hidden="true" /> : project.linkLabel ?? copy.exploreCta}
@@ -189,6 +210,8 @@ function ShowcaseCard({ item, copy }: { item: ShowcaseItem; copy: ProjectShowcas
 }
 
 export function ProjectGalleryShowcase({ content }: { content: PortfolioContent }) {
+  const [previewProject, setPreviewProject] = useState<Project | null>(null);
+  const previewTriggerRef = useRef<HTMLButtonElement | null>(null);
   const copy = content.projectShowcase ?? showcaseFallbackCopy;
   const studyById = new Map(content.caseStudies.map((study) => [study.id, study]));
 
@@ -264,7 +287,15 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
         onScroll={controls.updateState}
       >
         {items.map((item) => (
-          <ShowcaseCard key={item.project.title} item={item} copy={copy} />
+          <ShowcaseCard
+            key={item.project.title}
+            item={item}
+            copy={copy}
+            onOpenPreview={(project, trigger) => {
+              previewTriggerRef.current = trigger;
+              setPreviewProject(project);
+            }}
+          />
         ))}
       </div>
 
@@ -281,6 +312,12 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
           />
         ))}
       </div>
+
+      <ProjectPreviewDialog
+        project={previewProject}
+        returnFocusElement={previewTriggerRef.current}
+        onClosed={() => setPreviewProject(null)}
+      />
     </div>
   );
 }
