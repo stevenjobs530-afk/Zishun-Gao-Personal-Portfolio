@@ -95,31 +95,33 @@ export function CaseStudyFoldout({
     <RevealArticle delay={delay}>
       <article className={`case-study-foldout ${expanded ? "is-expanded" : ""}`}>
         <LiquidGlass className="case-study-foldout__cover overflow-visible p-0">
-          <div className="relative z-[1] grid min-h-[430px] grid-cols-[minmax(0,1.08fr)_minmax(320px,.92fr)] items-center gap-10 px-7 pb-20 pt-8 md:px-10 md:pb-24 md:pt-10 max-lg:grid-cols-1 max-lg:gap-8 max-sm:min-h-0 max-sm:px-5 max-sm:pb-20 max-sm:pt-6">
+          <div className="relative z-[1] grid min-h-[400px] grid-cols-[minmax(0,.98fr)_minmax(360px,1.02fr)] items-center gap-12 px-7 pb-20 pt-8 md:px-10 md:pb-24 md:pt-10 max-lg:grid-cols-1 max-lg:gap-8 max-sm:min-h-0 max-sm:px-5 max-sm:pb-20 max-sm:pt-6">
             <div className="min-w-0">
-              <div className="flex items-center gap-4">
-                <ProjectEmblem caseStudyId={study.id} size="lg" />
-                <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{study.eyebrow}</p>
+              <div className="case-study-foldout__identity">
+                <span className="case-study-foldout__emblem">
+                  <ProjectEmblem caseStudyId={study.id} size="lg" />
+                </span>
+                <p className="text-xs font-semibold uppercase leading-[1.25] tracking-normal text-blue-600">{study.eyebrow}</p>
               </div>
-              <h3 className="apple-display-text mt-5 max-w-[720px] break-words text-[clamp(2rem,4vw,4rem)] leading-[1.02] text-neutral-950">
+              <h3 className="apple-display-text mt-5 max-w-[680px] break-words text-[clamp(1.9rem,3.15vw,3.35rem)] leading-[1.06] text-neutral-950">
                 {study.title}
               </h3>
-              <p className="mt-6 max-w-3xl text-[0.98rem] leading-8 text-neutral-600 md:text-[1.05rem]">{study.summary}</p>
+              <p className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.summary}</p>
             </div>
 
-            <div className="grid min-w-0 grid-cols-2 gap-x-7 gap-y-8 max-sm:gap-x-4 max-sm:gap-y-6">
+            <div className="grid min-w-0 grid-cols-2 gap-x-8 gap-y-7 max-sm:gap-x-4 max-sm:gap-y-6">
               {study.metrics.map((metric, index) => {
                 const MetricIcon = metricIcons[index % metricIcons.length];
 
                 return (
                   <div key={`${study.id}-${metric.label}`} className="case-study-foldout__metric border-t border-white/65 pt-4">
-                    <span className={`case-study-foldout__metric-dot case-study-foldout__metric-dot--${(index % 4) + 1}`} aria-hidden="true">
-                      <MetricIcon className="size-5" />
-                    </span>
-                    <span className="apple-display-text mt-3 block break-words text-[clamp(1.45rem,3vw,2.55rem)] leading-none text-neutral-950">
-                      {metric.value}
-                    </span>
-                    <span className="mt-2 block text-xs leading-5 text-neutral-500">{metric.label}</span>
+                    <div className="case-study-foldout__metric-heading">
+                      <span className={`case-study-foldout__metric-dot case-study-foldout__metric-dot--${(index % 4) + 1}`} aria-hidden="true">
+                        <MetricIcon className="size-5" />
+                      </span>
+                      <span className="case-study-foldout__metric-value apple-display-text text-neutral-950">{metric.value}</span>
+                    </div>
+                    <span className="case-study-foldout__metric-label">{metric.label}</span>
                   </div>
                 );
               })}

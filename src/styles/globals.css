@@ -31,15 +31,32 @@
   content: "";
 }
 
+.case-study-foldout__identity {
+  display: flex;
+  min-height: 3.5rem;
+  align-items: center;
+  gap: 1rem;
+}
+
+.case-study-foldout__emblem {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
 .case-study-foldout__metric {
-  position: relative;
-  padding-left: 3.5rem;
+  min-width: 0;
+}
+
+.case-study-foldout__metric-heading {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.8rem;
 }
 
 .case-study-foldout__metric-dot {
-  position: absolute;
-  top: 0.75rem;
-  left: 0;
+  flex: 0 0 auto;
   width: 2.75rem;
   height: 2.75rem;
   border: 1px solid rgba(255, 255, 255, 0.82);
@@ -48,6 +65,24 @@
   display: grid;
   color: #1261ff;
   place-items: center;
+}
+
+.case-study-foldout__metric-value {
+  min-width: 0;
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  white-space: nowrap;
+}
+
+.case-study-foldout__metric-label {
+  display: block;
+  margin-top: 0.55rem;
+  margin-left: 3.55rem;
+  color: rgb(115 115 115);
+  font-size: 0.75rem;
+  line-height: 1.25rem;
 }
 
 .case-study-foldout__metric-dot--1 { background: radial-gradient(circle, rgba(0, 122, 255, 0.4), rgba(235, 244, 255, 0.78) 58%, rgba(255, 255, 255, 0.84)); }
@@ -128,13 +163,20 @@
   }
 
   .case-study-foldout__metric {
-    min-width: 0;
-    padding-left: 0;
-    padding-top: 3.65rem;
+    padding-top: 0.9rem;
   }
 
-  .case-study-foldout__metric-dot {
-    top: 0.6rem;
+  .case-study-foldout__metric-heading {
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .case-study-foldout__metric-value {
+    font-size: clamp(1.12rem, 5.2vw, 1.35rem);
+  }
+
+  .case-study-foldout__metric-label {
+    margin-left: 0;
   }
 
   .case-study-foldout__toggle {
