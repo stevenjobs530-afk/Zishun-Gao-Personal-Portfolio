@@ -1315,7 +1315,8 @@
 
 .pt-number-field {
   display: flex;
-  align-items: baseline;
+  align-items: center;
+  gap: 5px;
   min-height: 76px;
   padding: 8px 14px;
   border: 1px solid rgba(111, 133, 168, 0.14);
@@ -1324,19 +1325,23 @@
 }
 
 .pt-number-field input {
-  width: 100%;
+  width: 0;
+  flex: 1 1 0;
   min-width: 0;
   border: 0;
   outline: 0;
   background: transparent;
   color: var(--pt-blue-deep);
-  font-size: clamp(1.75rem, 3vw, 2.7rem);
+  font-size: clamp(1.75rem, 2.2vw, 2.4rem);
   font-variant-numeric: tabular-nums;
 }
 
 .pt-number-field small {
+  flex: 0 0 auto;
   color: #4a7ede;
   font-size: 0.72rem;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .pt-save-set,
