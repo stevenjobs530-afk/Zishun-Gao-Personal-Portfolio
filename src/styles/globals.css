@@ -494,70 +494,14 @@
     opacity: 0.72;
   }
 
-  /* Hello intro: translucent liquid-glass shell that matches the site background
-     palette (warm centre, indigo top-right, cyan bottom-left) so the fade-out
-     blends smoothly into the homepage instead of a flat white panel. */
+  /* Hello intro: a neutral frosted shell for the original black handwritten mark.
+     The quiet grey depth keeps the transition dimensional without tinting the word. */
   .hello-intro-shell {
     background:
-      radial-gradient(circle at 50% 44%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.66) 36%, transparent 72%),
-      radial-gradient(circle at 76% 16%, rgba(99, 102, 241, 0.16), transparent 38%),
-      radial-gradient(circle at 16% 80%, rgba(34, 211, 238, 0.15), transparent 40%),
-      radial-gradient(circle at 50% 90%, rgba(255, 187, 122, 0.13), transparent 44%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(244, 247, 252, 0.82) 56%, rgba(236, 242, 248, 0.88) 100%);
-  }
-
-  .hello-rainbow-glow {
-    position: absolute;
-    pointer-events: none;
-    border-radius: 999px;
-    filter: blur(60px) saturate(135%);
-    mix-blend-mode: screen;
-    opacity: 0.7;
-    animation: hello-aurora-drift 11s ease-in-out infinite;
-    will-change: transform, opacity;
-  }
-
-  .hello-rainbow-glow-one {
-    top: 12%;
-    left: 14%;
-    width: 42vw;
-    max-width: 560px;
-    height: 30vh;
-    background: radial-gradient(ellipse at center, rgba(120, 158, 255, 0.5), rgba(160, 140, 255, 0.28) 55%, transparent 72%);
-  }
-
-  .hello-rainbow-glow-two {
-    right: 8%;
-    top: 20%;
-    width: 38vw;
-    max-width: 520px;
-    height: 32vh;
-    background: radial-gradient(ellipse at center, rgba(255, 168, 196, 0.42), rgba(255, 198, 142, 0.3) 52%, transparent 72%);
-    animation-delay: -3.5s;
-    animation-duration: 13s;
-  }
-
-  .hello-rainbow-glow-three {
-    bottom: 8%;
-    left: 38%;
-    width: 40vw;
-    max-width: 540px;
-    height: 28vh;
-    background: radial-gradient(ellipse at center, rgba(150, 230, 205, 0.42), rgba(120, 200, 255, 0.26) 55%, transparent 74%);
-    animation-delay: -6.5s;
-    animation-duration: 15s;
-  }
-
-  @keyframes hello-aurora-drift {
-    0%,
-    100% {
-      transform: translate3d(0, 0, 0) scale(1);
-      opacity: 0.4;
-    }
-    50% {
-      transform: translate3d(2.5%, -3%, 0) scale(1.08);
-      opacity: 0.6;
-    }
+      radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.76) 40%, transparent 72%),
+      radial-gradient(circle at 78% 14%, rgba(209, 215, 226, 0.18), transparent 38%),
+      radial-gradient(circle at 18% 82%, rgba(199, 205, 215, 0.16), transparent 42%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(244, 246, 249, 0.9) 58%, rgba(235, 239, 244, 0.94) 100%);
   }
 
   /* Liquid-glass light stage. CSS variables (set by HelloIntro from spring-smoothed
@@ -592,39 +536,12 @@
     filter: blur(26px);
   }
 
-  /* Soft colored caustic: the glass letting warm/cool light through onto the
-     background. A blurred horizontal spectrum, aligned to the word's own colors,
-     sitting just under the stroke. Kept low + very soft so it reads as spill
-     light, not a second rainbow competing with the word. */
-  .hello-color-spill {
-    position: absolute;
-    left: 5%;
-    right: 5%;
-    top: 46%;
-    height: 44%;
-    z-index: 0;
-    pointer-events: none;
-    background: linear-gradient(
-      90deg,
-      rgba(111, 224, 208, 0.55) 0%,
-      rgba(124, 182, 255, 0.5) 22%,
-      rgba(154, 140, 255, 0.5) 36%,
-      rgba(255, 143, 190, 0.55) 55%,
-      rgba(255, 173, 126, 0.5) 71%,
-      rgba(255, 210, 122, 0.5) 82%,
-      rgba(143, 224, 176, 0.55) 100%
-    );
-    filter: blur(40px) saturate(125%);
-    opacity: 0.5;
-    mix-blend-mode: screen;
-    transform: translateY(12%);
-  }
-
   /* Grounded, directional soft shadow + a tight contact shadow under the stroke. */
   .hello-glass-mark {
     filter:
-      drop-shadow(var(--hello-shadow-x) var(--hello-shadow-y) var(--hello-shadow-blur) rgba(40, 52, 78, 0.18))
-      drop-shadow(0 1px 2px rgba(40, 52, 78, 0.14));
+      drop-shadow(var(--hello-shadow-x) var(--hello-shadow-y) var(--hello-shadow-blur) rgba(28, 31, 38, 0.18))
+      drop-shadow(0 1px 2px rgba(28, 31, 38, 0.14));
+    will-change: filter;
   }
 
   /* Pointer-tracked specular glint — the moving reflection of liquid glass. */
@@ -637,7 +554,7 @@
     background: radial-gradient(
       30% 46% at var(--hello-glint-x) var(--hello-glint-y),
       rgba(255, 255, 255, 0.6),
-      rgba(214, 232, 255, 0.18) 46%,
+      rgba(224, 228, 235, 0.2) 46%,
       transparent 72%
     );
     mix-blend-mode: screen;
