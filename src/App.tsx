@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, CheckCircle2, Code2, Download, Drum, Dumbbell, FileText, ImageIcon, ListChecks, Palette, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Camera, CheckCircle2, Download, Drum, Dumbbell, FileText, Palette, ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { GlassButton } from "@/components/ui/apple-tahoe-liquid-glass-button";
 import { BackgroundComponents } from "@/components/ui/background-components";
@@ -9,12 +9,12 @@ import { LanguageSelectorDropdown } from "@/components/ui/language-selector-drop
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { RevealArticle, RevealBlock, RevealListItem, StaggerBlock, StaggerItem } from "@/components/ui/text-animations";
 import { DataCanvas } from "@/components/DataCanvas";
+import { CaseStudyFoldout } from "@/components/CaseStudyFoldout";
 import { HelloIntro } from "@/components/HelloIntro";
 import { PortfolioGuidedHints } from "@/components/PortfolioGuidedHints";
-import { ProjectEmblem } from "@/components/ProjectEmblems";
 import { ProjectGalleryShowcase } from "@/components/ProjectGalleryShowcase";
 import { SectionNavigator } from "@/components/SectionNavigator";
-import { languageOptions, portfolioByLanguage, type CaseStudy, type LanguageCode, type PortfolioContent } from "@/data/portfolio";
+import { languageOptions, portfolioByLanguage, type LanguageCode, type PortfolioContent } from "@/data/portfolio";
 
 const defaultLanguage: LanguageCode = "en";
 
@@ -25,19 +25,10 @@ const navSectionIdsByLanguage = {
   "zh-CN": ["education", "projects", "experience", "skills", "about", "contact"],
 } as const satisfies Record<LanguageCode, readonly NavSectionId[]>;
 
-const caseStudyDetailTargets = [
-  { id: "screenshots", Icon: ImageIcon },
-  { id: "code", Icon: Code2 },
-  { id: "conclusion", Icon: ListChecks },
-] as const;
 const interestIcons = [Drum, Palette, Camera, Dumbbell] as const;
 
 function publicAssetPath(path: string) {
   return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
-}
-
-function versionedScreenshotPath(path: string) {
-  return `${publicAssetPath(path)}?v=20260621`;
 }
 
 const cvPdfPaths = {
@@ -271,81 +262,6 @@ function SectionHeading({ label, title }: { label: string; title: string }) {
   );
 }
 
-function ProjectDetailMenu({
-  studyId,
-  labels,
-  className = "",
-}: {
-  studyId: string;
-  labels: PortfolioContent["caseStudyLabels"];
-  className?: string;
-}) {
-  return (
-    <div className={`flex flex-wrap gap-2 ${className}`}>
-      {caseStudyDetailTargets.map(({ id, Icon }) => (
-        <Button key={id} asChild variant="glass" size="sm" className="gap-2 px-3">
-          <a href={`#case-${studyId}-${id}`}>
-            <Icon className="size-4" aria-hidden="true" />
-            {labels[id]}
-          </a>
-        </Button>
-      ))}
-    </div>
-  );
-}
-
-function CaseStudyEvidenceSection({
-  study,
-  labels,
-}: {
-  study: CaseStudy;
-  labels: PortfolioContent["caseStudyLabels"];
-}) {
-  return (
-    <div className="min-w-0">
-      <h4 className="apple-display-text text-lg text-neutral-900">{labels.evidence}</h4>
-      <div className="mt-4 grid gap-4">
-        {study.evidence.map((item) => (
-          <article key={item.title}>
-            <h5 className="text-sm font-semibold text-neutral-900">{item.title}</h5>
-            <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{item.body}</p>
-          </article>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CaseStudyCodeSection({
-  study,
-  labels,
-}: {
-  study: CaseStudy;
-  labels: PortfolioContent["caseStudyLabels"];
-}) {
-  return (
-    <div id={`case-${study.id}-code`} className="min-w-0 scroll-mt-96">
-      <h4 className="apple-display-text text-lg text-neutral-900">{labels.code}</h4>
-      <div className="mt-4 grid min-w-0 gap-4">
-        {study.codeSamples.map((sample) => (
-          <div
-            key={`${study.id}-${sample.label}`}
-            className="min-w-0 overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl"
-          >
-            <div className="flex items-center justify-between gap-4 border-b border-white/55 px-4 py-3">
-              <span className="text-xs font-semibold text-neutral-600">{sample.label}</span>
-              <span className="text-xs text-blue-600">{sample.language}</span>
-            </div>
-            <pre className="max-w-full overflow-x-auto px-4 py-3 text-[0.76rem] leading-6 text-neutral-700">
-              <code>{sample.lines.join("\n")}</code>
-            </pre>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function About({ content }: { content: PortfolioContent }) {
   return (
     <section id="about" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pt-24">
@@ -435,6 +351,56 @@ function PersonalTrainingPortal({ content }: { content: PortfolioContent }) {
 }
 
 function CaseStudies({ content }: { content: PortfolioContent }) {
+  const [openStudyId, setOpenStudyId] = useState<string | null>(null);
+
+  const toggleStudy = (studyId: string) => {
+    if (openStudyId === studyId) {
+      setOpenStudyId(null);
+
+      if (window.location.hash.startsWith(`#case-${studyId}`)) {
+        window.history.replaceState(null, "", "#case-studies");
+      }
+
+      return;
+    }
+
+    setOpenStudyId(studyId);
+  };
+
+  useEffect(() => {
+    const syncStudyFromHash = () => {
+      const matchingStudy = content.caseStudies.find((study) => window.location.hash.startsWith(`#case-${study.id}`));
+
+      if (matchingStudy) {
+        setOpenStudyId(matchingStudy.id);
+      }
+    };
+
+    syncStudyFromHash();
+    window.addEventListener("hashchange", syncStudyFromHash);
+    return () => window.removeEventListener("hashchange", syncStudyFromHash);
+  }, [content.caseStudies]);
+
+  useEffect(() => {
+    if (!openStudyId || !window.location.hash.startsWith(`#case-${openStudyId}`)) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (!target) {
+        return;
+      }
+
+      window.scrollTo({
+        top: Math.max(0, window.scrollY + target.getBoundingClientRect().top - 110),
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
+    }, 60);
+
+    return () => window.clearTimeout(timeout);
+  }, [openStudyId]);
+
   return (
     <section id="case-studies" className="mx-auto w-[min(1180px,calc(100%-40px))] pt-24 max-sm:w-[calc(100%-28px)]">
       <div className="grid grid-cols-[.86fr_1.14fr] gap-20 pb-9 max-lg:grid-cols-1">
@@ -444,134 +410,16 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
         </RevealBlock>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-7">
         {content.caseStudies.map((study, index) => (
-          <div key={study.id} id={`case-${study.id}`} className="scroll-mt-40">
-            <RevealArticle delay={index * 0.08}>
-              <LiquidGlass className="grid grid-cols-[minmax(0,1.08fr)_minmax(320px,.92fr)] items-start gap-8 p-7 md:p-9 max-lg:grid-cols-1">
-                <div className="flex min-w-0 flex-col max-lg:contents">
-                  <div className="relative z-[1] min-w-0 max-lg:order-1">
-                    <div className="flex items-center gap-4">
-                      <ProjectEmblem caseStudyId={study.id} size="lg" />
-                      <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{study.eyebrow}</p>
-                    </div>
-                    <h3 className="apple-display-text mt-4 break-words text-[clamp(1.7rem,2.6vw,2.75rem)] leading-[1.12] text-neutral-950">
-                      {study.title}
-                    </h3>
-                    <p className="mt-5 max-w-3xl text-base leading-8 text-neutral-600">{study.summary}</p>
-
-                    <div className="mt-6 border-t border-white/55 pt-5">
-                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.businessQuestion}</h4>
-                      <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.businessQuestion}</p>
-                    </div>
-
-                    <ProjectDetailMenu studyId={study.id} labels={content.caseStudyLabels} className="mt-6" />
-
-                    <div className="mt-8 border-t border-white/55 pt-6">
-                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.problem}</h4>
-                      <p className="mt-3 text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.problem}</p>
-                    </div>
-
-                    <div className="mt-8 grid grid-cols-2 gap-8 max-md:grid-cols-1">
-                      <div>
-                        <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.method}</h4>
-                        <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
-                          {study.method.map((item) => (
-                            <li key={item} className="flex gap-3">
-                              <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-500/70" aria-hidden="true" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div>
-                        <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.result}</h4>
-                        <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
-                          {study.results.map((item) => (
-                            <li key={item} className="flex gap-3">
-                              <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-500/70" aria-hidden="true" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div id={`case-${study.id}-conclusion`} className="mt-8 scroll-mt-96 border-t border-white/55 pt-6">
-                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.conclusion}</h4>
-                      <ul className="mt-3 grid gap-3 text-[0.95rem] leading-7 text-neutral-600">
-                        {study.conclusion.map((item) => (
-                          <li key={item} className="flex gap-3">
-                            <span className="mt-3 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/70" aria-hidden="true" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
-                        <a href="#projects">
-                          <ArrowLeft className="size-4" aria-hidden="true" />
-                          {content.caseStudyLabels.backToProjects}
-                        </a>
-                      </Button>
-                    </div>
-
-                    {study.href && study.linkLabel ? (
-                      <Button asChild variant="glass" size="sm" className="mt-6 w-fit gap-2">
-                        <a href={study.href} target="_blank" rel="noreferrer">
-                          {study.linkLabel} <ArrowUpRight className="size-4" aria-hidden="true" />
-                        </a>
-                      </Button>
-                    ) : null}
-                  </div>
-
-                  <div className="relative z-[1] mt-8 min-w-0 border-t border-white/55 pt-6 max-lg:order-3 max-lg:mt-0">
-                    <CaseStudyEvidenceSection study={study} labels={content.caseStudyLabels} />
-                  </div>
-                </div>
-
-                <div className="flex min-w-0 flex-col max-lg:contents">
-                  <div className="relative z-[1] flex min-w-0 flex-col gap-6 max-lg:order-2">
-                    <div className="grid grid-cols-2 gap-3">
-                      {study.metrics.map((metric) => (
-                        <div key={`${study.id}-${metric.label}`} className="border-t border-white/60 pt-4">
-                          <span className="apple-display-text block text-[clamp(1.45rem,2.5vw,2.35rem)] leading-none text-neutral-950">
-                            {metric.value}
-                          </span>
-                          <span className="mt-2 block text-xs leading-5 text-neutral-500">{metric.label}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div id={`case-${study.id}-screenshots`} className="scroll-mt-96 border-t border-white/55 pt-5">
-                      <h4 className="apple-display-text text-lg text-neutral-900">{content.caseStudyLabels.screenshots}</h4>
-                      <div className="mt-4 grid gap-5">
-                        {study.screenshots.map((screenshot) => (
-                          <figure key={screenshot.src} className="group/shot">
-                            <div className="overflow-hidden rounded-lg border border-white/65 bg-white/42 shadow-[inset_0_1px_1px_rgba(255,255,255,.9),0_18px_42px_rgba(46,61,82,.1)] backdrop-blur-2xl">
-                              <img
-                                className="media-fade-in max-h-[360px] w-full object-contain transition-transform duration-700 ease-[cubic-bezier(.22,1,.36,1)] group-hover/shot:scale-[1.025]"
-                                src={versionedScreenshotPath(screenshot.src)}
-                                alt={screenshot.alt}
-                                loading="lazy"
-                              />
-                            </div>
-                            <figcaption className="mt-3">
-                              <span className="text-[0.95rem] font-semibold text-neutral-900">{screenshot.title}</span>
-                              <p className="mt-1 text-[0.95rem] leading-7 text-neutral-600">{screenshot.caption}</p>
-                            </figcaption>
-                          </figure>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="relative z-[1] mt-8 min-w-0 border-t border-white/55 pt-6 max-lg:order-4 max-lg:mt-0">
-                    <CaseStudyCodeSection study={study} labels={content.caseStudyLabels} />
-                  </div>
-                </div>
-              </LiquidGlass>
-            </RevealArticle>
+          <div key={study.id} id={`case-${study.id}`}>
+            <CaseStudyFoldout
+              study={study}
+              labels={content.caseStudyLabels}
+              expanded={openStudyId === study.id}
+              onToggle={() => toggleStudy(study.id)}
+              delay={index * 0.08}
+            />
             {study.id === "aep" ? <PersonalTrainingPortal content={content} /> : null}
           </div>
         ))}
