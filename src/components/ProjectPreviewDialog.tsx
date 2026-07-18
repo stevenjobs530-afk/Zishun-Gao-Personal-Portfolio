@@ -198,10 +198,12 @@ export function ProjectPreviewDialog({
           >
             <X aria-hidden="true" />
           </Button>
-          <p className="project-preview-dialog__label">{project.preview.label}</p>
-          <h2 id={titleId}>{project.preview.title}</h2>
-          <p id={descriptionId} className="project-preview-dialog__description">{project.preview.description}</p>
-          <p id={disclosureId} className="project-preview-dialog__disclosure">{project.preview.disclosure}</p>
+          <div className="project-preview-dialog__copy">
+            <p className="project-preview-dialog__label">{project.preview.label}</p>
+            <h2 id={titleId}>{project.preview.title}</h2>
+            <p id={descriptionId} className="project-preview-dialog__description">{project.preview.description}</p>
+            <p id={disclosureId} className="project-preview-dialog__disclosure">{project.preview.disclosure}</p>
+          </div>
           <div className="project-preview-dialog__actions">
             <Button asChild variant="primary" className="project-preview-dialog__primary-action">
               <a href={projectUrl(project.href)} target="_blank" rel="noreferrer" onClick={requestClose}>

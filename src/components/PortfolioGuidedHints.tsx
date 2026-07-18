@@ -20,6 +20,7 @@ type HintCopy = {
 
 const hintStorageKey = "zishun-portfolio-guided-hints-dismissed";
 const viewportPadding = 16;
+const compactHintBreakpoint = 1024;
 const initialVisibleHints: Record<HintId, boolean> = {
   language: false,
   sections: false,
@@ -96,6 +97,10 @@ function getCardSize(card: HTMLElement | null) {
   };
 }
 
+function supportsSecondaryHint() {
+  return window.innerWidth >= compactHintBreakpoint;
+}
+
 function getLanguagePosition(card: HTMLElement | null): HintPosition | null {
   const target = document.querySelector('[data-guide-target="language"]');
 
@@ -107,7 +112,10 @@ function getLanguagePosition(card: HTMLElement | null): HintPosition | null {
   const { width, height } = getCardSize(card);
   const viewportWidth = window.innerWidth;
   const viewportHeight = window.innerHeight;
-  const left = clamp(targetRect.right - width, viewportPadding, viewportWidth - width - viewportPadding);
+  const left =
+    viewportWidth < compactHintBreakpoint
+      ? clamp((viewportWidth - width) / 2, viewportPadding, viewportWidth - width - viewportPadding)
+      : clamp(targetRect.right - width, viewportPadding, viewportWidth - width - viewportPadding);
   const top = clamp(targetRect.bottom + 14, viewportPadding, viewportHeight - height - viewportPadding);
 
   return {
@@ -197,7 +205,7 @@ function HintCard({
     <aside
       ref={cardRef}
       data-guide-card={hintId}
-      className="pointer-events-none fixed z-[70] max-h-[min(19rem,calc(100vh-2rem))] w-[min(21.5rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-white/80 bg-white/68 p-4 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.96),0_22px_60px_rgba(46,61,82,.18),0_0_34px_rgba(126,217,255,.17)] backdrop-blur-[38px] backdrop-saturate-150 motion-safe:animate-fade-in max-[430px]:p-3.5"
+      className="pointer-events-none fixed z-[70] max-h-[min(19rem,calc(100vh-2rem))] w-[min(21.5rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-white/80 bg-white/68 p-4 text-neutral-800 shadow-[inset_0_1px_1px_rgba(255,255,255,.96),0_22px_60px_rgba(46,61,82,.18),0_0_34px_rgba(126,217,255,.17)] backdrop-blur-[38px] backdrop-saturate-150 motion-safe:animate-fade-in max-[430px]:p-3.5 max-lg:!relative max-lg:!top-auto max-lg:!left-auto max-lg:mx-auto max-lg:mt-[calc(env(safe-area-inset-top)+6rem)] max-lg:!max-h-none max-lg:!overflow-visible"
       style={{ top: position.top, left: position.left }}
       role="status"
     >
@@ -237,8 +245,60 @@ export function PortfolioGuidedHints({
     language: null,
     sections: null,
   });
+  const compactNavigatorStyle = useRef<{
+    element: HTMLElement;
+    bottom: string;
+    transition: string;
+  } | null>(null);
   const copy = useMemo(() => hintCopyByLanguage[language], [language]);
   const hasVisibleHints = visibleHints.language || visibleHints.sections;
+
+  const restoreCompactNavigatorPosition = useCallback(() => {
+    const savedStyle = compactNavigatorStyle.current;
+
+    if (!savedStyle) {
+      return;
+    }
+
+    savedStyle.element.style.bottom = savedStyle.bottom;
+    savedStyle.element.style.transition = savedStyle.transition;
+    compactNavigatorStyle.current = null;
+  }, []);
+
+  const keepCompactNavigatorClearOfHeroActions = useCallback(() => {
+    if (window.innerWidth >= compactHintBreakpoint) {
+      restoreCompactNavigatorPosition();
+      return;
+    }
+
+    const target = document.querySelector('[data-guide-target="sections"]');
+    const container = target?.parentElement;
+    const heroActions = Array.from(document.querySelectorAll("#top button, #top a[download]")).filter(isUsableTarget);
+    const visibleActions = heroActions.filter((action) => {
+      const rect = action.getBoundingClientRect();
+      return rect.bottom > viewportPadding && rect.top < window.innerHeight - viewportPadding;
+    });
+
+    if (!(container instanceof HTMLElement) || visibleActions.length === 0) {
+      restoreCompactNavigatorPosition();
+      return;
+    }
+
+    if (!compactNavigatorStyle.current || compactNavigatorStyle.current.element !== container) {
+      restoreCompactNavigatorPosition();
+      compactNavigatorStyle.current = {
+        element: container,
+        bottom: container.style.bottom,
+        transition: container.style.transition,
+      };
+    }
+
+    const firstActionTop = Math.min(...visibleActions.map((action) => action.getBoundingClientRect().top));
+    const requiredBottom = Math.ceil(window.innerHeight - firstActionTop + viewportPadding);
+
+    container.style.bottom = `max(${requiredBottom}px, calc(env(safe-area-inset-bottom) + 1rem))`;
+    container.style.transition = "bottom 180ms ease-out";
+  }, [restoreCompactNavigatorPosition]);
 
   const dismissAll = useCallback(() => {
     try {
@@ -252,6 +312,13 @@ export function PortfolioGuidedHints({
 
   const dismissHint = useCallback((hintId: HintId) => {
     setVisibleHints((currentHints) => {
+      if (hintId === "language" && supportsSecondaryHint()) {
+        return {
+          language: false,
+          sections: true,
+        };
+      }
+
       const nextHints = {
         ...currentHints,
         [hintId]: false,
@@ -291,9 +358,32 @@ export function PortfolioGuidedHints({
 
     setVisibleHints({
       language: true,
-      sections: true,
+      sections: false,
     });
   }, [introComplete]);
+
+  useEffect(() => {
+    if (!introComplete) {
+      return;
+    }
+
+    let frame = window.requestAnimationFrame(keepCompactNavigatorClearOfHeroActions);
+
+    const scheduleUpdate = () => {
+      window.cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(keepCompactNavigatorClearOfHeroActions);
+    };
+
+    window.addEventListener("resize", scheduleUpdate);
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("resize", scheduleUpdate);
+      window.removeEventListener("scroll", scheduleUpdate);
+      restoreCompactNavigatorPosition();
+    };
+  }, [hasVisibleHints, introComplete, keepCompactNavigatorClearOfHeroActions, restoreCompactNavigatorPosition]);
 
   useEffect(() => {
     if (!hasVisibleHints) {

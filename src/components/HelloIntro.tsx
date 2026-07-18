@@ -6,9 +6,29 @@ import { AppleHelloEnglishEffect } from "@/components/ui/apple-hello-effect";
 import { cn } from "@/lib/utils";
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const helloIntroSessionKey = "zishun-portfolio-hello-intro-seen";
+
+const hasSeenHelloIntro = () => {
+  if (typeof window === "undefined") return false;
+
+  try {
+    return window.sessionStorage.getItem(helloIntroSessionKey) === "true";
+  } catch {
+    return false;
+  }
+};
+
+const rememberHelloIntro = () => {
+  try {
+    window.sessionStorage.setItem(helloIntroSessionKey, "true");
+  } catch {
+    // Keep the animation available if storage is unavailable or blocked.
+  }
+};
 
 export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
-  const [isComplete, setIsComplete] = useState(false);
+  const skipIntroForThisSession = useRef(hasSeenHelloIntro()).current;
+  const [isComplete, setIsComplete] = useState(skipIntroForThisSession);
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [pointerFine, setPointerFine] = useState(false);
   const hasReportedComplete = useRef(false);
@@ -35,6 +55,18 @@ export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
   const shadowBlur = useTransform(smoothY, (v) => `${24 + Math.abs(v) * 4}px`);
   const glintX = useTransform(smoothX, (v) => `${50 + v * 38}%`);
   const glintY = useTransform(smoothY, (v) => `${36 + v * 26}%`);
+
+  useEffect(() => {
+    if (skipIntroForThisSession) {
+      if (!hasReportedComplete.current) {
+        hasReportedComplete.current = true;
+        onComplete?.();
+      }
+      return;
+    }
+
+    rememberHelloIntro();
+  }, [onComplete, skipIntroForThisSession]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -175,11 +207,11 @@ export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
       </AnimatePresence>
 
       <motion.div
-        className="pointer-events-none fixed left-1/2 top-4 z-40 hidden w-40 -translate-x-1/2 text-neutral-950 lg:block"
+        className="pointer-events-none fixed left-1/2 top-4 z-40 hidden w-40 -translate-x-1/2 text-neutral-950 xl:block"
         initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: isComplete ? 1 : 0, y: isComplete ? 0 : -8 }}
+        animate={{ opacity: isComplete && !skipIntroForThisSession ? 1 : 0, y: isComplete ? 0 : -8 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        aria-hidden={!isComplete}
+        aria-hidden={!isComplete || skipIntroForThisSession}
       >
         <AppleHelloEnglishEffect className="h-auto w-full" drawn />
       </motion.div>

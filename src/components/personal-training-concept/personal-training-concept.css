@@ -2438,8 +2438,26 @@
 
 @media (max-width: 880px) {
   .pt-header { flex-wrap: wrap; row-gap: 2px; }
-  .pt-header nav { order: 3; width: 100%; overflow-x: auto; scrollbar-width: none; }
-  .pt-header nav::-webkit-scrollbar { display: none; }
+  .pt-header nav {
+    order: 3;
+    width: 100%;
+    gap: clamp(10px, 1.8vw, 14px);
+    padding-inline: 2px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: 2px;
+    scroll-snap-type: x proximity;
+    scrollbar-color: rgba(73, 101, 150, 0.45) transparent;
+    scrollbar-width: thin;
+  }
+
+  .pt-header nav button {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .pt-header nav::-webkit-scrollbar { display: block; height: 3px; }
+  .pt-header nav::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(73, 101, 150, 0.45); }
 
   .pt-hero {
     grid-template-columns: 1fr;
@@ -2497,8 +2515,8 @@
   .pt-wordmark { font-size: 1.08rem; }
   .pt-back-link { font-size: 0.7rem; }
   .pt-showcase-status { min-height: 32px; padding: 6px 10px; font-size: 0.68rem; }
-  .pt-header nav { gap: 18px; }
-  .pt-header nav button { min-height: 40px; padding-top: 10px; font-size: 0.72rem; }
+  .pt-header nav { gap: clamp(7px, 2vw, 10px); }
+  .pt-header nav button { min-height: 40px; padding: 10px 0; font-size: clamp(0.68rem, 2.85vw, 0.72rem); }
   .pt-concept section { scroll-margin-top: 116px; }
 
   .pt-hero {
