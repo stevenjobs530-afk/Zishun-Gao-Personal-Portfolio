@@ -1301,7 +1301,7 @@
 
 .pt-set-fields {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr));
   gap: 14px;
   margin-top: 22px;
 }
@@ -1328,12 +1328,19 @@
   width: 0;
   flex: 1 1 0;
   min-width: 0;
+  appearance: textfield;
   border: 0;
   outline: 0;
   background: transparent;
   color: var(--pt-blue-deep);
-  font-size: clamp(1.75rem, 2.2vw, 2.4rem);
+  font-size: clamp(1.7rem, 1.8vw, 2.05rem);
   font-variant-numeric: tabular-nums;
+}
+
+.pt-number-field input::-webkit-inner-spin-button,
+.pt-number-field input::-webkit-outer-spin-button {
+  margin: 0;
+  appearance: none;
 }
 
 .pt-number-field small {
