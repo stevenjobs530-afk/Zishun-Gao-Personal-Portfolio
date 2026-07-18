@@ -209,6 +209,8 @@ export type PortfolioContent = {
     code: string;
     conclusion: string;
     backToProjects: string;
+    expandDetails: string;
+    collapseDetails: string;
   };
   footer: {
     rights: string;
@@ -1543,6 +1545,8 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       code: "Code",
       conclusion: "Conclusion",
       backToProjects: "Back to project cards",
+      expandDetails: "Explore case study",
+      collapseDetails: "Collapse case study",
     },
     profile,
     metrics,
@@ -1651,6 +1655,8 @@ export const portfolioByLanguage: Record<LanguageCode, PortfolioContent> = {
       code: "代码",
       conclusion: "结论",
       backToProjects: "返回项目卡片",
+      expandDetails: "展开案例研究",
+      collapseDetails: "收起案例研究",
     },
     profile: chineseProfile,
     metrics: chineseMetrics,
