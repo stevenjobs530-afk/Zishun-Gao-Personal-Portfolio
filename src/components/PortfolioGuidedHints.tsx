@@ -363,7 +363,8 @@ export function PortfolioGuidedHints({
   }, [introComplete]);
 
   useEffect(() => {
-    if (!introComplete) {
+    if (!introComplete || !hasVisibleHints) {
+      restoreCompactNavigatorPosition();
       return;
     }
 

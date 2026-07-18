@@ -170,16 +170,12 @@ export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
       <AnimatePresence onExitComplete={handleExitComplete}>
         {!isComplete ? (
           <motion.div
-            className="hello-intro-shell fixed inset-0 z-50 grid place-items-center overflow-hidden px-6 pt-[env(safe-area-inset-top)] backdrop-blur-2xl max-sm:backdrop-blur-md"
+            className="hello-intro-shell fixed inset-0 z-[80] grid place-items-center overflow-hidden px-6 pt-[env(safe-area-inset-top)] backdrop-blur-2xl max-sm:backdrop-blur-md"
             exit={{ opacity: 0, scale: 1.015, filter: "blur(6px)" }}
             transition={{ duration: shouldShortCircuit ? 0.22 : 0.7, ease: [0.22, 1, 0.36, 1] }}
             onPointerMove={interactive ? handlePointerMove : undefined}
             onPointerLeave={interactive ? handlePointerLeave : undefined}
           >
-            {/* Liquid-glass atmosphere: soft blurred rainbow caustics that echo the site background */}
-            <div className="hello-rainbow-glow hello-rainbow-glow-one" aria-hidden="true" />
-            <div className="hello-rainbow-glow hello-rainbow-glow-two" aria-hidden="true" />
-            <div className="hello-rainbow-glow hello-rainbow-glow-three" aria-hidden="true" />
             <motion.div
               ref={stageRef}
               className={cn(
@@ -188,14 +184,11 @@ export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
               )}
               style={stageStyle}
             >
-              {/* Overhead light pooling from above + pointer-tracked glass glint */}
+              {/* Neutral overhead light pooling from above + pointer-tracked glass glint */}
               <div className="hello-overhead-light" aria-hidden="true" />
-              {/* Colored light spilling from the glass onto the background, mirroring
-                  the left-to-right spectrum of the word (kept soft + localized). */}
-              <div className="hello-color-spill" aria-hidden="true" />
               <AppleHelloEnglishEffect
-                className="hello-glass-mark relative z-[1] h-auto w-full"
-                tone="rainbow"
+                className="hello-glass-mark relative z-[1] h-auto w-full text-neutral-950"
+                tone="ink"
                 speed={shouldShortCircuit ? 0 : introSpeed.current}
                 drawn={shouldShortCircuit}
                 onAnimationComplete={() => setIsComplete(true)}
@@ -211,7 +204,7 @@ export function HelloIntro({ onComplete }: { onComplete?: () => void }) {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: isComplete && !skipIntroForThisSession ? 1 : 0, y: isComplete ? 0 : -8 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        aria-hidden={!isComplete || skipIntroForThisSession}
+        aria-hidden="true"
       >
         <AppleHelloEnglishEffect className="h-auto w-full" drawn />
       </motion.div>
