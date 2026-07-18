@@ -190,6 +190,43 @@
   transform: scaleX(1);
 }
 
+.pt-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.pt-language-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 74px;
+  min-height: 36px !important;
+  padding: 7px 11px;
+  border: 1px solid rgba(18, 97, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.74);
+  color: var(--pt-blue-deep) !important;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 680;
+  white-space: nowrap;
+  transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.pt-language-button:hover {
+  border-color: rgba(18, 97, 255, 0.34);
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.pt-language-button svg {
+  width: 16px;
+  height: 16px;
+}
+
 .pt-showcase-status,
 .pt-future-badge {
   display: inline-flex;
@@ -2419,6 +2456,7 @@
 @media (max-width: 1080px) {
   .pt-header nav { gap: 11px; }
   .pt-header nav button { font-size: 0.75rem; }
+  .pt-showcase-status { display: none; }
 
   .pt-hero {
     grid-template-columns: minmax(260px, 0.65fr) minmax(540px, 1.35fr);
@@ -2526,7 +2564,8 @@
 
   .pt-wordmark { font-size: 1.08rem; }
   .pt-back-link { font-size: 0.7rem; }
-  .pt-showcase-status { min-height: 32px; padding: 6px 10px; font-size: 0.68rem; }
+  .pt-header-actions { flex: 0 0 auto; }
+  .pt-language-button { min-width: 68px; min-height: 34px !important; padding: 6px 10px; font-size: 0.7rem; }
   .pt-header nav { gap: clamp(7px, 2vw, 10px); }
   .pt-header nav button { min-height: 40px; padding: 10px 0; font-size: clamp(0.68rem, 2.85vw, 0.72rem); }
   .pt-concept section { scroll-margin-top: 116px; }

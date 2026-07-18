@@ -1,6 +1,7 @@
 import { ArrowRight, Dumbbell, Info, Plus, Search, Trash2 } from "lucide-react";
 import { type FormEvent, type KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import { GlassPanel, Reveal, SectionCopy } from "./ConceptPrimitives";
+import { translateConceptText, type ConceptLanguage } from "./concept-i18n";
 import {
   createConceptId,
   normalizeConceptText,
@@ -44,10 +45,12 @@ function validateDraft(draft: LibraryDraft) {
 }
 
 export function LibrarySection({
+  language,
   items,
   onAddItem,
   onDeleteItem,
 }: {
+  language: ConceptLanguage;
   items: TrainingLibraryItem[];
   onAddItem: (item: TrainingLibraryItem) => void;
   onDeleteItem: (id: string) => void;
@@ -168,7 +171,11 @@ export function LibrarySection({
 
   function handleDelete(item: TrainingLibraryItem) {
     if (item.source !== "user-created") return;
-    if (!window.confirm(`Remove “${item.trainingName}” from this browser-only preview?`)) return;
+    const confirmation = translateConceptText(
+      `Remove “${item.trainingName}” from this browser-only preview?`,
+      language,
+    );
+    if (!window.confirm(confirmation)) return;
 
     const remainingItems = items.filter((candidate) => candidate.id !== item.id);
     onDeleteItem(item.id);

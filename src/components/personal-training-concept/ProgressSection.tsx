@@ -1,6 +1,7 @@
 import { Activity, BarChart3, Dumbbell, Plus, Target, Trash2 } from "lucide-react";
 import { type FormEvent, type KeyboardEvent, useEffect, useId, useMemo, useRef, useState } from "react";
 import { ConceptNotice, GlassPanel, Reveal, SectionCopy } from "./ConceptPrimitives";
+import { translateConceptText, type ConceptLanguage } from "./concept-i18n";
 import {
   createConceptId,
   createIllustrativeSeries,
@@ -141,11 +142,13 @@ function ProgressCanvas({ definition }: { definition: CustomProgressDefinition }
 }
 
 export function ProgressSection({
+  language,
   libraryItems,
   definitions,
   onAddDefinition,
   onDeleteDefinition,
 }: {
+  language: ConceptLanguage;
   libraryItems: TrainingLibraryItem[];
   definitions: CustomProgressDefinition[];
   onAddDefinition: (definition: CustomProgressDefinition) => void;
@@ -254,7 +257,11 @@ export function ProgressSection({
 
   function handleDelete(definition: CustomProgressDefinition) {
     if (definition.source !== "user-created") return;
-    if (!window.confirm(`Remove “${definition.progressName}” from this browser-only preview?`)) return;
+    const confirmation = translateConceptText(
+      `Remove “${definition.progressName}” from this browser-only preview?`,
+      language,
+    );
+    if (!window.confirm(confirmation)) return;
 
     const remaining = definitions.filter((candidate) => candidate.id !== definition.id);
     onDeleteDefinition(definition.id);

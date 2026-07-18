@@ -1,4 +1,5 @@
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Languages } from "lucide-react";
+import type { ConceptLanguage } from "./concept-i18n";
 import { scrollToConceptSection } from "./concept-utils";
 
 const navigation = [
@@ -10,7 +11,14 @@ const navigation = [
   ["technology", "Technology"],
 ] as const;
 
-export function ConceptHeader() {
+interface ConceptHeaderProps {
+  language: ConceptLanguage;
+  onLanguageChange: (language: ConceptLanguage) => void;
+}
+
+export function ConceptHeader({ language, onLanguageChange }: ConceptHeaderProps) {
+  const nextLanguage = language === "en" ? "zh" : "en";
+
   return (
     <header className="pt-header">
       <a className="pt-back-link" href={import.meta.env.BASE_URL}>
@@ -27,9 +35,23 @@ export function ConceptHeader() {
           </button>
         ))}
       </nav>
-      <span className="pt-showcase-status">
-        <span aria-hidden="true" /> Personal project · Concept study
-      </span>
+      <div className="pt-header-actions">
+        <span className="pt-showcase-status">
+          <span aria-hidden="true" /> Personal project · Concept study
+        </span>
+        <button
+          className="pt-language-button"
+          type="button"
+          data-no-localize
+          lang={nextLanguage === "zh" ? "zh-CN" : "en"}
+          aria-label={language === "en" ? "切换为中文" : "Switch to English"}
+          title={language === "en" ? "切换为中文" : "Switch to English"}
+          onClick={() => onLanguageChange(nextLanguage)}
+        >
+          <Languages aria-hidden="true" />
+          <span>{language === "en" ? "中文" : "EN"}</span>
+        </button>
+      </div>
     </header>
   );
 }
