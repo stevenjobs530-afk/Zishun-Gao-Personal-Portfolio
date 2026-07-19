@@ -48,7 +48,7 @@ function useCarouselControls(cardCount: number) {
     }
     const maxScroll = track.scrollWidth - track.clientWidth;
     const firstCard = track.firstElementChild instanceof HTMLElement ? track.firstElementChild : null;
-    const itemWidth = firstCard ? firstCard.offsetWidth + 20 : track.clientWidth;
+    const itemWidth = firstCard ? firstCard.offsetWidth + 32 : track.clientWidth;
     const nextIndex = Math.min(cardCount - 1, Math.max(0, Math.round(track.scrollLeft / itemWidth)));
     setActiveIndex(nextIndex);
     setCanScrollPrev(track.scrollLeft > 4);
@@ -74,7 +74,7 @@ function useCarouselControls(cardCount: number) {
     let currentIndex = activeIndex;
     if (track) {
       const firstCard = track.firstElementChild instanceof HTMLElement ? track.firstElementChild : null;
-      const itemWidth = firstCard ? firstCard.offsetWidth + 20 : track.clientWidth;
+      const itemWidth = firstCard ? firstCard.offsetWidth + 32 : track.clientWidth;
       currentIndex = Math.min(cardCount - 1, Math.max(0, Math.round(track.scrollLeft / itemWidth)));
     }
     scrollToIndex(Math.min(cardCount - 1, Math.max(0, currentIndex + direction)));
@@ -134,7 +134,7 @@ function ShowcaseCard({
   const headlineMetrics = study?.metrics.slice(0, 2) ?? [];
 
   return (
-    <article className="snap-start shrink-0 pl-5 first:pl-0">
+    <article className="snap-start shrink-0">
       <LiquidGlass className="group/gallery-card flex h-full min-h-[540px] w-[min(85vw,330px)] flex-col overflow-hidden p-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 sm:w-[360px] lg:w-[396px]">
         <div className="relative z-[1] flex h-full flex-col">
           <ShowcaseCover item={item} />
@@ -283,7 +283,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
 
       <div
         ref={controls.trackRef}
-        className="award-preview-track -mx-8 mt-10 flex snap-x snap-mandatory gap-0 overflow-x-auto scroll-smooth px-8 pb-10 pt-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="award-preview-track -mx-8 mt-10 flex snap-x snap-mandatory scroll-px-8 gap-8 overflow-x-auto scroll-smooth px-8 pb-10 pt-6 [scrollbar-width:none] lg:-mx-16 lg:scroll-px-16 lg:px-16 [&::-webkit-scrollbar]:hidden"
         onScroll={controls.updateState}
       >
         {items.map((item) => (

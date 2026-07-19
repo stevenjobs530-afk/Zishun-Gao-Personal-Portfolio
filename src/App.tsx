@@ -91,7 +91,7 @@ function Header({
   const navSectionIds = navSectionIdsByLanguage[language];
 
   return (
-    <header className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+1.25rem)] z-30 flex w-[min(1180px,calc(100%-40px))] -translate-x-1/2 items-center justify-between gap-5 rounded-lg border border-white/80 bg-white/55 px-4 py-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.95),0_18px_55px_rgba(46,61,82,.14)] backdrop-blur-[44px] backdrop-saturate-150 max-sm:top-[calc(env(safe-area-inset-top)+0.75rem)] max-sm:w-[calc(100%-28px)] max-sm:gap-3">
+    <header className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+1.25rem)] z-30 flex w-[min(1180px,calc(100%-40px))] -translate-x-1/2 items-center justify-between gap-5 rounded-lg border border-white/55 bg-white/30 px-4 py-3 shadow-[inset_0_1px_1px_rgba(255,255,255,.78),0_14px_42px_rgba(46,61,82,.1)] backdrop-blur-[28px] backdrop-saturate-140 max-sm:top-[calc(env(safe-area-inset-top)+0.75rem)] max-sm:w-[calc(100%-28px)] max-sm:gap-3">
       <a
         className="min-w-0 truncate text-sm font-semibold text-neutral-950"
         href="#top"
@@ -103,7 +103,7 @@ function Header({
         {content.header.brandPrimary} <span className="text-neutral-500">{content.header.brandSecondary}</span>
       </a>
       <div className="flex shrink-0 items-center gap-4 max-sm:gap-3">
-        <nav className="flex items-center gap-5 text-xs font-medium text-neutral-600 max-lg:hidden" aria-label="Primary navigation">
+        <nav className="flex items-center gap-5 text-xs font-medium text-neutral-700 max-lg:hidden" aria-label="Primary navigation">
           {navSectionIds.map((sectionId) => (
             <a
               key={sectionId}
