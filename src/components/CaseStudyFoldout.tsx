@@ -94,53 +94,56 @@ export function CaseStudyFoldout({
   return (
     <RevealArticle delay={delay}>
       <article className={`case-study-foldout ${expanded ? "is-expanded" : ""}`}>
-        <LiquidGlass className="case-study-foldout__cover overflow-visible p-0">
-          <div className="relative z-[1] grid min-h-[400px] grid-cols-[minmax(0,.98fr)_minmax(360px,1.02fr)] items-center gap-12 px-7 pb-20 pt-8 md:px-10 md:pb-24 md:pt-10 max-lg:grid-cols-1 max-lg:gap-8 max-sm:min-h-0 max-sm:px-5 max-sm:pb-20 max-sm:pt-6">
-            <div className="min-w-0">
-              <div className="case-study-foldout__identity">
-                <span className="case-study-foldout__emblem">
-                  <ProjectEmblem caseStudyId={study.id} size="lg" />
-                </span>
-                <p className="text-xs font-semibold uppercase leading-[1.25] tracking-normal text-blue-600">{study.eyebrow}</p>
+        <div className="case-study-foldout__cover-stack">
+          <span className="case-study-foldout__underlay" aria-hidden="true" />
+          <LiquidGlass className="case-study-foldout__cover overflow-visible p-0">
+            <div className="relative z-[1] grid min-h-[400px] grid-cols-[minmax(0,.98fr)_minmax(360px,1.02fr)] items-center gap-12 px-7 pb-20 pt-8 md:px-10 md:pb-24 md:pt-10 max-lg:grid-cols-1 max-lg:gap-8 max-sm:min-h-0 max-sm:px-5 max-sm:pb-20 max-sm:pt-6">
+              <div className="min-w-0">
+                <div className="case-study-foldout__identity">
+                  <span className="case-study-foldout__emblem">
+                    <ProjectEmblem caseStudyId={study.id} size="lg" />
+                  </span>
+                  <p className="text-xs font-semibold uppercase leading-[1.25] tracking-normal text-blue-600">{study.eyebrow}</p>
+                </div>
+                <h3 className="apple-display-text mt-5 max-w-[680px] break-words text-[clamp(1.9rem,3.15vw,3.35rem)] leading-[1.06] text-neutral-950">
+                  {study.title}
+                </h3>
+                <p className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.summary}</p>
               </div>
-              <h3 className="apple-display-text mt-5 max-w-[680px] break-words text-[clamp(1.9rem,3.15vw,3.35rem)] leading-[1.06] text-neutral-950">
-                {study.title}
-              </h3>
-              <p className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-neutral-600 md:text-base md:leading-8">{study.summary}</p>
-            </div>
 
-            <div className="grid min-w-0 grid-cols-2 gap-x-8 gap-y-7 max-sm:gap-x-4 max-sm:gap-y-6">
-              {study.metrics.map((metric, index) => {
-                const MetricIcon = metricIcons[index % metricIcons.length];
+              <div className="grid min-w-0 grid-cols-2 gap-x-8 gap-y-7 max-sm:gap-x-4 max-sm:gap-y-6">
+                {study.metrics.map((metric, index) => {
+                  const MetricIcon = metricIcons[index % metricIcons.length];
 
-                return (
-                  <div key={`${study.id}-${metric.label}`} className="case-study-foldout__metric border-t border-white/65 pt-4">
-                    <div className="case-study-foldout__metric-heading">
-                      <span className={`case-study-foldout__metric-dot case-study-foldout__metric-dot--${(index % 4) + 1}`} aria-hidden="true">
-                        <MetricIcon className="size-5" />
-                      </span>
-                      <span className="case-study-foldout__metric-value apple-display-text text-neutral-950">{metric.value}</span>
+                  return (
+                    <div key={`${study.id}-${metric.label}`} className="case-study-foldout__metric border-t border-white/65 pt-4">
+                      <div className="case-study-foldout__metric-heading">
+                        <span className={`case-study-foldout__metric-dot case-study-foldout__metric-dot--${(index % 4) + 1}`} aria-hidden="true">
+                          <MetricIcon className="size-5" />
+                        </span>
+                        <span className="case-study-foldout__metric-value apple-display-text text-neutral-950">{metric.value}</span>
+                      </div>
+                      <span className="case-study-foldout__metric-label">{metric.label}</span>
                     </div>
-                    <span className="case-study-foldout__metric-label">{metric.label}</span>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          <button
-            type="button"
-            className="case-study-foldout__toggle"
-            aria-expanded={expanded}
-            aria-controls={expanded ? detailsId : undefined}
-            onClick={onToggle}
-          >
-            <span className="case-study-foldout__toggle-icon">
-              <ChevronDown className="size-5" aria-hidden="true" />
-            </span>
-            <span>{expanded ? labels.collapseDetails : labels.expandDetails}</span>
-          </button>
-        </LiquidGlass>
+            <button
+              type="button"
+              className="case-study-foldout__toggle"
+              aria-expanded={expanded}
+              aria-controls={expanded ? detailsId : undefined}
+              onClick={onToggle}
+            >
+              <span className="case-study-foldout__toggle-icon">
+                <ChevronDown className="size-5" aria-hidden="true" />
+              </span>
+              <span>{expanded ? labels.collapseDetails : labels.expandDetails}</span>
+            </button>
+          </LiquidGlass>
+        </div>
 
         {expanded ? (
           <div id={detailsId} className="case-study-foldout__details">
