@@ -147,7 +147,12 @@ function Hero({ content, language }: { content: PortfolioContent; language: Lang
   const cvPdfPath = cvPdfPaths[language];
 
   return (
-    <section id="top" className="mx-auto grid min-h-[88vh] w-[min(1180px,calc(100%-40px))] grid-cols-[minmax(0,1.05fr)_minmax(320px,.75fr)] items-center gap-16 pb-12 pt-32 max-lg:min-h-0 max-lg:grid-cols-1 max-lg:gap-6 max-lg:pb-8 max-sm:w-[calc(100%-28px)] max-sm:pt-28">
+    <section
+      id="top"
+      className={`mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[minmax(0,1.05fr)_minmax(320px,.75fr)] items-center gap-16 pb-12 pt-32 max-lg:min-h-0 max-lg:grid-cols-1 max-lg:gap-6 max-lg:pb-8 max-sm:w-[calc(100%-28px)] max-sm:pt-28 ${
+        language === "zh-CN" ? "min-h-[72vh]" : "min-h-[88vh]"
+      }`}
+    >
       <StaggerBlock className="max-w-[760px]" delay={0.15}>
         <StaggerItem>
           <h1 className="apple-display-text text-[clamp(4.1rem,9vw,8.7rem)] leading-[.88] text-neutral-950 max-sm:text-[clamp(2.75rem,15vw,4rem)] max-sm:leading-[.96]">
@@ -249,14 +254,20 @@ function RecruiterQuickView({ content }: { content: PortfolioContent }) {
   );
 }
 
-function SectionHeading({ label, title }: { label: string; title: string }) {
+function SectionHeading({ label, title, compact = false }: { label: string; title: string; compact?: boolean }) {
   return (
     <StaggerBlock>
       <StaggerItem>
         <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{label}</p>
       </StaggerItem>
       <StaggerItem>
-        <h2 className="apple-display-text mt-4 text-[clamp(2.25rem,5vw,4.8rem)] leading-none text-neutral-800">{title}</h2>
+        <h2
+          className={`apple-display-text mt-4 text-neutral-800 ${
+            compact ? "text-[clamp(2.25rem,4vw,4rem)] leading-[.96]" : "text-[clamp(2.25rem,5vw,4.8rem)] leading-none"
+          }`}
+        >
+          {title}
+        </h2>
       </StaggerItem>
     </StaggerBlock>
   );
@@ -350,8 +361,9 @@ function PersonalTrainingPortal({ content }: { content: PortfolioContent }) {
   );
 }
 
-function CaseStudies({ content }: { content: PortfolioContent }) {
+function CaseStudies({ content, language }: { content: PortfolioContent; language: LanguageCode }) {
   const [openStudyId, setOpenStudyId] = useState<string | null>(null);
+  const compactIntro = language === "en";
 
   const toggleStudy = (studyId: string) => {
     if (openStudyId === studyId) {
@@ -402,9 +414,16 @@ function CaseStudies({ content }: { content: PortfolioContent }) {
   }, [openStudyId]);
 
   return (
-    <section id="case-studies" className="mx-auto w-[min(1180px,calc(100%-40px))] pt-24 max-sm:w-[calc(100%-28px)]">
-      <div className="grid grid-cols-[.86fr_1.14fr] gap-20 pb-9 max-lg:grid-cols-1">
-        <SectionHeading label={content.sections.caseStudies.label} title={content.sections.caseStudies.title} />
+    <section
+      id="case-studies"
+      className={`mx-auto w-[min(1180px,calc(100%-40px))] max-sm:w-[calc(100%-28px)] ${compactIntro ? "pt-16" : "pt-24"}`}
+    >
+      <div
+        className={`grid max-lg:grid-cols-1 ${
+          compactIntro ? "grid-cols-[1fr_1fr] gap-14 pb-7" : "grid-cols-[.86fr_1.14fr] gap-20 pb-9"
+        }`}
+      >
+        <SectionHeading label={content.sections.caseStudies.label} title={content.sections.caseStudies.title} compact={compactIntro} />
         <RevealBlock>
           <p className="text-base leading-8 text-neutral-600">{content.sections.caseStudies.body}</p>
         </RevealBlock>
@@ -761,9 +780,14 @@ function AcademicTranscripts({ content }: { content: PortfolioContent }) {
   );
 }
 
-function EducationAwards({ content }: { content: PortfolioContent }) {
+function EducationAwards({ content, compactTop = false }: { content: PortfolioContent; compactTop?: boolean }) {
   return (
-    <section id="education" className="mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pb-10 pt-32 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pb-8 max-sm:pt-24">
+    <section
+      id="education"
+      className={`mx-auto grid w-[min(1180px,calc(100%-40px))] grid-cols-[.82fr_1.18fr] gap-20 pb-10 max-lg:grid-cols-1 max-sm:w-[calc(100%-28px)] max-sm:pb-8 ${
+        compactTop ? "pt-20 max-sm:pt-16" : "pt-32 max-sm:pt-24"
+      }`}
+    >
       <div>
         <p className="text-xs font-semibold uppercase tracking-normal text-blue-600">{content.sections.education.label}</p>
         <LiquidGlass className="mt-5">
@@ -907,11 +931,11 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
     return (
       <main>
         <Hero content={content} language={language} />
-        <EducationAwards content={content} />
+        <EducationAwards content={content} compactTop />
         <Metrics content={content} />
         <RecruiterQuickView content={content} />
         <Projects content={content} />
-        <CaseStudies content={content} />
+        <CaseStudies content={content} language={language} />
         <ExperienceSkills content={content} />
         <About content={content} />
         <Interests content={content} />
@@ -927,7 +951,7 @@ function MainContent({ content, language }: { content: PortfolioContent; languag
       <RecruiterQuickView content={content} />
       <About content={content} />
       <Projects content={content} />
-      <CaseStudies content={content} />
+      <CaseStudies content={content} language={language} />
       <ExperienceSkills content={content} />
       <EducationAwards content={content} />
       <Interests content={content} />
