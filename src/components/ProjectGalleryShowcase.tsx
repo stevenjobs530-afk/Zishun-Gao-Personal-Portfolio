@@ -63,9 +63,18 @@ function useCarouselControls(cardCount: number) {
   }, []);
 
   const scrollToIndex = (index: number) => {
-    const target = trackRef.current?.children.item(index);
-    if (target instanceof HTMLElement) {
-      target.scrollIntoView({ behavior: prefersReducedMotion() ? "auto" : "smooth", block: "nearest", inline: "start" });
+    const track = trackRef.current;
+    const target = track?.children.item(index);
+    if (track && target instanceof HTMLElement) {
+      const trackRect = track.getBoundingClientRect();
+      const targetRect = target.getBoundingClientRect();
+      const scrollPaddingStart = Number.parseFloat(window.getComputedStyle(track).scrollPaddingInlineStart) || 0;
+      const targetLeft = targetRect.left - trackRect.left + track.scrollLeft;
+
+      track.scrollTo({
+        left: Math.max(0, targetLeft - scrollPaddingStart),
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
     }
   };
 
@@ -135,7 +144,7 @@ function ShowcaseCard({
 
   return (
     <article className="snap-start shrink-0">
-      <LiquidGlass className="group/gallery-card flex h-full min-h-[540px] w-[min(85vw,330px)] flex-col overflow-hidden p-0 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 sm:w-[360px] lg:w-[396px]">
+      <LiquidGlass className="group/gallery-card flex h-full min-h-[540px] w-[min(85vw,330px)] flex-col overflow-hidden p-0 shadow-[inset_0_1px_1px_rgba(255,255,255,.92),inset_0_-1px_18px_rgba(255,255,255,.36),0_0_0_1px_rgba(255,255,255,.27),-18px_28px_72px_rgba(33,130,255,.12),-8px_18px_46px_rgba(21,214,180,.08),0_20px_58px_rgba(46,61,82,.15),0_42px_120px_rgba(33,130,255,.13)] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 sm:w-[360px] lg:w-[396px]">
         <div className="relative z-[1] flex h-full flex-col">
           <ShowcaseCover item={item} />
 
@@ -283,7 +292,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
 
       <div
         ref={controls.trackRef}
-        className="award-preview-track -mx-8 mt-10 flex snap-x snap-mandatory scroll-px-8 gap-8 overflow-x-auto scroll-smooth px-8 pb-10 pt-6 [scrollbar-width:none] lg:-mx-16 lg:scroll-px-16 lg:px-16 [&::-webkit-scrollbar]:hidden"
+        className="award-preview-track -mx-8 mt-10 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-10 pl-10 pr-8 pt-6 [scroll-padding-inline-start:2.5rem] [scrollbar-width:none] lg:-mx-16 lg:pl-20 lg:pr-16 lg:[scroll-padding-inline-start:5rem] [&::-webkit-scrollbar]:hidden"
         onScroll={controls.updateState}
       >
         {items.map((item) => (
