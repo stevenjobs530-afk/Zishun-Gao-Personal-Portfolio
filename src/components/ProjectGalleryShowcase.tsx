@@ -292,7 +292,7 @@ export function ProjectGalleryShowcase({ content }: { content: PortfolioContent 
 
       <div
         ref={controls.trackRef}
-        className="award-preview-track -mx-8 mt-10 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-10 pl-10 pr-8 pt-6 [scroll-padding-inline-start:2.5rem] [scrollbar-width:none] lg:-mx-16 lg:pl-20 lg:pr-16 lg:[scroll-padding-inline-start:5rem] [&::-webkit-scrollbar]:hidden"
+        className="award-preview-track project-gallery-track -mx-8 mt-10 flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth pb-10 pl-10 pr-8 pt-6 [scroll-padding-inline-start:2.5rem] [scrollbar-width:none] lg:-mx-16 lg:pl-20 lg:pr-16 lg:[scroll-padding-inline-start:5rem] [&::-webkit-scrollbar]:hidden"
         onScroll={controls.updateState}
       >
         {items.map((item) => (

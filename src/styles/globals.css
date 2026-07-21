@@ -496,6 +496,54 @@
     );
   }
 
+  .project-gallery-track {
+    --project-gallery-side-fade: 34px;
+    --project-gallery-side-fade-soft: 14px;
+    -webkit-mask-image:
+      linear-gradient(
+        to right,
+        transparent 0,
+        rgba(0, 0, 0, 0.38) var(--project-gallery-side-fade-soft),
+        #000 var(--project-gallery-side-fade),
+        #000 calc(100% - var(--project-gallery-side-fade)),
+        rgba(0, 0, 0, 0.38) calc(100% - var(--project-gallery-side-fade-soft)),
+        transparent 100%
+      ),
+      linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--award-wall-edge-fade),
+        #000 calc(100% - var(--award-wall-edge-fade)),
+        transparent 100%
+      );
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(
+        to right,
+        transparent 0,
+        rgba(0, 0, 0, 0.38) var(--project-gallery-side-fade-soft),
+        #000 var(--project-gallery-side-fade),
+        #000 calc(100% - var(--project-gallery-side-fade)),
+        rgba(0, 0, 0, 0.38) calc(100% - var(--project-gallery-side-fade-soft)),
+        transparent 100%
+      ),
+      linear-gradient(
+        to bottom,
+        transparent 0,
+        #000 var(--award-wall-edge-fade),
+        #000 calc(100% - var(--award-wall-edge-fade)),
+        transparent 100%
+      );
+    mask-composite: intersect;
+  }
+
+  @media (min-width: 1024px) {
+    .project-gallery-track {
+      --project-gallery-side-fade: 76px;
+      --project-gallery-side-fade-soft: 30px;
+    }
+  }
+
   .liquid-glow-button {
     position: relative;
     isolation: isolate;
